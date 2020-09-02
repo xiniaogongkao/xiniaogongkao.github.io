@@ -1,0 +1,614 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.1.1">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"tech.xiniaogongkao.com","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="事务的四大特性 一般来说，事务是必须满足4个条件（ACID）：：原子性（Atomicity，或称不可分割性）、一致性（Consistency）、隔离性（Isolation，又称独立性）、持久性（Durability）。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="mysql事务特性及隔离级别">
+<meta property="og:url" content="https://tech.xiniaogongkao.com/2020/08/26/mysql%E4%BA%8B%E5%8A%A1%E7%89%B9%E6%80%A7%E5%8F%8A%E9%9A%94%E7%A6%BB%E7%BA%A7%E5%88%AB/index.html">
+<meta property="og:site_name" content="犀鸟技术博客">
+<meta property="og:description" content="事务的四大特性 一般来说，事务是必须满足4个条件（ACID）：：原子性（Atomicity，或称不可分割性）、一致性（Consistency）、隔离性（Isolation，又称独立性）、持久性（Durability）。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://cdn.learnku.com/uploads/images/202006/06/19945/a1eQXtCcNP.png!large">
+<meta property="og:image" content="https://cdn.learnku.com/uploads/images/202006/06/19945/uMasui73Bx.png!large">
+<meta property="og:image" content="https://cdn.learnku.com/uploads/images/202006/06/19945/Q7Q5Anzxv8.png!large">
+<meta property="og:image" content="https://cdn.learnku.com/uploads/images/202007/20/19945/QEqlj6iuxg.png!large">
+<meta property="og:image" content="https://cdn.learnku.com/uploads/images/202007/20/19945/qLg85vkGu5.png!large">
+<meta property="og:image" content="https://cdn.learnku.com/uploads/images/202007/20/19945/Y1gMUTqufp.png!large">
+<meta property="og:image" content="https://cdn.learnku.com/uploads/images/202007/20/19945/z2lMiNNaJl.png!large">
+<meta property="og:image" content="https://cdn.learnku.com/uploads/images/202007/20/19945/BKDsTY2FAQ.png!large">
+<meta property="og:image" content="https://cdn.learnku.com/uploads/images/202007/20/19945/E0cpXga0zE.png!large">
+<meta property="og:image" content="https://cdn.learnku.com/uploads/images/202007/20/19945/H7TxlrRa1E.png!large">
+<meta property="og:image" content="https://cdn.learnku.com/uploads/images/202007/21/19945/pbnfj4I2rP.png!large">
+<meta property="og:image" content="https://cdn.learnku.com/uploads/images/202007/21/19945/MeNhnX3izJ.png!large">
+<meta property="og:image" content="https://cdn.learnku.com/uploads/images/202007/21/19945/8ak1TgQ1Rp.png!large">
+<meta property="og:image" content="https://cdn.learnku.com/uploads/images/202007/21/19945/jWTRymlRLa.png!large">
+<meta property="og:image" content="https://cdn.learnku.com/uploads/images/202007/21/19945/wFDSY1Y8PK.png!large">
+<meta property="og:image" content="https://cdn.learnku.com/uploads/images/202007/21/19945/MfuIkCjwmG.png!large">
+<meta property="og:image" content="https://cdn.learnku.com/uploads/images/202007/21/19945/bbzR2rgnOv.png!large">
+<meta property="article:published_time" content="2020-08-26T08:39:17.000Z">
+<meta property="article:modified_time" content="2020-08-31T06:05:35.845Z">
+<meta property="article:author" content="犀鸟技术中心">
+<meta property="article:tag" content="mysql">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://cdn.learnku.com/uploads/images/202006/06/19945/a1eQXtCcNP.png!large">
+
+<link rel="canonical" href="https://tech.xiniaogongkao.com/2020/08/26/mysql%E4%BA%8B%E5%8A%A1%E7%89%B9%E6%80%A7%E5%8F%8A%E9%9A%94%E7%A6%BB%E7%BA%A7%E5%88%AB/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>mysql事务特性及隔离级别 | 犀鸟技术博客</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta custom-logo">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">犀鸟技术博客</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">与其感慨路难行，不如马上出发</p>
+      <a>
+        <img class="custom-logo-image" src="http://xiniaogongkao.com/_nuxt/img/687333d.png" alt="犀鸟技术博客">
+      </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://tech.xiniaogongkao.com/2020/08/26/mysql%E4%BA%8B%E5%8A%A1%E7%89%B9%E6%80%A7%E5%8F%8A%E9%9A%94%E7%A6%BB%E7%BA%A7%E5%88%AB/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="犀鸟技术中心">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="犀鸟技术博客">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          mysql事务特性及隔离级别
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-08-26 16:39:17" itemprop="dateCreated datePublished" datetime="2020-08-26T16:39:17+08:00">2020-08-26</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-08-31 14:05:35" itemprop="dateModified" datetime="2020-08-31T14:05:35+08:00">2020-08-31</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%9C%8D%E5%8A%A1%E7%AB%AF/" itemprop="url" rel="index"><span itemprop="name">服务端</span></a>
+                </span>
+            </span>
+
+          <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>1.9k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>2 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h2 id="事务的四大特性"><a href="#事务的四大特性" class="headerlink" title="事务的四大特性"></a>事务的四大特性</h2><blockquote>
+<p>一般来说，事务是必须满足4个条件（ACID）：：原子性（Atomicity，或称不可分割性）、一致性（Consistency）、隔离性（Isolation，又称独立性）、持久性（Durability）。</p>
+</blockquote>
+<a id="more"></a>
+
+<ul>
+<li><p><strong>原子性：</strong> 一个事务（transaction）中的所有操作，要么全部完成，要么全部不完成，不会结束在中间某个环节。事务在执行过程中发生错误，会被回滚（Rollback）到事务开始前的状态，就像这个事务从来没有执行过一样。</p>
+</li>
+<li><p><strong>一致性：</strong> 在事务开始之前和事务结束以后，数据库的完整性没有被破坏。这表示写入的数据必须完全符合所有的预设规则，这包含数据的精确度、串联性以及后续数据库可以自发性地完成预定的工作。</p>
+</li>
+<li><p><strong>隔离性：</strong> 数据库允许多个并发事务同时对其数据进行读写和修改的能力，隔离性可以防止多个事务并发执行时由于交叉执行而导致数据的不一致。事务隔离分为不同级别，包括读未提交（Read uncommitted）、读提交（read committed）、可重复读（repeatable read）和串行化（Serializable）。</p>
+</li>
+<li><p><strong>持久性：</strong> 事务处理结束后，对数据的修改就是永久的，即便系统故障也不会丢失。</p>
+</li>
+</ul>
+<h2 id="事务的隔离级别"><a href="#事务的隔离级别" class="headerlink" title="事务的隔离级别"></a>事务的隔离级别</h2><blockquote>
+<p>事务隔离分为不同级别，包括读未提交（Read uncommitted）、读提交（read committed）、可重复读（repeatable read）和串行化（Serializable）。</p>
+</blockquote>
+<table>
+<thead>
+<tr>
+<th>隔离级别</th>
+<th>脏读</th>
+<th>不可重复读</th>
+<th>幻读</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>未提交（Read uncommitted）</td>
+<td>是</td>
+<td>是</td>
+<td>是</td>
+</tr>
+<tr>
+<td>不可重复读（read-committed）</td>
+<td>否</td>
+<td>是</td>
+<td>是</td>
+</tr>
+<tr>
+<td>可重复读（repeatable-read）</td>
+<td>否</td>
+<td>否</td>
+<td>是</td>
+</tr>
+<tr>
+<td>串行化（serializable）</td>
+<td>否</td>
+<td>否</td>
+<td>否</td>
+</tr>
+</tbody></table>
+<blockquote>
+<p>下面通过实例来说明这几种的区别</p>
+</blockquote>
+<ul>
+<li><p><strong>读未提交</strong><br>进入mysql，并设置当前事务模式为read uncommitted（未提交读）<br><code>set session transaction isolation level read uncommitted;</code></p>
+<ol>
+<li><p>查看表user的初始值<br><img src="https://cdn.learnku.com/uploads/images/202006/06/19945/a1eQXtCcNP.png!large" alt="mysql事务的四大特性以及隔离级别"></p>
+</li>
+<li><p>打开客户端B，开启事务，更新<code>user</code>表的<code>age</code>字段，然后在客户端A中查询数据<br><img src="https://cdn.learnku.com/uploads/images/202006/06/19945/uMasui73Bx.png!large" alt="mysql事务的四大特性以及隔离级别"></p>
+</li>
+<li><p>此时会发现虽然客户端B的事务没有提交，但是A却能读到B更新后的的数据，一旦客户端B的数据因为某种原因回滚的话，那么A读到的其实就是脏数据。<br><img src="https://cdn.learnku.com/uploads/images/202006/06/19945/Q7Q5Anzxv8.png!large" alt="mysql事务的四大特性以及隔离级别"></p>
+</li>
+<li><p>在客户端执行<code>update user set age = age - 5 where id = 1;</code>发现<code>zhangsan</code>的年龄并没有变成想象中的 15-5 = 10，居然是5，是不是很奇怪，数据不一致啊，如果你这么想就太天真 了，在应用程序中，我们会用15-5=10，并不知道其他会话回滚了，要想解决这个问题可以采用读已提交（read committed）的隔离级别。</p>
+</li>
+</ol>
+</li>
+<li><p><strong>读已提交</strong></p>
+</li>
+</ul>
+<ol>
+<li>打开客户端A，设置当前事务模式为 <code>read committed</code> （读已提交）查询表<code>user</code>的数据；</li>
+</ol>
+<p><img src="https://cdn.learnku.com/uploads/images/202007/20/19945/QEqlj6iuxg.png!large" alt="MySQL 事务的四大特性以及隔离级别"></p>
+<ol start="2">
+<li>在客户端A提交之前打开客户端B并更新数据；</li>
+</ol>
+<p><img src="https://cdn.learnku.com/uploads/images/202007/20/19945/qLg85vkGu5.png!large" alt="MySQL 事务的四大特性以及隔离级别"></p>
+<ol start="3">
+<li>此时客户端B的事务还没提交，客户端A并不能查询到客户端B更新的内容，这解决了脏读的问题；</li>
+</ol>
+<p><img src="https://cdn.learnku.com/uploads/images/202007/20/19945/Y1gMUTqufp.png!large" alt="MySQL 事务的四大特性以及隔离级别"></p>
+<ol start="4">
+<li>然后我们提交客户端B的事务；</li>
+</ol>
+<p><img src="https://cdn.learnku.com/uploads/images/202007/20/19945/z2lMiNNaJl.png!large" alt="MySQL 事务的四大特性以及隔离级别"></p>
+<ol start="5">
+<li>客户端A执行相同的查询，但是结果却不一致，这就产生了不可重复读的问题</li>
+</ol>
+<p><img src="https://cdn.learnku.com/uploads/images/202007/20/19945/BKDsTY2FAQ.png!large" alt="MySQL 事务的四大特性以及隔离级别"></p>
+<ul>
+<li><strong>可重复读</strong></li>
+</ul>
+<ol>
+<li>打开客户端A，设置当前事务模式为 <code>repeatable read</code> （重复读）查询表<code>user</code>的数据；</li>
+</ol>
+<p><img src="https://cdn.learnku.com/uploads/images/202007/20/19945/E0cpXga0zE.png!large" alt="MySQL 事务的四大特性以及隔离级别"></p>
+<ol start="2">
+<li>在客户端A的事务提交之前打开客户端B更新表<code>user</code>的值并提交；</li>
+</ol>
+<p><img src="https://cdn.learnku.com/uploads/images/202007/20/19945/H7TxlrRa1E.png!large" alt="MySQL 事务的四大特性以及隔离级别"></p>
+<ol start="3">
+<li>在客户端A中查询<code>user</code>表的数据，发现与之前查询的相同，没有出现不可重复读的问题。当我们将当前会话的隔离级别设置为可重复读的时候，当前会话可以重复读，就是每次读取的结果  集都相同，而不管其他事务有没有提交</li>
+</ol>
+<p><img src="https://cdn.learnku.com/uploads/images/202007/21/19945/pbnfj4I2rP.png!large" alt="MySQL 事务的四大特性以及隔离级别"></p>
+<ol start="4">
+<li>在客户端执行<code>update user set age = age - 10 where id = 1 ;</code> 这个时候我们发现<code>age</code>字段并没有 变成 30-10 = 20 ，而是按照客户端B里面的 50-10 = 40 来计算的 ，数据的一致性倒是没有被破坏。可重复读的隔离级别下使用了MVCC机制，select操作不会更新版本号，是快照读（历史版本）；insert、update和delete会更新版本号，是当前读（当前版本）。</li>
+</ol>
+<p><img src="https://cdn.learnku.com/uploads/images/202007/21/19945/MeNhnX3izJ.png!large" alt="MySQL 事务的四大特性以及隔离级别"></p>
+<ol start="5">
+<li>打开客户端B插入一条数据，然后提交。</li>
+</ol>
+<p><img src="https://cdn.learnku.com/uploads/images/202007/21/19945/8ak1TgQ1Rp.png!large" alt="MySQL 事务的四大特性以及隔离级别"></p>
+<ol start="6">
+<li>在客户端A中查询所有的记录，发现并没有出现新增的数据。</li>
+</ol>
+<p><img src="https://cdn.learnku.com/uploads/images/202007/21/19945/jWTRymlRLa.png!large" alt="MySQL 事务的四大特性以及隔离级别"></p>
+<ul>
+<li><strong>串行化</strong></li>
+</ul>
+<ol>
+<li>打开一个客户端A，并设置当前事务模式为serializable（串行化），开启事务，并查询<code>user</code>表数据</li>
+</ol>
+<p><img src="https://cdn.learnku.com/uploads/images/202007/21/19945/wFDSY1Y8PK.png!large" alt="MySQL 事务的四大特性以及隔离级别"></p>
+<p><img src="https://cdn.learnku.com/uploads/images/202007/21/19945/MfuIkCjwmG.png!large" alt="MySQL 事务的四大特性以及隔离级别"></p>
+<ol start="2">
+<li>在客户端B中插入一条数据，可以发现并不能立即插入，可以看出，如果一个事务，使用了SERIALIZABLE——可串行化隔离级别时，在这个事务没有被提交之前其他的线程，只能等到当前操作完成之后，才能进行操作，这样会非常耗时，而且，影响数据库的性能，通常情况下，不会使用这种隔离级别</li>
+</ol>
+<p><img src="https://cdn.learnku.com/uploads/images/202007/21/19945/bbzR2rgnOv.png!large" alt="MySQL 事务的四大特性以及隔离级别"></p>
+<p><a target="_blank" rel="noopener" href="https://www.cnblogs.com/wyaokai/p/10921323.html" title="参考">参考</a></p>
+
+    </div>
+
+    
+    
+    
+        
+
+<div>
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>犀鸟教育-覃涛
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="https://tech.xiniaogongkao.com/2020/08/26/mysql%E4%BA%8B%E5%8A%A1%E7%89%B9%E6%80%A7%E5%8F%8A%E9%9A%94%E7%A6%BB%E7%BA%A7%E5%88%AB/" title="mysql事务特性及隔离级别">https://tech.xiniaogongkao.com/2020/08/26/mysql事务特性及隔离级别/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/mysql/" rel="tag"># mysql</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item"></div>
+      <div class="post-nav-item">
+    <a href="/2020/08/26/hello-world/" rel="next" title="Hello World">
+      Hello World <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%8B%E5%8A%A1%E7%9A%84%E5%9B%9B%E5%A4%A7%E7%89%B9%E6%80%A7"><span class="nav-number">1.</span> <span class="nav-text">事务的四大特性</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%8B%E5%8A%A1%E7%9A%84%E9%9A%94%E7%A6%BB%E7%BA%A7%E5%88%AB"><span class="nav-number">2.</span> <span class="nav-text">事务的隔离级别</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">犀鸟技术中心</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">2</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">1</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">1</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="cc-license motion-element" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" class="cc-opacity" rel="noopener" target="_blank"><img src="/images/cc-by-nc-sa.svg" alt="Creative Commons"></a>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">犀鸟技术中心</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-area"></i>
+    </span>
+    <span title="站点总字数">2k</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="站点阅读时长">2 分钟</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>
