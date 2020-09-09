@@ -189,7 +189,7 @@
               <span class="post-meta-item-text">发表于</span>
               
 
-              <time title="创建时间：2020-09-09 10:18:52 / 修改时间：10:27:57" itemprop="dateCreated datePublished" datetime="2020-09-09T10:18:52+08:00">2020-09-09</time>
+              <time title="创建时间：2020-09-09 10:18:52 / 修改时间：11:30:27" itemprop="dateCreated datePublished" datetime="2020-09-09T10:18:52+08:00">2020-09-09</time>
             </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -229,131 +229,14 @@
           <h1 id="第一章-命名"><a href="#第一章-命名" class="headerlink" title="第一章 命名"></a>第一章 命名</h1><ul>
 <li>名为万物之始，万物始于无名，道生一，一生二，二生三，三生万物. ——《道德经》</li>
 </ul>
-<h3 id="一，重要性"><a href="#一，重要性" class="headerlink" title="一，重要性"></a>一，重要性</h3><ul>
-<li>在程序员的工作中，大部分的时间都在阅读和理解代码，好的命名能够让代码的概念清晰，增加代码的表达力。好的命名是我们写出好代码的基础.</li>
-<li>此外，<code>Martin Fowler</code>也表示过，他最喜欢的一句谚语是：“在计算机科学中有两件难事：缓存失效和命名。</li>
-<li>代码即文档，可读性好的代码应该有一定的<code>自明性</code>，也就是不借助注释和文档，代码本身就能显性化地表达开发者的意图.</li>
-</ul>
-<h3 id="二，具体命名"><a href="#二，具体命名" class="headerlink" title="二，具体命名"></a>二，具体命名</h3><ul>
-<li>变量名应该是<code>名词</code>，能够正确地描述业务，有表达力.</li>
-</ul>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span> pageSize = <span class="number">10</span>;</span><br><span class="line"><span class="comment">// 这样做还有一个好处，即代码的`可搜索性`，在代码中查找 pageSize 很容易，但是想找到 10 就很麻烦了.</span></span><br></pre></td></tr></table></figure>
-
-
-<ul>
-<li>函数命名要具体，空泛的命名没有意义。函数的命名要体现做什么，而不是怎么做。<ul>
-<li>假如我们将雇员信息存储在一个栈中，现在要从栈中获取最近存储的一个雇员信息，那么<code>getLatestEmployee()</code>就比<code>popRecord()</code>要好，因为栈数据结构是底层实现细节，命名应该提升抽象层次、体现业务语义。</li>
-</ul>
-</li>
-<li>类是面向对象中最重要的概念之一，是一组数据和操作的封装。对于一个应用系统，我们可以将类分为两大类：实体类和辅助类。<ul>
-<li>实体类承载了核心业务数据和核心业务逻辑，其命名要充分体现<code>业务语义</code>，并在团队内达成共识，如Customer、Bank和Employee等。</li>
-<li>辅助类是辅佐实体类一起完成业务逻辑的，其命名要能够通过后缀来体现功能。例如：<ul>
-<li>用来为 Customer 做控制路由的控制类 CustomerController</li>
-<li>提供 Customer 服务的服务类 CustomerService</li>
-<li>获取数据存储的仓储类 CustomerRepository</li>
-</ul>
-</li>
-<li>对于辅助类，尽量不要用 Helper、Util 之类的后缀，因为其含义太过笼统，容易破坏<code>SRP</code>（单一职责原则）。</li>
-</ul>
-</li>
-<li>包（Package）代表了一组有关系的类的集合，起到<code>分类组合</code>和<code>命名空间</code>的作用。</li>
-<li>这里说的模块（Module）主要是指Maven中的Module，相对于包来说，模块的粒度更大，通常一个模块中包含了多个包。</li>
-</ul>
-<h3 id="三，要点"><a href="#三，要点" class="headerlink" title="三，要点"></a>三，要点</h3><ul>
-<li>保持一致性.<ul>
-<li>保持命名的一致性，可以提高代码的可读性，从而简化复杂度。</li>
-</ul>
-</li>
-<li>每个概念对应一个词，并且一以贯之。例如:<ul>
-<li>fetch、retrieve、get、find 和 query 都可以表示查询的意思，如果不加约定地给多个类中的同种查询方法命名，你怎么记得是哪个类中的哪个方法呢？</li>
-<li>同样，在一段代码中，同时存在 manager、controller 和 handler，会令人感到困惑。| CRUD 操作 | 方法名约定 |<br>| — | — |<br>| 新增 | create |<br>| 添加 | add |<br>| 删除 | remove |<br>| 修改 | update |<br>| 查询（单个结果） | get |<br>| 查询（多个结果） | list |<br>| 分页查询 | page |<br>| 统计 | count |</li>
-</ul>
-</li>
-</ul>
-<ul>
-<li><p>遵守<code>对仗词</code>的命名规则有助于保持一致性，从而提高代码的可读性。</p>
-<ul>
-<li>add / remove</li>
-<li>increment / decrement</li>
-<li>open / close</li>
-<li>begin / end</li>
-<li>inset / delete</li>
-<li>show / hide</li>
-<li>create / destory</li>
-<li>lock / unlock</li>
-<li>source / target</li>
-<li>first / last</li>
-<li>min / max</li>
-<li>start / stop</li>
-<li>get / set</li>
-<li>next / previous</li>
-<li>up / down</li>
-<li>old / new</li>
-</ul>
-</li>
-<li><p>后置限定词</p>
-<ul>
-<li>很多程序中会有表示计算结果的变量，例如总额、平均值、最大值等。如果你要用类似Total、Sum、Average、Max、Min这样的限定词来修改某个命名，那么记住把限定词加到名字的<code>最后</code>，并在项目中贯彻执行，保持命名风格的一致性。</li>
-<li>这种方法有很多优点。首先，变量名中最重要的部分，即为这一变量赋予<code>主要含义的部分</code>应位于最前面，这样可以突出显示，并会被首先阅读到。</li>
-<li>如果贯彻限定词后置的原则，我们就能收获一组非常优雅、具有对称性的变量命名，例如:<ul>
-<li>revenueTotal（总收入）</li>
-<li>expenseTotal（总支出）</li>
-<li>revenueAverage（平均收入）</li>
-<li>expenseAverage（平均支出）</li>
-</ul>
-</li>
-</ul>
-</li>
-<li><p>统一业务语言（Confluence）</p>
-</li>
-<li><p>统一技术语言（技术栈）</p>
-</li>
-<li><p>自明的代码</p>
-<ul>
-<li>所谓<code>自明性</code>，就是在不借助其他辅助手段的情况下，代码本身就能向读者清晰地传达自身的含义。</li>
-</ul>
-</li>
-<li><p>小心注释</p>
-<ul>
-<li><p>如果注释是为了<strong>阐述代码背后的意图</strong>，那么这个注释是有用的；如果注释是为了复述代码功能，那么就要小心了，这样的注释往往意味着“坏味道”</p>
-<ul>
-<li>在Martin Fowler的《重构：改善既有代码的设计》一书中，注释就是“坏味道”之一），是为了弥补我们代码表达能力的不足。</li>
-<li>就像 Brian W.Kernighan 说的那样：“别给糟糕的代码加注释——重新写吧。”</li>
-</ul>
-</li>
-<li><p><strong>不要复述功能</strong></p>
-<ul>
-<li>为了复述代码功能而存在的注释，主要作用是弥补我们表达意图时遭遇的失败，这时要考虑这样的注释是否是必需的。</li>
-</ul>
-</li>
-<li><p>要解释背后意图</p>
-<ul>
-<li><p>注释要能够解释代码背后的意图，而不是对功能的简单重复。</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">try</span> &#123;</span><br><span class="line">    <span class="comment">// 在这里等待2秒</span></span><br><span class="line">    Thread.sleep(<span class="number">2000</span>);</span><br><span class="line">&#125; <span class="keyword">catch</span> (InterruptedException e) &#123;</span><br><span class="line">    LOGGER.error(e);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>此段注释和没写是一样的，因为只是对 sleep 的简单复述。正确的做法应该是阐述 sleep 背后的原因。如下:</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">try</span> &#123;</span><br><span class="line">    <span class="comment">// 休息2秒，为了等待关联系统处理结果</span></span><br><span class="line">    Thread.sleep(<span class="number">2000</span>);</span><br><span class="line">&#125; <span class="keyword">catch</span> (InterruptedException e) &#123;</span><br><span class="line">    LOGGER.error(e);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>或者直接用一个 private 方法封装起来，用显性的方法名爱表达意图，就不需要注释了.</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">waitProcessResultFromA</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">        Thread.sleep(<span class="number">2000</span>);</span><br><span class="line">    &#125; <span class="keyword">catch</span> (InterruptedException e) &#123;</span><br><span class="line">        LOGGER.error(e);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-</li>
-</ul>
-</li>
-</ul>
-</li>
-<li><p>命名工具</p>
-<ul>
-<li>“他山之石，可以攻玉”。特别是对于英语非母语的我们，命名工具会非常有用。</li>
-<li><a target="_blank" rel="noopener" href="https://unbug.github.io/codelf/">Codelf-命名工具</a></li>
-</ul>
-</li>
-</ul>
-<h3 id="四，本章小结"><a href="#四，本章小结" class="headerlink" title="四，本章小结"></a>四，本章小结</h3><ul>
-<li>命名在软件设计中有着举足轻重的作用，命名的力量就是<strong>语言的力量</strong>，好的命名可以保证代码不仅是被机器执行的指令，更是人和人之间沟通的<code>桥梁</code>。</li>
-<li>命名的重要性不仅体现在提升代码的可读性上，有意义的命名更能够引导我们更加深入地理解问题域，理清<code>关键业务概念</code>，进行合理的业务抽象，从而设计出更加符合业务语义、易于理解的系统。</li>
-<li>因此，每一个程序员都应该掌握一套<code>命名的方法论</code>：了解如何给软件制品（Artifact，包括 Module、Package、Class、Function 和 Variable ）命名，如何写注释，如何让代码自明地表达自己，以及如何保持命名风格的一致性。</li>
-</ul>
-
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2020/09/09/%E7%AC%AC%E4%B8%80%E7%AB%A0-%E5%91%BD%E5%90%8D/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
       
     </div>
 
@@ -397,7 +280,7 @@
               <span class="post-meta-item-text">发表于</span>
               
 
-              <time title="创建时间：2020-09-09 10:15:31 / 修改时间：10:27:57" itemprop="dateCreated datePublished" datetime="2020-09-09T10:15:31+08:00">2020-09-09</time>
+              <time title="创建时间：2020-09-09 10:15:31 / 修改时间：11:30:24" itemprop="dateCreated datePublished" datetime="2020-09-09T10:15:31+08:00">2020-09-09</time>
             </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -441,14 +324,14 @@
 <li>我有一个梦想，我写的代码，可以像诗歌一样优美.</li>
 <li>我有一个梦想，我做的设计，能恰到好处，既不过度，也无不足.</li>
 </ul>
-<h4 id="二，本质"><a href="#二，本质" class="headerlink" title="二，本质"></a>二，本质</h4><ul>
-<li>软件的本质是<code>复杂性</code>，软件在实现的过程中有很大的灵活性和抽象性，导致软件具有天然的复杂性.</li>
-</ul>
-<h4 id="三，美德"><a href="#三，美德" class="headerlink" title="三，美德"></a>三，美德</h4><ul>
-<li>我们都知道“写出好代码”是比“写出代码”要难得多的要求，一个程序员的<code>美德</code>就在于他是否能为后人留下一段看得懂、可维护性好的代码.</li>
-<li>写好代码的技艺不是一蹴而就的，它是一个<code>系统化</code>的工程，不是看几本书、写几年代码就能轻松习得的，而需要我们对自己的思维习惯、学习方法和工程实践进行彻底的反省和重构.</li>
-</ul>
-
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2020/09/09/%E5%89%8D%E8%A8%80/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
       
     </div>
 
