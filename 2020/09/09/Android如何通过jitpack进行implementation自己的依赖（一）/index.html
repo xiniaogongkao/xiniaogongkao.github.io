@@ -1,0 +1,545 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.1.1">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon.ico">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon.ico">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"tech.xiniaogongkao.com","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="jitpack介绍Easy to use package repository for Git Publish your JVM and Android libraries（易于使用的Git软件包存储库 发布您的JVM和Android库）本质上，JitPack相当于一个Maven仓库。对普通JVM应用，只要能够编译成功，都是可以自动生成的，不需要额外配置。对Android的aar来说，需要确保.&#x2F;">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Android如何通过jitpack进行implementation自己的依赖（一）">
+<meta property="og:url" content="https://tech.xiniaogongkao.com/2020/09/09/Android%E5%A6%82%E4%BD%95%E9%80%9A%E8%BF%87jitpack%E8%BF%9B%E8%A1%8Cimplementation%E8%87%AA%E5%B7%B1%E7%9A%84%E4%BE%9D%E8%B5%96%EF%BC%88%E4%B8%80%EF%BC%89/index.html">
+<meta property="og:site_name" content="犀鸟技术博客">
+<meta property="og:description" content="jitpack介绍Easy to use package repository for Git Publish your JVM and Android libraries（易于使用的Git软件包存储库 发布您的JVM和Android库）本质上，JitPack相当于一个Maven仓库。对普通JVM应用，只要能够编译成功，都是可以自动生成的，不需要额外配置。对Android的aar来说，需要确保.&#x2F;">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://tech.xiniaogongkao.com/2020/09/09/Android%E5%A6%82%E4%BD%95%E9%80%9A%E8%BF%87jitpack%E8%BF%9B%E8%A1%8Cimplementation%E8%87%AA%E5%B7%B1%E7%9A%84%E4%BE%9D%E8%B5%96%EF%BC%88%E4%B8%80%EF%BC%89/image.png">
+<meta property="og:image" content="https://tech.xiniaogongkao.com/2020/09/09/Android%E5%A6%82%E4%BD%95%E9%80%9A%E8%BF%87jitpack%E8%BF%9B%E8%A1%8Cimplementation%E8%87%AA%E5%B7%B1%E7%9A%84%E4%BE%9D%E8%B5%96%EF%BC%88%E4%B8%80%EF%BC%89/image2.png">
+<meta property="og:image" content="https://tech.xiniaogongkao.com/2020/09/09/Android%E5%A6%82%E4%BD%95%E9%80%9A%E8%BF%87jitpack%E8%BF%9B%E8%A1%8Cimplementation%E8%87%AA%E5%B7%B1%E7%9A%84%E4%BE%9D%E8%B5%96%EF%BC%88%E4%B8%80%EF%BC%89/image3.png">
+<meta property="og:image" content="https://tech.xiniaogongkao.com/2020/09/09/Android%E5%A6%82%E4%BD%95%E9%80%9A%E8%BF%87jitpack%E8%BF%9B%E8%A1%8Cimplementation%E8%87%AA%E5%B7%B1%E7%9A%84%E4%BE%9D%E8%B5%96%EF%BC%88%E4%B8%80%EF%BC%89/image4.png">
+<meta property="og:image" content="https://tech.xiniaogongkao.com/2020/09/09/Android%E5%A6%82%E4%BD%95%E9%80%9A%E8%BF%87jitpack%E8%BF%9B%E8%A1%8Cimplementation%E8%87%AA%E5%B7%B1%E7%9A%84%E4%BE%9D%E8%B5%96%EF%BC%88%E4%B8%80%EF%BC%89/image8.png">
+<meta property="og:image" content="https://tech.xiniaogongkao.com/2020/09/09/Android%E5%A6%82%E4%BD%95%E9%80%9A%E8%BF%87jitpack%E8%BF%9B%E8%A1%8Cimplementation%E8%87%AA%E5%B7%B1%E7%9A%84%E4%BE%9D%E8%B5%96%EF%BC%88%E4%B8%80%EF%BC%89/image5.png">
+<meta property="og:image" content="https://tech.xiniaogongkao.com/2020/09/09/Android%E5%A6%82%E4%BD%95%E9%80%9A%E8%BF%87jitpack%E8%BF%9B%E8%A1%8Cimplementation%E8%87%AA%E5%B7%B1%E7%9A%84%E4%BE%9D%E8%B5%96%EF%BC%88%E4%B8%80%EF%BC%89/image6.png">
+<meta property="og:image" content="https://tech.xiniaogongkao.com/2020/09/09/Android%E5%A6%82%E4%BD%95%E9%80%9A%E8%BF%87jitpack%E8%BF%9B%E8%A1%8Cimplementation%E8%87%AA%E5%B7%B1%E7%9A%84%E4%BE%9D%E8%B5%96%EF%BC%88%E4%B8%80%EF%BC%89/image7.png">
+<meta property="article:published_time" content="2020-09-09T07:05:22.000Z">
+<meta property="article:modified_time" content="2020-09-09T08:04:30.244Z">
+<meta property="article:author" content="犀鸟技术中心">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://tech.xiniaogongkao.com/2020/09/09/Android%E5%A6%82%E4%BD%95%E9%80%9A%E8%BF%87jitpack%E8%BF%9B%E8%A1%8Cimplementation%E8%87%AA%E5%B7%B1%E7%9A%84%E4%BE%9D%E8%B5%96%EF%BC%88%E4%B8%80%EF%BC%89/image.png">
+
+<link rel="canonical" href="https://tech.xiniaogongkao.com/2020/09/09/Android%E5%A6%82%E4%BD%95%E9%80%9A%E8%BF%87jitpack%E8%BF%9B%E8%A1%8Cimplementation%E8%87%AA%E5%B7%B1%E7%9A%84%E4%BE%9D%E8%B5%96%EF%BC%88%E4%B8%80%EF%BC%89/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>Android如何通过jitpack进行implementation自己的依赖（一） | 犀鸟技术博客</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta custom-logo">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">犀鸟技术博客</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">与其感慨路难行，不如马上出发</p>
+      <a>
+        <img class="custom-logo-image" src="/images/xnlogo.png" alt="犀鸟技术博客">
+      </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://tech.xiniaogongkao.com/2020/09/09/Android%E5%A6%82%E4%BD%95%E9%80%9A%E8%BF%87jitpack%E8%BF%9B%E8%A1%8Cimplementation%E8%87%AA%E5%B7%B1%E7%9A%84%E4%BE%9D%E8%B5%96%EF%BC%88%E4%B8%80%EF%BC%89/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="犀鸟技术中心">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="犀鸟技术博客">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Android如何通过jitpack进行implementation自己的依赖（一）
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2020-09-09 15:05:22 / 修改时间：16:04:30" itemprop="dateCreated datePublished" datetime="2020-09-09T15:05:22+08:00">2020-09-09</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E7%A7%BB%E5%8A%A8%E7%AB%AF/" itemprop="url" rel="index"><span itemprop="name">移动端</span></a>
+                </span>
+            </span>
+
+          <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>1.2k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>1 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h2 id="jitpack介绍"><a href="#jitpack介绍" class="headerlink" title="jitpack介绍"></a>jitpack介绍</h2><p>Easy to use package repository for Git Publish your JVM and Android libraries（易于使用的Git软件包存储库 发布您的JVM和Android库）<br>本质上，JitPack相当于一个Maven仓库。<br>对普通JVM应用，只要能够编译成功，都是可以自动生成的，不需要额外配置。<br>对Android的aar来说，需要确保./gradlew install能够把它安装到本地Maven仓库，默认路径为~/.m2/repositories/。</p>
+<a id="more"></a>
+
+<h2 id="发布流程"><a href="#发布流程" class="headerlink" title="发布流程"></a>发布流程</h2><h3 id="step-1"><a href="#step-1" class="headerlink" title="step 1"></a>step 1</h3><p> 创建一个github账号，并且创建一个新的Repository（资料库）<br><img src="/2020/09/09/Android%E5%A6%82%E4%BD%95%E9%80%9A%E8%BF%87jitpack%E8%BF%9B%E8%A1%8Cimplementation%E8%87%AA%E5%B7%B1%E7%9A%84%E4%BE%9D%E8%B5%96%EF%BC%88%E4%B8%80%EF%BC%89/image.png" alt="1.png"><br><img src="/2020/09/09/Android%E5%A6%82%E4%BD%95%E9%80%9A%E8%BF%87jitpack%E8%BF%9B%E8%A1%8Cimplementation%E8%87%AA%E5%B7%B1%E7%9A%84%E4%BE%9D%E8%B5%96%EF%BC%88%E4%B8%80%EF%BC%89/image2.png" alt="2.png"></p>
+<h3 id="step-2"><a href="#step-2" class="headerlink" title="step 2"></a>step 2</h3><p>android studio创建项目<br>项目的根目录的build.gradle里面需要配置（）</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">dependencies &#123;</span><br><span class="line">        classpath &#39;com.github.dcendents:android-maven-gradle-plugin:1.3&#39;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+
+<p>注意：maven的版本号需要和gradle版本号保持一致(<a target="_blank" rel="noopener" href="https://developer.android.com/studio/releases/gradle-plugin">官方链接</a>)</p>
+<table>
+<thead>
+<tr>
+<th>Plugin version</th>
+<th>Required Gradle version</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>1.0.0 - 1.1.3</td>
+<td>2.2.1 - 2.3</td>
+</tr>
+<tr>
+<td>1.2.0 - 1.3.1</td>
+<td>2.2.1 - 2.9</td>
+</tr>
+<tr>
+<td>1.5.0</td>
+<td>2.2.1 - 2.13</td>
+</tr>
+<tr>
+<td>2.0.0 - 2.1.2</td>
+<td>2.10 - 2.13</td>
+</tr>
+<tr>
+<td>2.1.3 - 2.2.3</td>
+<td>2.14.1+</td>
+</tr>
+<tr>
+<td>2.3.0+</td>
+<td>3.3+</td>
+</tr>
+<tr>
+<td>3.0.0+</td>
+<td>4.1+</td>
+</tr>
+<tr>
+<td>3.1.0+</td>
+<td>4.4+</td>
+</tr>
+<tr>
+<td>3.2.0 - 3.2.1</td>
+<td>4.6+</td>
+</tr>
+<tr>
+<td>3.3.0 - 3.3.3</td>
+<td>4.10.1+</td>
+</tr>
+<tr>
+<td>3.4.0 - 3.4.3</td>
+<td>5.1.1+</td>
+</tr>
+<tr>
+<td>3.5.0 - 3.5.4</td>
+<td>5.4.1+</td>
+</tr>
+<tr>
+<td>3.6.0 - 3.6.4</td>
+<td>5.6.4+</td>
+</tr>
+<tr>
+<td>4.0.0+</td>
+<td>6.1.1+</td>
+</tr>
+</tbody></table>
+<h3 id="step-3"><a href="#step-3" class="headerlink" title="step 3"></a>step 3</h3><p>android studio 中项目新建一个module，将工具类代码放进去(注意：用红色边框选中的部分是需要上传到刚才创建的资料库中的)</p>
+<p><img src="/2020/09/09/Android%E5%A6%82%E4%BD%95%E9%80%9A%E8%BF%87jitpack%E8%BF%9B%E8%A1%8Cimplementation%E8%87%AA%E5%B7%B1%E7%9A%84%E4%BE%9D%E8%B5%96%EF%BC%88%E4%B8%80%EF%BC%89/image3.png" alt="3.png"></p>
+<p>在module的build.gradle中配置以下信息其中xxx是你自己github的用户名</p>
+<p><img src="/2020/09/09/Android%E5%A6%82%E4%BD%95%E9%80%9A%E8%BF%87jitpack%E8%BF%9B%E8%A1%8Cimplementation%E8%87%AA%E5%B7%B1%E7%9A%84%E4%BE%9D%E8%B5%96%EF%BC%88%E4%B8%80%EF%BC%89/image4.png" alt="4.png"></p>
+<h3 id="step-4"><a href="#step-4" class="headerlink" title="step 4"></a>step 4</h3><p>通过git命令将红框中的代码push到一开始创建好的资源库中去，并且发布release版本（已经创建过了所以选择Draft a new release，如果是首次创建那么就是create new release）</p>
+<p><img src="/2020/09/09/Android%E5%A6%82%E4%BD%95%E9%80%9A%E8%BF%87jitpack%E8%BF%9B%E8%A1%8Cimplementation%E8%87%AA%E5%B7%B1%E7%9A%84%E4%BE%9D%E8%B5%96%EF%BC%88%E4%B8%80%EF%BC%89/image8.png" alt="8.png"></p>
+<p>发布完成之后登录jitpack网站<a target="_blank" rel="noopener" href="https://jitpack.io/">jitpack网站</a>，然后进行搜索（当然你也可以直接再android studio中直接share project to github,通过命令行的push操作在你新建资源库成功之后会有相应的命令提示）</p>
+<p><img src="/2020/09/09/Android%E5%A6%82%E4%BD%95%E9%80%9A%E8%BF%87jitpack%E8%BF%9B%E8%A1%8Cimplementation%E8%87%AA%E5%B7%B1%E7%9A%84%E4%BE%9D%E8%B5%96%EF%BC%88%E4%B8%80%EF%BC%89/image5.png" alt="5.png"></p>
+<h3 id="step-5"><a href="#step-5" class="headerlink" title="step 5"></a>step 5</h3><p>怎样引用</p>
+<p>project的build.gradle中添加maven地址<br>app的.build.gradle进行应用操作<br><img src="/2020/09/09/Android%E5%A6%82%E4%BD%95%E9%80%9A%E8%BF%87jitpack%E8%BF%9B%E8%A1%8Cimplementation%E8%87%AA%E5%B7%B1%E7%9A%84%E4%BE%9D%E8%B5%96%EF%BC%88%E4%B8%80%EF%BC%89/image6.png" alt="6.png"><br>引用成功之后会在External Libraries中看到你引用的aar包<br><img src="/2020/09/09/Android%E5%A6%82%E4%BD%95%E9%80%9A%E8%BF%87jitpack%E8%BF%9B%E8%A1%8Cimplementation%E8%87%AA%E5%B7%B1%E7%9A%84%E4%BE%9D%E8%B5%96%EF%BC%88%E4%B8%80%EF%BC%89/image7.png" alt="7.png"><br>至此，依赖操作就已经完成了，接下来有时间会分享更加细致的介绍，感谢观看</p>
+<p>created by viiliz</p>
+
+    </div>
+
+    
+    
+    
+        
+
+<div>
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>犀鸟教育-彭礼平
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="https://tech.xiniaogongkao.com/2020/09/09/Android%E5%A6%82%E4%BD%95%E9%80%9A%E8%BF%87jitpack%E8%BF%9B%E8%A1%8Cimplementation%E8%87%AA%E5%B7%B1%E7%9A%84%E4%BE%9D%E8%B5%96%EF%BC%88%E4%B8%80%EF%BC%89/" title="Android如何通过jitpack进行implementation自己的依赖（一）">https://tech.xiniaogongkao.com/2020/09/09/Android如何通过jitpack进行implementation自己的依赖（一）/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2020/09/09/%E7%AC%AC%E4%B8%80%E7%AB%A0-%E5%91%BD%E5%90%8D/" rel="prev" title="第一章 命名">
+      <i class="fa fa-chevron-left"></i> 第一章 命名
+    </a></div>
+      <div class="post-nav-item"></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#jitpack%E4%BB%8B%E7%BB%8D"><span class="nav-number">1.</span> <span class="nav-text">jitpack介绍</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%91%E5%B8%83%E6%B5%81%E7%A8%8B"><span class="nav-number">2.</span> <span class="nav-text">发布流程</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#step-1"><span class="nav-number">2.1.</span> <span class="nav-text">step 1</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#step-2"><span class="nav-number">2.2.</span> <span class="nav-text">step 2</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#step-3"><span class="nav-number">2.3.</span> <span class="nav-text">step 3</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#step-4"><span class="nav-number">2.4.</span> <span class="nav-text">step 4</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#step-5"><span class="nav-number">2.5.</span> <span class="nav-text">step 5</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">犀鸟技术中心</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">5</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">4</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">3</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="cc-license motion-element" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" class="cc-opacity" rel="noopener" target="_blank"><img src="/images/cc-by-nc-sa.svg" alt="Creative Commons"></a>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">犀鸟技术中心</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-area"></i>
+    </span>
+    <span title="站点总字数">8k</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="站点阅读时长">7 分钟</span>
+</div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>
