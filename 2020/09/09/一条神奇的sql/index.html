@@ -20,20 +20,27 @@
     var CONFIG = {"hostname":"tech.xiniaogongkao.com","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
   </script>
 
-  <meta name="description" content="本书作者为张建飞，此为总结  前言一，梦想 我有一个梦想，我写的代码，可以像诗歌一样优美. 我有一个梦想，我做的设计，能恰到好处，既不过度，也无不足.">
+  <meta name="description" content="一条神奇的sql个人有一个习惯，喜欢在查询的时候把sql也打印出来去数据库执行一下，看是否预期一致。 就是这个习惯，让我发现一个”神奇”的现象：同一预期的sql通过不同的方法而得到出不同的结果集。">
 <meta property="og:type" content="article">
-<meta property="og:title" content="前言">
-<meta property="og:url" content="https://tech.xiniaogongkao.com/2020/09/09/%E5%89%8D%E8%A8%80/index.html">
+<meta property="og:title" content="一条神奇的sql">
+<meta property="og:url" content="https://tech.xiniaogongkao.com/2020/09/09/%E4%B8%80%E6%9D%A1%E7%A5%9E%E5%A5%87%E7%9A%84sql/index.html">
 <meta property="og:site_name" content="犀鸟技术博客">
-<meta property="og:description" content="本书作者为张建飞，此为总结  前言一，梦想 我有一个梦想，我写的代码，可以像诗歌一样优美. 我有一个梦想，我做的设计，能恰到好处，既不过度，也无不足.">
+<meta property="og:description" content="一条神奇的sql个人有一个习惯，喜欢在查询的时候把sql也打印出来去数据库执行一下，看是否预期一致。 就是这个习惯，让我发现一个”神奇”的现象：同一预期的sql通过不同的方法而得到出不同的结果集。">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2020-09-09T02:15:31.000Z">
-<meta property="article:modified_time" content="2020-09-09T03:30:24.142Z">
+<meta property="og:image" content="https://tech.xiniaogongkao.com/2020/09/09/%E4%B8%80%E6%9D%A1%E7%A5%9E%E5%A5%87%E7%9A%84sql/%E4%B8%80%E6%9D%A1%E7%A5%9E%E5%A5%87%E7%9A%84sql-1598260722466.jpg">
+<meta property="og:image" content="https://tech.xiniaogongkao.com/2020/09/09/%E4%B8%80%E6%9D%A1%E7%A5%9E%E5%A5%87%E7%9A%84sql/%E4%B8%80%E6%9D%A1%E7%A5%9E%E5%A5%87%E7%9A%84sql-1598262409174.png">
+<meta property="og:image" content="https://tech.xiniaogongkao.com/2020/09/09/%E4%B8%80%E6%9D%A1%E7%A5%9E%E5%A5%87%E7%9A%84sql/%E4%B8%80%E6%9D%A1%E7%A5%9E%E5%A5%87%E7%9A%84sql-1598263676857.png">
+<meta property="og:image" content="https://tech.xiniaogongkao.com/2020/09/09/%E4%B8%80%E6%9D%A1%E7%A5%9E%E5%A5%87%E7%9A%84sql/%E4%B8%80%E6%9D%A1%E7%A5%9E%E5%A5%87%E7%9A%84sql-1598264249180.png">
+<meta property="og:image" content="https://tech.xiniaogongkao.com/2020/09/09/%E4%B8%80%E6%9D%A1%E7%A5%9E%E5%A5%87%E7%9A%84sql/%E4%B8%80%E6%9D%A1%E7%A5%9E%E5%A5%87%E7%9A%84sql-1598263984297.png">
+<meta property="og:image" content="https://tech.xiniaogongkao.com/2020/09/09/%E4%B8%80%E6%9D%A1%E7%A5%9E%E5%A5%87%E7%9A%84sql/435e9664.png">
+<meta property="article:published_time" content="2020-09-09T09:48:00.000Z">
+<meta property="article:modified_time" content="2020-09-09T10:13:54.513Z">
 <meta property="article:author" content="犀鸟技术中心">
-<meta property="article:tag" content="从码农到工匠">
+<meta property="article:tag" content="mysql">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://tech.xiniaogongkao.com/2020/09/09/%E4%B8%80%E6%9D%A1%E7%A5%9E%E5%A5%87%E7%9A%84sql/%E4%B8%80%E6%9D%A1%E7%A5%9E%E5%A5%87%E7%9A%84sql-1598260722466.jpg">
 
-<link rel="canonical" href="https://tech.xiniaogongkao.com/2020/09/09/%E5%89%8D%E8%A8%80/">
+<link rel="canonical" href="https://tech.xiniaogongkao.com/2020/09/09/%E4%B8%80%E6%9D%A1%E7%A5%9E%E5%A5%87%E7%9A%84sql/">
 
 
 <script id="page-configurations">
@@ -46,7 +53,7 @@
   };
 </script>
 
-  <title>前言 | 犀鸟技术博客</title>
+  <title>一条神奇的sql | 犀鸟技术博客</title>
   
 
 
@@ -170,7 +177,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://tech.xiniaogongkao.com/2020/09/09/%E5%89%8D%E8%A8%80/">
+    <link itemprop="mainEntityOfPage" href="https://tech.xiniaogongkao.com/2020/09/09/%E4%B8%80%E6%9D%A1%E7%A5%9E%E5%A5%87%E7%9A%84sql/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -183,7 +190,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          前言
+          一条神奇的sql
         </h1>
 
         <div class="post-meta">
@@ -194,7 +201,7 @@
               <span class="post-meta-item-text">发表于</span>
               
 
-              <time title="创建时间：2020-09-09 10:15:31 / 修改时间：11:30:24" itemprop="dateCreated datePublished" datetime="2020-09-09T10:15:31+08:00">2020-09-09</time>
+              <time title="创建时间：2020-09-09 17:48:00 / 修改时间：18:13:54" itemprop="dateCreated datePublished" datetime="2020-09-09T17:48:00+08:00">2020-09-09</time>
             </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -202,7 +209,7 @@
               </span>
               <span class="post-meta-item-text">分类于</span>
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E3%80%8A%E4%BB%A3%E7%A0%81%E7%B2%BE%E8%BF%9B%E4%B9%8B%E8%B7%AF%EF%BC%9A%E4%BB%8E%E7%A0%81%E5%86%9C%E5%88%B0%E5%B7%A5%E5%8C%A0%E3%80%8B/" itemprop="url" rel="index"><span itemprop="name">《代码精进之路：从码农到工匠》</span></a>
+                  <a href="/categories/%E6%9C%8D%E5%8A%A1%E7%AB%AF%E7%AB%AF/" itemprop="url" rel="index"><span itemprop="name">服务端端</span></a>
                 </span>
             </span>
 
@@ -212,14 +219,14 @@
                 <i class="far fa-file-word"></i>
               </span>
                 <span class="post-meta-item-text">本文字数：</span>
-              <span>266</span>
+              <span>1.8k</span>
             </span>
             <span class="post-meta-item" title="阅读时长">
               <span class="post-meta-item-icon">
                 <i class="far fa-clock"></i>
               </span>
                 <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>1 分钟</span>
+              <span>2 分钟</span>
             </span>
 
         </div>
@@ -231,22 +238,36 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <ul>
-<li>本书作者为张建飞，此为总结</li>
-</ul>
-<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><h4 id="一，梦想"><a href="#一，梦想" class="headerlink" title="一，梦想"></a>一，梦想</h4><ul>
-<li>我有一个梦想，我写的代码，可以像诗歌一样优美.</li>
-<li>我有一个梦想，我做的设计，能恰到好处，既不过度，也无不足.</li>
-</ul>
-<a id="more"></a>
+        <h1 id="一条神奇的sql"><a href="#一条神奇的sql" class="headerlink" title="一条神奇的sql"></a>一条神奇的sql</h1><p>个人有一个习惯，喜欢在查询的时候把sql也打印出来去数据库执行一下，看是否预期一致。<br> 就是这个习惯，让我发现一个”神奇”的现象：同一预期的sql通过不同的方法而得到出不同的结果集。</p>
+ <a id="more"></a>
 
-<h4 id="二，本质"><a href="#二，本质" class="headerlink" title="二，本质"></a>二，本质</h4><ul>
-<li>软件的本质是<code>复杂性</code>，软件在实现的过程中有很大的灵活性和抽象性，导致软件具有天然的复杂性.</li>
-</ul>
-<h4 id="三，美德"><a href="#三，美德" class="headerlink" title="三，美德"></a>三，美德</h4><ul>
-<li>我们都知道“写出好代码”是比“写出代码”要难得多的要求，一个程序员的<code>美德</code>就在于他是否能为后人留下一段看得懂、可维护性好的代码.</li>
-<li>写好代码的技艺不是一蹴而就的，它是一个<code>系统化</code>的工程，不是看几本书、写几年代码就能轻松习得的，而需要我们对自己的思维习惯、学习方法和工程实践进行彻底的反省和重构.</li>
-</ul>
+<h3 id="本次问题环境"><a href="#本次问题环境" class="headerlink" title="本次问题环境"></a>本次问题环境</h3><p> <strong>mysql5.7 php7.3.4nts ThinkPHP5.1 redis5.0.5</strong></p>
+<h3 id="出现的问题现象"><a href="#出现的问题现象" class="headerlink" title="出现的问题现象"></a>出现的问题现象</h3><p>   原先代码的本意是查出type（数据类型为enum）为2或者3的数据，因为涉及到工作，这里就用一个测试案例呐。<br>   可以通过下图看到，我们的本意是查出xn_my_enum表符合条件为type为1，2的数据集。但是呢，我拿到sql去数据库执行的<br>   结果，和tp的查询构造器方法获得的数据集不一样(⊙o⊙)？</p>
+<p>   明显的，$list才是我们所预期的数据集 ，而$list2就。。。</p>
+<p>   这是啥玩意啊，为啥type为“3”的也来了哈哈</p>
+<p>   <strong>使用tp的查询构造器方法和原生的query传sql方法获得的数据集不一致。</strong></p>
+<p><img src="/2020/09/09/%E4%B8%80%E6%9D%A1%E7%A5%9E%E5%A5%87%E7%9A%84sql/%E4%B8%80%E6%9D%A1%E7%A5%9E%E5%A5%87%E7%9A%84sql-1598260722466.jpg" alt="1598259749(1).jpg"></p>
+<p><img src="/2020/09/09/%E4%B8%80%E6%9D%A1%E7%A5%9E%E5%A5%87%E7%9A%84sql/%E4%B8%80%E6%9D%A1%E7%A5%9E%E5%A5%87%E7%9A%84sql-1598262409174.png"></p>
+<h3 id="解决问题的过程"><a href="#解决问题的过程" class="headerlink" title="解决问题的过程"></a>解决问题的过程</h3><p>首先查看表结构可以发现，type为enum类型，而且元素顺序为2，3，9，6；</p>
+<p>那么我们知道枚举原理：<strong>枚举在进行数据规范的时候（定义的时候），系统会自动建立一个数字与枚举元素的对应关系（关系放到日志中）；<br>然后在进行数据插入的时候，系统自动将字符转换成对应的数字存储，<br>然后在进行数据提取的时候，系统就自动将数字转换成字符串显示。</strong></p>
+<p>那么数字与枚举元素的对应关系就是1-”2“，2-”3“，3-“9”，4-“6”；</p>
+<p>咦，是不是与$list2的结果集一样的，哈哈，那么就可以知道如果参数传的是int的话，就会直接查enum<br>的数字。</p>
+<p>出现这种情况，基本就是框架tp的锅了，或者说是代码不规范和数据库表设计不合理。</p>
+<p>那么追一下tp的getLastSql()吧，最终如下图，通过层层解析后，然后通过getRealSql()<br>来获得我们看到的sql,关键的地方用红框了，$value是int,$type是2（代表数据类型为string，set，enum）<br>所以走不到if里面被处理加上单引号，自然的就以原有的int替换占位符了，所以得到了我们看到的sql。</p>
+<p><img src="/2020/09/09/%E4%B8%80%E6%9D%A1%E7%A5%9E%E5%A5%87%E7%9A%84sql/%E4%B8%80%E6%9D%A1%E7%A5%9E%E5%A5%87%E7%9A%84sql-1598263676857.png" alt="获取sql"></p>
+<p><img src="/2020/09/09/%E4%B8%80%E6%9D%A1%E7%A5%9E%E5%A5%87%E7%9A%84sql/%E4%B8%80%E6%9D%A1%E7%A5%9E%E5%A5%87%E7%9A%84sql-1598264249180.png" alt="获取sql"></p>
+<p>那么tp的查询构造器是咋搞得呢，它走的另一个路子，通过PDO的操作实例的一个方法bindValue(),我们可以在下图看到<br>PDO实例调用的bindValue()接收3个参数，而$val[1]=2,所以值是会加上单引号的，得到了正确的结果集。</p>
+<p><img src="/2020/09/09/%E4%B8%80%E6%9D%A1%E7%A5%9E%E5%A5%87%E7%9A%84sql/%E4%B8%80%E6%9D%A1%E7%A5%9E%E5%A5%87%E7%9A%84sql-1598263984297.png" alt="绑定参数"></p>
+<h3 id="解决方案"><a href="#解决方案" class="headerlink" title="解决方案"></a>解决方案</h3><p>1.把参数加上单引号，明白enum的原理；</p>
+<p>2.不管它，反正框架帮你解决了。。。这显然不是啥好习惯。</p>
+<h3 id="总结-一些唠叨"><a href="#总结-一些唠叨" class="headerlink" title="总结 || 一些唠叨"></a>总结 || 一些唠叨</h3><p>用某个东西的时候，最好能理解其原理，这样用起来才能得心应手，不会出了点小问题就焦头烂额。</p>
+<p>能追一下问题的根源是极好的，这个问题本来8月初就想记录下来了，苦于各种原因吧，哈哈，<br>把做的事写下来比做难多了。</p>
+<p>这个问题就是getRealSql()的原因，它在$type（参数数据类型）满足加单引号的条件时<br>没有加上，但是这个也是tp5.1版本的bug吧，tp5.0.24没这个问题</p>
+<p><img src="/2020/09/09/%E4%B8%80%E6%9D%A1%E7%A5%9E%E5%A5%87%E7%9A%84sql/435e9664.png" alt="tp5.0.24的getRealSql()"></p>
+<p><strong>可还原数据支持</strong></p>
+<p><code>CREATE TABLE </code>xn_my_enum<code>(  </code>id<code>int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT &#39;ID&#39;,  </code>username<code>varchar(30) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT &#39;&#39; COMMENT &#39;名字&#39;,  </code>type<code>enum(&#39;2&#39;,&#39;3&#39;,&#39;9&#39;,&#39;6&#39;) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT &#39;2&#39; COMMENT &#39;type&#39;,  </code>createtime<code> int(10) unsigned DEFAULT &#39;0&#39; COMMENT &#39;时间&#39;,   PRIMARY KEY (</code>id<code>) ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT=&#39;神奇的sql测试表&#39;; </code></p>
+<p>*<em>_SELECT * FROM <code>xn_my_enum</code> WHERE  <code>type</code> IN (1,2);_*</em></p>
+<p>INSERT into <code>xn_my_enum</code>(username,type) VALUES(‘VBA’,’2’),(‘VBA333’,’3’),(‘VBA6’,’6’),(‘VBA9’,’9’);</p>
 
     </div>
 
@@ -258,11 +279,11 @@
 <div>
 <ul class="post-copyright">
   <li class="post-copyright-author">
-    <strong>本文作者： </strong>犀鸟教育-张凯
+    <strong>本文作者： </strong>犀鸟教育-文帅
   </li>
   <li class="post-copyright-link">
     <strong>本文链接：</strong>
-    <a href="https://tech.xiniaogongkao.com/2020/09/09/%E5%89%8D%E8%A8%80/" title="前言">https://tech.xiniaogongkao.com/2020/09/09/前言/</a>
+    <a href="https://tech.xiniaogongkao.com/2020/09/09/%E4%B8%80%E6%9D%A1%E7%A5%9E%E5%A5%87%E7%9A%84sql/" title="一条神奇的sql">https://tech.xiniaogongkao.com/2020/09/09/一条神奇的sql/</a>
   </li>
   <li class="post-copyright-license">
     <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
@@ -273,7 +294,7 @@
 
       <footer class="post-footer">
           <div class="post-tags">
-              <a href="/tags/%E4%BB%8E%E7%A0%81%E5%86%9C%E5%88%B0%E5%B7%A5%E5%8C%A0/" rel="tag"># 从码农到工匠</a>
+              <a href="/tags/mysql/" rel="tag"># mysql</a>
           </div>
 
         
@@ -282,13 +303,10 @@
         
     <div class="post-nav">
       <div class="post-nav-item">
-    <a href="/2020/09/07/%E5%89%8D%E7%AB%AF%E6%95%B0%E6%8D%AE%E5%BA%93%E4%B9%8B-WebSQL/" rel="prev" title="前端数据库之-WebSQL">
-      <i class="fa fa-chevron-left"></i> 前端数据库之-WebSQL
+    <a href="/2020/09/09/Android%E5%A6%82%E4%BD%95%E9%80%9A%E8%BF%87jitpack%E8%BF%9B%E8%A1%8Cimplementation%E8%87%AA%E5%B7%B1%E7%9A%84%E4%BE%9D%E8%B5%96%EF%BC%88%E4%B8%80%EF%BC%89/" rel="prev" title="Android如何通过jitpack进行implementation自己的依赖（一）">
+      <i class="fa fa-chevron-left"></i> Android如何通过jitpack进行implementation自己的依赖（一）
     </a></div>
-      <div class="post-nav-item">
-    <a href="/2020/09/09/%E7%AC%AC%E4%B8%80%E7%AB%A0-%E5%91%BD%E5%90%8D/" rel="next" title="第一章 命名">
-      第一章 命名 <i class="fa fa-chevron-right"></i>
-    </a></div>
+      <div class="post-nav-item"></div>
     </div>
       </footer>
     
@@ -347,7 +365,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%89%8D%E8%A8%80"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%B8%80%EF%BC%8C%E6%A2%A6%E6%83%B3"><span class="nav-number">1.0.0.1.</span> <span class="nav-text">一，梦想</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%BA%8C%EF%BC%8C%E6%9C%AC%E8%B4%A8"><span class="nav-number">1.0.0.2.</span> <span class="nav-text">二，本质</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%B8%89%EF%BC%8C%E7%BE%8E%E5%BE%B7"><span class="nav-number">1.0.0.3.</span> <span class="nav-text">三，美德</span></a></li></ol></li></ol></li></ol></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%B8%80%E6%9D%A1%E7%A5%9E%E5%A5%87%E7%9A%84sql"><span class="nav-number">1.</span> <span class="nav-text">一条神奇的sql</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9C%AC%E6%AC%A1%E9%97%AE%E9%A2%98%E7%8E%AF%E5%A2%83"><span class="nav-number">1.0.1.</span> <span class="nav-text">本次问题环境</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%87%BA%E7%8E%B0%E7%9A%84%E9%97%AE%E9%A2%98%E7%8E%B0%E8%B1%A1"><span class="nav-number">1.0.2.</span> <span class="nav-text">出现的问题现象</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%A7%A3%E5%86%B3%E9%97%AE%E9%A2%98%E7%9A%84%E8%BF%87%E7%A8%8B"><span class="nav-number">1.0.3.</span> <span class="nav-text">解决问题的过程</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88"><span class="nav-number">1.0.4.</span> <span class="nav-text">解决方案</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%80%BB%E7%BB%93-%E4%B8%80%E4%BA%9B%E5%94%A0%E5%8F%A8"><span class="nav-number">1.0.5.</span> <span class="nav-text">总结 || 一些唠叨</span></a></li></ol></li></ol></li></ol></div>
       </div>
       <!--/noindex-->
 
