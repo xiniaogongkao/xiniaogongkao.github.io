@@ -1,0 +1,590 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.1.1">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon.ico">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon.ico">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"tech.xiniaogongkao.com","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="第二章 规范 离娄之明，公输子之巧，不以规矩，不能成方圆。——孟子">
+<meta property="og:type" content="article">
+<meta property="og:title" content="第二章 规范">
+<meta property="og:url" content="https://tech.xiniaogongkao.com/2020/09/10/%E7%AC%AC%E4%BA%8C%E7%AB%A0-%E8%A7%84%E8%8C%83/index.html">
+<meta property="og:site_name" content="犀鸟技术博客">
+<meta property="og:description" content="第二章 规范 离娄之明，公输子之巧，不以规矩，不能成方圆。——孟子">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2020-09-10T01:24:18.000Z">
+<meta property="article:modified_time" content="2020-09-10T01:30:49.884Z">
+<meta property="article:author" content="犀鸟技术中心">
+<meta property="article:tag" content="从码农到工匠">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="https://tech.xiniaogongkao.com/2020/09/10/%E7%AC%AC%E4%BA%8C%E7%AB%A0-%E8%A7%84%E8%8C%83/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>第二章 规范 | 犀鸟技术博客</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta custom-logo">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">犀鸟技术博客</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">与其感慨路难行，不如马上出发</p>
+      <a>
+        <img class="custom-logo-image" src="/images/xnlogo.png" alt="犀鸟技术博客">
+      </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://tech.xiniaogongkao.com/2020/09/10/%E7%AC%AC%E4%BA%8C%E7%AB%A0-%E8%A7%84%E8%8C%83/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="犀鸟技术中心">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="犀鸟技术博客">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          第二章 规范
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2020-09-10 09:24:18 / 修改时间：09:30:49" itemprop="dateCreated datePublished" datetime="2020-09-10T09:24:18+08:00">2020-09-10</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E3%80%8A%E4%BB%A3%E7%A0%81%E7%B2%BE%E8%BF%9B%E4%B9%8B%E8%B7%AF%EF%BC%9A%E4%BB%8E%E7%A0%81%E5%86%9C%E5%88%B0%E5%B7%A5%E5%8C%A0%E3%80%8B/" itemprop="url" rel="index"><span itemprop="name">《代码精进之路：从码农到工匠》</span></a>
+                </span>
+            </span>
+
+          <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>2.8k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>3 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <hr>
+<h1 id="第二章-规范"><a href="#第二章-规范" class="headerlink" title="第二章 规范"></a>第二章 规范</h1><ul>
+<li>离娄之明，公输子之巧，不以规矩，不能成方圆。——孟子</li>
+</ul>
+<a id="more"></a>
+
+<h3 id="一，前言"><a href="#一，前言" class="headerlink" title="一，前言"></a>一，前言</h3><ul>
+<li>规范的价值<ul>
+<li>复杂系统的前沿科学家 Mitchell Waldrop 在《复杂》一书中，提出一种用<code>信息熵</code>来进行复杂性度量的方法。</li>
+<li>所谓信息熵，就是<strong>一条信息的信息量大小和它的不确定性之间的关系</strong>。<ul>
+<li>举个例子，假设消息由符号A、C、G和T组成，如果序列高度有序，例如“A AA A A A A … A”，则熵为零。而完全随机的序列，例如“G A TA C G A … A”，熵值达到最大。</li>
+</ul>
+</li>
+<li>事物的复杂程度在很大程度上取决于其<code>有序程度</code>，减少无序能在一定程度上降低复杂度，这正是规范的价值所在。</li>
+</ul>
+</li>
+<li>认知成本<ul>
+<li>所谓认知，是指<strong>人们获得知识或应用知识的过程</strong>。</li>
+<li>知识是人类对经验范围内的感觉进行总结归纳之后发现的<code>规律</code>。混乱无序的东西没有规律，不能形成知识，也就不能被认知到，这就是<strong>有组织和无组织的复杂性的区别</strong>。</li>
+</ul>
+</li>
+<li>混乱的代价<ul>
+<li>在评估一个需求时，要在杂乱无章的代码中找好久才能找到相关的需求改动点，然而真正需要改动的代码可能只有一行而已。这样的无序在很大程度上是系统<strong>缺少代码组织结构规范</strong>造成的。</li>
+<li>混乱是有代价的，我们有必要使用规范和约定来使大脑从记忆不同的代码段的随意性、偶然性差异中解脱出来。将我们有限的精力用在刀刃上，而不是用来疲于应对各种不一致和随心所欲的混乱。</li>
+</ul>
+</li>
+</ul>
+<h3 id="二，代码格式规范"><a href="#二，代码格式规范" class="headerlink" title="二，代码格式规范"></a>二，代码格式规范</h3><ul>
+<li><code>代码格式</code>关系到代码的<code>可读性</code>，因此需要遵从一定的规范，包括<strong>缩进、水平对齐、注释格式</strong>等。关于代码格式，可能会因为语言和个人偏好而不同，但是一个团队最好是选定<strong>一种格式</strong>，因为一致性可以减少复杂度。</li>
+<li><code>空行</code>是一个小小的细节，但又不仅是一个细节问题。<ul>
+<li>空行在代码中的概念区隔作用同样适用。以 Spring 中的 BeanDefinitionVisitor 为例，在包声明、导入声明和每个函数之间，都有空行隔开。</li>
+<li>这种极其简单的规则极大地影响代码的视觉外观，每个空白行都是一条线索，提示你下一组代码<strong>表示的是不同的概念或功能</strong>。</li>
+</ul>
+</li>
+</ul>
+<h3 id="三，命名规范"><a href="#三，命名规范" class="headerlink" title="三，命名规范"></a>三，命名规范</h3><ul>
+<li>变量名使用小驼峰：<code>let pageNum = 10</code></li>
+<li>全局变量使用大驼峰： <code>let BaseUrl = &#39;&#39;</code></li>
+<li>常量使用大写加下划线连接：<code>const TOTAL_COUNT = 100</code></li>
+<li>文件名使用中划线连接：<code>course-details.vue</code></li>
+<li>组件名使用小驼峰：<code>uploadImage.vue</code></li>
+</ul>
+<h3 id="四，日志规范"><a href="#四，日志规范" class="headerlink" title="四，日志规范"></a>四，日志规范</h3><ul>
+<li>日志的重要性很容易被开发人员忽视，写好程序的日志可以帮助我们大大减轻后期维护的压力。</li>
+<li>我认为比较有用的4个级别依次是<code>ERROR、WARN、INFO 和 DEBUG</code>。通常这4个级别就能够很好地满足我们的需求了。</li>
+<li>ERROR，表示不能自己恢复的错误，需要立即被关注和解决。<ul>
+<li>例如，数据库操作错误、I/O错误（网络调用超时、文件读取错误等）、未知的系统错误（NullPointerException、OutOfMemoryError等）。</li>
+<li>ERROR要<strong>接入监控和报警系统</strong>。ERROR需要<strong>人工介入处理</strong>，及时止损，否则会影响系统的可用性。</li>
+</ul>
+</li>
+<li>WARN，对于可预知的业务问题，最好不要用ERROR输出日志，以免污染报警系统。<ul>
+<li>例如，参数校验不通过、没有访问权限等业务异常，就不应该用ERROR输出。</li>
+<li>需要注意的是，在短时间内产生过多的WARN日志，也是一种系统不健康的表现。</li>
+</ul>
+</li>
+<li>INFO，用于记录系统的基本运行过程和运行状态。<ul>
+<li>优先根据INFO日志可初步定位，主要包括系统状态变化日志、业务流程的核心处理、关键动作和业务流程的状态变化。</li>
+</ul>
+</li>
+<li>DEBUG，是输出调试信息，如 request/response 的对象内容。<ul>
+<li>通常在开发和预发环境下，DEBUG日志会打开，以方便开发和调试。<strong>而在线上环境，DEBUG开关需要关闭</strong>，因为在生产环境下开启DEBUG会导致日志量非常大，其损耗是难以接受的。</li>
+</ul>
+</li>
+</ul>
+<h4 id="五，异常规范"><a href="#五，异常规范" class="headerlink" title="五，异常规范"></a>五，异常规范</h4><ul>
+<li>异常处理<ul>
+<li>很多的应用系统因为<strong>没有统一的异常处理规范</strong>，增加了人为的复杂性，具体体现在以下两个方面。<ul>
+<li>代码中到处充斥着异常捕获的try/catch的代码，搞乱了代码结构，把错误处理与正常流程混为一谈，严重影响了代码的可读性。</li>
+<li>异常处理不统一，有的场景对外直接抛出异常，有的场景对外返回错误码，这种不一致性让服务的调用方摸不着头脑，增加了服务的使用成本和沟通成本。</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>错误码<ul>
+<li>错误码规范并没有统一的约定，错误码管理混乱会给后续的系统维护（特别是在理清系统业务脉络和问题定位上）带来很多麻烦。</li>
+<li>编号错误码<ul>
+<li>对于平台、底层系统或软件产品，可以采用<strong>编号式的编码规范</strong>，好处是编码风格固定，给人一种正式感；缺点是必须要配合文档才能理解错误码代表的意思。</li>
+<li>ORA-00001：违反唯一约束条件</li>
+<li>ORA-00017：请求会话以设置跟踪事件</li>
+</ul>
+</li>
+<li>显性化错误码<ul>
+<li>显性化的错误码具有更强的灵活性，适合<a target="_blank" rel="noopener" href="https://www.scrumcn.com/agile/scrum-knowledge-library/agile101.html">敏捷开发</a>。</li>
+<li>例如，我们可以将错误码定义成3个部分：<code>类型+场景+自定义标识</code>。</li>
+<li>对于错误类型，我们可以做一个约定：P代表参数异常（ParamException）、B代表业务异常（BizException）、S代表系统异常（SystemException）。<table>
+<thead>
+<tr>
+<th>显性化错误码</th>
+<th>释义</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>P_Customer_NameIsNull</td>
+<td>客户姓名不能为空</td>
+</tr>
+<tr>
+<td>B_Customer_NameAlreadyExist</td>
+<td>客户姓名已存在</td>
+</tr>
+<tr>
+<td>S_Unknow_Error</td>
+<td>未知系统错误</td>
+</tr>
+</tbody></table>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="五，埋点规范和架构规范"><a href="#五，埋点规范和架构规范" class="headerlink" title="五，埋点规范和架构规范"></a>五，埋点规范和架构规范</h3><ul>
+<li>埋点规范<ul>
+<li>做互联网产品，了解用户的行为和心智很重要。有一句话叫“业务数据化、数据业务化”，即<strong>业务要沉淀数据、数据要反哺业务</strong>。</li>
+<li>埋点规范的价值在于确保被采集上来的数据能够被统计分析，类似协议的作用，因此埋点规范已不再是可有可无的选项，而是必须要遵守的协议。</li>
+</ul>
+</li>
+<li>架构规范<ul>
+<li>规范对于架构来说至关重要。从某种意义上来说，架构就是一组约束，遵从了这些约束，才能符合架构要求；反之，架构将失去意义。</li>
+</ul>
+</li>
+</ul>
+<h3 id="六，防止破窗"><a href="#六，防止破窗" class="headerlink" title="六，防止破窗"></a>六，防止破窗</h3><ul>
+<li>环境中的不良现象如果被放任存在，就会诱使人们仿效，甚至变本加厉。<ul>
+<li>以一幢有少许破窗的建筑为例，如果破窗不被修理好，可能将会有破坏者破坏更多的窗户。最终，他们甚至会闯入建筑内，如果发现无人居住，也许就在那里定居或者纵火。一面墙，如果出现一些涂鸦而没有被清洗掉，那么很快，墙上就布满了乱七八糟、不堪入目的东西；一条人行道有些许纸屑，不久后就会有更多垃圾，最终人们会视若理所当然地将垃圾顺手丢弃在地上。<strong>这个现象，就是犯罪心理学中的“破窗效应”</strong>。</li>
+</ul>
+</li>
+<li>首先，我们要有<code>一套规范</code>，并尽量遵守规范，不要做“打破第一扇窗”的人；其次，发现有“破窗”，要<strong>及时地修复</strong>，不要让事情进一步恶化。整洁的代码需要每个人的精心呵护，需要整个团队都具备一些工匠精神。</li>
+</ul>
+<h3 id="本章小结"><a href="#本章小结" class="headerlink" title="本章小结"></a>本章小结</h3><ul>
+<li>混乱会造成复杂，有序会减少复杂度。<code>制定规范</code>是为了从无序走向有序，减少认知成本。</li>
+<li>在软件开发过程中，大到体系结构和应用架构规范，小到代码格式和空行的约定，都在一定程度上影响着<code>系统的复杂程度</code>。</li>
+<li>留给公司一个方便维护、整洁优雅的代码库，是我们技术人员的最高技术使命，也是我们对公司做出的最大技术贡献。</li>
+</ul>
+
+    </div>
+
+    
+    
+    
+        
+
+<div>
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>犀鸟教育-张凯
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="https://tech.xiniaogongkao.com/2020/09/10/%E7%AC%AC%E4%BA%8C%E7%AB%A0-%E8%A7%84%E8%8C%83/" title="第二章 规范">https://tech.xiniaogongkao.com/2020/09/10/第二章-规范/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E4%BB%8E%E7%A0%81%E5%86%9C%E5%88%B0%E5%B7%A5%E5%8C%A0/" rel="tag"># 从码农到工匠</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2020/09/09/%E4%B8%80%E6%9D%A1%E7%A5%9E%E5%A5%87%E7%9A%84sql/" rel="prev" title="一条神奇的sql">
+      <i class="fa fa-chevron-left"></i> 一条神奇的sql
+    </a></div>
+      <div class="post-nav-item"></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%AC%AC%E4%BA%8C%E7%AB%A0-%E8%A7%84%E8%8C%83"><span class="nav-number">1.</span> <span class="nav-text">第二章 规范</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%80%EF%BC%8C%E5%89%8D%E8%A8%80"><span class="nav-number">1.0.1.</span> <span class="nav-text">一，前言</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BA%8C%EF%BC%8C%E4%BB%A3%E7%A0%81%E6%A0%BC%E5%BC%8F%E8%A7%84%E8%8C%83"><span class="nav-number">1.0.2.</span> <span class="nav-text">二，代码格式规范</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%89%EF%BC%8C%E5%91%BD%E5%90%8D%E8%A7%84%E8%8C%83"><span class="nav-number">1.0.3.</span> <span class="nav-text">三，命名规范</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9B%9B%EF%BC%8C%E6%97%A5%E5%BF%97%E8%A7%84%E8%8C%83"><span class="nav-number">1.0.4.</span> <span class="nav-text">四，日志规范</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%BA%94%EF%BC%8C%E5%BC%82%E5%B8%B8%E8%A7%84%E8%8C%83"><span class="nav-number">1.0.4.1.</span> <span class="nav-text">五，异常规范</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BA%94%EF%BC%8C%E5%9F%8B%E7%82%B9%E8%A7%84%E8%8C%83%E5%92%8C%E6%9E%B6%E6%9E%84%E8%A7%84%E8%8C%83"><span class="nav-number">1.0.5.</span> <span class="nav-text">五，埋点规范和架构规范</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%85%AD%EF%BC%8C%E9%98%B2%E6%AD%A2%E7%A0%B4%E7%AA%97"><span class="nav-number">1.0.6.</span> <span class="nav-text">六，防止破窗</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9C%AC%E7%AB%A0%E5%B0%8F%E7%BB%93"><span class="nav-number">1.0.7.</span> <span class="nav-text">本章小结</span></a></li></ol></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">犀鸟技术中心</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">7</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">5</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">3</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="cc-license motion-element" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" class="cc-opacity" rel="noopener" target="_blank"><img src="/images/cc-by-nc-sa.svg" alt="Creative Commons"></a>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">犀鸟技术中心</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-area"></i>
+    </span>
+    <span title="站点总字数">13k</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="站点阅读时长">12 分钟</span>
+</div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>
