@@ -20,25 +20,22 @@
     var CONFIG = {"hostname":"tech.xiniaogongkao.com","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
   </script>
 
-  <meta name="description" content="前端数据库之-WebSQL在前端的数据存储中，通常会使用localStorage或者sessionStorage还有cookies，他们都是以键值对的形式存储，类似于非关系型的数据库，其实在浏览器中，还有一种关系型数据库，那就是这篇文章所提到的WebSQL，接下来介绍一下WebSQL的使用">
+  <meta name="description" content="在程序员这个行业，坚持做技术写作的人一直比较少。我和身边的朋友沟通后，发现他们除了借口没有时间外，大多没有意识到写作带来的收益。在他们看来，将自己学到的知识简单记录下来就足够自己需要的时候回顾了。而技术写作通常需要花更多时间，因为需要将技术的细节以及来龙去脉讲清楚。不得不承认，这的确是一个事实，通常情况下，把一个知识讲清楚比理解它更难。那我们为什么要花时间写作呢？我想写作至少有以下好处。">
 <meta property="og:type" content="article">
-<meta property="og:title" content="前端数据库之-WebSQL">
-<meta property="og:url" content="https://tech.xiniaogongkao.com/2020/09/07/%E5%89%8D%E7%AB%AF%E6%95%B0%E6%8D%AE%E5%BA%93%E4%B9%8B-WebSQL/index.html">
+<meta property="og:title" content="作为码农我们为什么要写作(转载)">
+<meta property="og:url" content="https://tech.xiniaogongkao.com/2020/09/14/%E4%BD%9C%E4%B8%BA%E7%A0%81%E5%86%9C%E6%88%91%E4%BB%AC%E4%B8%BA%E4%BB%80%E4%B9%88%E8%A6%81%E5%86%99%E4%BD%9C/index.html">
 <meta property="og:site_name" content="犀鸟技术博客">
-<meta property="og:description" content="前端数据库之-WebSQL在前端的数据存储中，通常会使用localStorage或者sessionStorage还有cookies，他们都是以键值对的形式存储，类似于非关系型的数据库，其实在浏览器中，还有一种关系型数据库，那就是这篇文章所提到的WebSQL，接下来介绍一下WebSQL的使用">
+<meta property="og:description" content="在程序员这个行业，坚持做技术写作的人一直比较少。我和身边的朋友沟通后，发现他们除了借口没有时间外，大多没有意识到写作带来的收益。在他们看来，将自己学到的知识简单记录下来就足够自己需要的时候回顾了。而技术写作通常需要花更多时间，因为需要将技术的细节以及来龙去脉讲清楚。不得不承认，这的确是一个事实，通常情况下，把一个知识讲清楚比理解它更难。那我们为什么要花时间写作呢？我想写作至少有以下好处。">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://tech.xiniaogongkao.com/2020/09/07/%E5%89%8D%E7%AB%AF%E6%95%B0%E6%8D%AE%E5%BA%93%E4%B9%8B-WebSQL/QQ%E6%88%AA%E5%9B%BE20200907101326.png">
-<meta property="og:image" content="https://tech.xiniaogongkao.com/2020/09/07/%E5%89%8D%E7%AB%AF%E6%95%B0%E6%8D%AE%E5%BA%93%E4%B9%8B-WebSQL/QQ%E6%88%AA%E5%9B%BE20200907102721.png">
-<meta property="og:image" content="https://tech.xiniaogongkao.com/2020/09/07/%E5%89%8D%E7%AB%AF%E6%95%B0%E6%8D%AE%E5%BA%93%E4%B9%8B-WebSQL/QQ%E6%88%AA%E5%9B%BE20200907103236.png">
-<meta property="og:image" content="https://tech.xiniaogongkao.com/2020/09/07/%E5%89%8D%E7%AB%AF%E6%95%B0%E6%8D%AE%E5%BA%93%E4%B9%8B-WebSQL/QQ%E6%88%AA%E5%9B%BE20200907104435.png">
-<meta property="article:published_time" content="2020-09-07T03:30:51.000Z">
-<meta property="article:modified_time" content="2020-09-09T02:16:41.424Z">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2020/png/2371561/1600050372539-bdd555cb-2d79-41c9-a52b-1d683a47a257.png#align=left&display=inline&height=412&margin=%5Bobject%20Object%5D&originHeight=412&originWidth=543&size=0&status=done&style=none&width=543">
+<meta property="article:published_time" content="2020-09-14T02:30:26.000Z">
+<meta property="article:modified_time" content="2020-09-14T02:44:42.616Z">
 <meta property="article:author" content="犀鸟技术中心">
-<meta property="article:tag" content="websql">
+<meta property="article:tag" content="写作">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://tech.xiniaogongkao.com/2020/09/07/%E5%89%8D%E7%AB%AF%E6%95%B0%E6%8D%AE%E5%BA%93%E4%B9%8B-WebSQL/QQ%E6%88%AA%E5%9B%BE20200907101326.png">
+<meta name="twitter:image" content="https://cdn.nlark.com/yuque/0/2020/png/2371561/1600050372539-bdd555cb-2d79-41c9-a52b-1d683a47a257.png#align=left&display=inline&height=412&margin=%5Bobject%20Object%5D&originHeight=412&originWidth=543&size=0&status=done&style=none&width=543">
 
-<link rel="canonical" href="https://tech.xiniaogongkao.com/2020/09/07/%E5%89%8D%E7%AB%AF%E6%95%B0%E6%8D%AE%E5%BA%93%E4%B9%8B-WebSQL/">
+<link rel="canonical" href="https://tech.xiniaogongkao.com/2020/09/14/%E4%BD%9C%E4%B8%BA%E7%A0%81%E5%86%9C%E6%88%91%E4%BB%AC%E4%B8%BA%E4%BB%80%E4%B9%88%E8%A6%81%E5%86%99%E4%BD%9C/">
 
 
 <script id="page-configurations">
@@ -51,7 +48,7 @@
   };
 </script>
 
-  <title>前端数据库之-WebSQL | 犀鸟技术博客</title>
+  <title>作为码农我们为什么要写作(转载) | 犀鸟技术博客</title>
   
 
 
@@ -175,7 +172,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://tech.xiniaogongkao.com/2020/09/07/%E5%89%8D%E7%AB%AF%E6%95%B0%E6%8D%AE%E5%BA%93%E4%B9%8B-WebSQL/">
+    <link itemprop="mainEntityOfPage" href="https://tech.xiniaogongkao.com/2020/09/14/%E4%BD%9C%E4%B8%BA%E7%A0%81%E5%86%9C%E6%88%91%E4%BB%AC%E4%B8%BA%E4%BB%80%E4%B9%88%E8%A6%81%E5%86%99%E4%BD%9C/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -188,7 +185,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          前端数据库之-WebSQL
+          作为码农我们为什么要写作(转载)
         </h1>
 
         <div class="post-meta">
@@ -197,23 +194,17 @@
                 <i class="far fa-calendar"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
+              
 
-              <time title="创建时间：2020-09-07 11:30:51" itemprop="dateCreated datePublished" datetime="2020-09-07T11:30:51+08:00">2020-09-07</time>
+              <time title="创建时间：2020-09-14 10:30:26 / 修改时间：10:44:42" itemprop="dateCreated datePublished" datetime="2020-09-14T10:30:26+08:00">2020-09-14</time>
             </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-09-09 10:16:41" itemprop="dateModified" datetime="2020-09-09T10:16:41+08:00">2020-09-09</time>
-              </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
                 <i class="far fa-folder"></i>
               </span>
               <span class="post-meta-item-text">分类于</span>
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/web%E7%AB%AF/" itemprop="url" rel="index"><span itemprop="name">web端</span></a>
+                  <a href="/categories/%E5%86%99%E4%BD%9C%E7%9A%84%E8%89%BA%E6%9C%AF/" itemprop="url" rel="index"><span itemprop="name">写作的艺术</span></a>
                 </span>
             </span>
 
@@ -223,7 +214,7 @@
                 <i class="far fa-file-word"></i>
               </span>
                 <span class="post-meta-item-text">本文字数：</span>
-              <span>1.4k</span>
+              <span>1.3k</span>
             </span>
             <span class="post-meta-item" title="阅读时长">
               <span class="post-meta-item-icon">
@@ -242,27 +233,29 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <h1 id="前端数据库之-WebSQL"><a href="#前端数据库之-WebSQL" class="headerlink" title="前端数据库之-WebSQL"></a>前端数据库之-WebSQL</h1><p>在前端的数据存储中，通常会使用localStorage或者sessionStorage还有cookies，他们都是以键值对的形式存储，类似于非关系型的数据库，其实在浏览器中，还有一种关系型数据库，那就是这篇文章所提到的WebSQL，接下来介绍一下WebSQL的使用</p>
+        <p>在程序员这个行业，坚持做技术写作的人一直比较少。我和身边的朋友沟通后，发现他们除了借口没有时间外，大多没有意识到写作带来的收益。在他们看来，将自己学到的知识简单记录下来就足够自己需要的时候回顾了。而技术写作通常需要花更多时间，因为需要将技术的细节以及来龙去脉讲清楚。<br>不得不承认，这的确是一个事实，通常情况下，把一个知识讲清楚比理解它更难。那我们为什么要花时间写作呢？我想写作至少有以下好处。</p>
 <a id="more"></a>
 
-<h1 id="创建数据库"><a href="#创建数据库" class="headerlink" title="创建数据库"></a>创建数据库</h1><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">const db = openDatabase(&#x27;person&#x27;,1,&#x27;person&#x27;,0)</span><br></pre></td></tr></table></figure>
-
-
-<p>使用openDatabase方法创建一个数据库，里面有五个参数，分别是数据库的名字，数据库的版本，数据库的备注，数据库的大小（在Chrome中，无论填多少大小都是5M，所以我们可以填0），创建的回调函数（可选输入），创建好之后我们打开Chrome的Application，再点击WebSQL，就看到已经创建了一个名为person的空数据库了</p>
-<p><img src="/2020/09/07/%E5%89%8D%E7%AB%AF%E6%95%B0%E6%8D%AE%E5%BA%93%E4%B9%8B-WebSQL/QQ%E6%88%AA%E5%9B%BE20200907101326.png" alt="QQ截图20200907101326.png"></p>
-<h1 id="创建表"><a href="#创建表" class="headerlink" title="创建表"></a>创建表</h1><p>接下来我们使用WebSQL的transaction方法来新起事务，我们通过他就可以用写SQL的方式来创建表了</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">db.transaction(tx =&gt;&#123;</span><br><span class="line">  tx.executeSql(&#x27;create table if not exists student (id unique,name)&#x27;)</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
-<p>该方法会被传入一个SQLTransaction对象，该对象可以执行executeSql方法。executeSql支持四个参数，sql语句，sql参数，成功回调函数，错误回调函数。现在我们通过此方法创建了一个student表，里面有id和name字段</p>
-<p><img src="/2020/09/07/%E5%89%8D%E7%AB%AF%E6%95%B0%E6%8D%AE%E5%BA%93%E4%B9%8B-WebSQL/QQ%E6%88%AA%E5%9B%BE20200907102721.png" alt="QQ截图20200907102721.png"></p>
-<h1 id="插入、修改、删除数据"><a href="#插入、修改、删除数据" class="headerlink" title="插入、修改、删除数据"></a>插入、修改、删除数据</h1><p>现在我们插入两条学生数据</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">db.transaction(tx =&gt;&#123;</span><br><span class="line">  tx.executeSql(&#x27;insert into student (id,name) values (?,?)&#x27;,[1,&#x27;天祥&#x27;]);</span><br><span class="line">  tx.executeSql(&#x27;insert into student (id,name) values (?,?)&#x27;,[2,&#x27;叶文&#x27;])</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
-
-<p><img src="/2020/09/07/%E5%89%8D%E7%AB%AF%E6%95%B0%E6%8D%AE%E5%BA%93%E4%B9%8B-WebSQL/QQ%E6%88%AA%E5%9B%BE20200907103236.png" alt="QQ截图20200907103236.png"></p>
-<p>我们在student表中创建了两条学生数据，如果要修改，可以执行update语句，删除可以执行delete语句，这里就不再演示，接下来我们查询并导出数据</p>
-<h1 id="查询数据"><a href="#查询数据" class="headerlink" title="查询数据"></a>查询数据</h1><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">db.transaction(tx =&gt;&#123;</span><br><span class="line">  tx.executeSql(&#x27;select * from student&#x27;,[],(tx,res)=&gt;&#123;</span><br><span class="line">    let rows = res.rows;	//查询的结果在res的rows对象属性里面</span><br><span class="line">    let len = rows.length;</span><br><span class="line">    for(let i=0;i&lt;len;i++)&#123;</span><br><span class="line">        console.log(rows[i])</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;);</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
-<p>执行之后成功查询到我们插入的两个学生的数据</p>
-<p><img src="/2020/09/07/%E5%89%8D%E7%AB%AF%E6%95%B0%E6%8D%AE%E5%BA%93%E4%B9%8B-WebSQL/QQ%E6%88%AA%E5%9B%BE20200907104435.png" alt="QQ截图20200907104435.png"></p>
-<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p>1、WebSQL的规范已经不受官方维护，目前火狐和IE等浏览器不能使用该功能，所以该功能仅作为一种知识拓展，不建议在开发中使用，如果遇到需要存储比较多内容的场景，可以使用IndexedDB<br>2、WebSQL是底层基于SQLite的关系型数据库<br>3、在Chrome中容量为5M，支持同域名下不同页面共享<br>4、版本的参数用于控制，如果打开的版本和现有版本不一致会报错</p>
+<h2 id="提高自己对知识的掌握层次"><a href="#提高自己对知识的掌握层次" class="headerlink" title="提高自己对知识的掌握层次"></a>提高自己对知识的掌握层次</h2><p>美国教育心理学家 <a target="_blank" rel="noopener" href="http://zh.wikipedia.org/wiki/%E6%9C%AC%E5%82%91%E6%98%8E%C2%B7%E5%B8%83%E9%AD%AF%E5%A7%86">Bloom</a> 将知识认知分为了两个维度，其中认知历程维度又分为 6 个层次，分别为：记忆、理解、应用、分析、评鉴、创造。如下图所示，层次越高，表示对知识的掌握程度越深。<br><a target="_blank" rel="noopener" href="https://blog.devtang.com/images/why-write-1.png"><img src="https://cdn.nlark.com/yuque/0/2020/png/2371561/1600050372539-bdd555cb-2d79-41c9-a52b-1d683a47a257.png#align=left&display=inline&height=412&margin=%5Bobject%20Object%5D&originHeight=412&originWidth=543&size=0&status=done&style=none&width=543"></a></p>
+<p>对于写作者来说，在写作过程中，因为需要对知识进行精确地表述，常常要对知识的细节再次的探索。在这个过程中，写作者可能会发现自己的观点不清晰的地方，通过二次学习，使自己的理解更加完善。写作者也可能会发现自己观点中的错误，从而改正自己的曲解。在经历过这段过程后，通常对于自己所写的知识的掌握程度，都上升了一个层次。<br>我自己的每次技术写作都经历了这样的提高过程。所以，我更多时候是把写作当成学习的一种方式。这种学习方式比普通的学习方式更加深入，效果更好。当然，花费的时间也更多。</p>
+<h2 id="提高表达和沟通的能力"><a href="#提高表达和沟通的能力" class="headerlink" title="提高表达和沟通的能力"></a>提高表达和沟通的能力</h2><p>作为一个程序员，日常的工作大部分时间都是面对电脑。许多人周末也喜欢当一个技术宅，待在家里上网、看电影或者玩游戏来消遣。长时间的面对机器，使得我们的语言表达能力极度衰退。而写作是一个很好的机会，让我们练习自己的表达能力。<br>长时间写作之后，你会更加注意平时沟通的语言。你的用词更加精准，表达更加生动。在表达能力提高的同时，你的沟通效率也得到提高。</p>
+<h2 id="接受读者的沟通和反馈"><a href="#接受读者的沟通和反馈" class="headerlink" title="接受读者的沟通和反馈"></a>接受读者的沟通和反馈</h2><p>当你的文章通过博客或者 InfoQ 网站发表出来后，你就会接着获得写作的第三个好处：来自读者的沟通和反馈。一篇好的文章通常会吸引一些读者回复，通过和读者的交流，你可以收获以下好处：</p>
+<ul>
+<li>错误内容反馈：尽管文章在写作时经历过二次学习，但是人难免会犯错。写作将你的思想完全暴露出来，有水平的读者可以指出你文章中的错误，从而使你对知识的理解更加准确。我的很多博客文章都有一些细微错误，通过读者的找反馈，我很快就将错误内容改正过来了，自己的水平也得到了提高。</li>
+</ul>
+<ul>
+<li>认识朋友：一个乐于分享的人总会比沉默寡言的人更招人喜欢。所以通过写作，你可以结交很多和你一样，乐于分享的朋友。</li>
+</ul>
+<ul>
+<li>了解更多相关信息：一些读者会回复说：” 某某框架也用了这个技术方案 “，或者是：” 你的这个实现方案没有另一个某某开源方案好 “。这些信息，作为你当前文章知识点的补充，使你能够了解更多相关的资料，再一次完善自己所学的知识。<h2 id="影响力"><a href="#影响力" class="headerlink" title="影响力"></a>影响力</h2></li>
+</ul>
+<p>当你持续的写作，坚持一年以上，你就会慢慢收获影响力。这个时候，你也会收到技术大会的分享邀请，出版社的约稿邀请，著名互联网公司的工作邀请，甚至是创业项目的合伙人邀请。你相比那些不分享的人，获得了更多的机会。当然你的技术观点也会被更多人接受，你也会收获到传递知识的乐趣。</p>
+<h2 id="结束语"><a href="#结束语" class="headerlink" title="结束语"></a>结束语</h2><ul>
+<li>在写作过程中，你将收获<code>提高自己对知识的掌握层次</code>和<code>提高表达和沟通的能力</code>的好处。</li>
+<li>在写作结束后，你将收获<code>错误内容反馈</code>、<code>认识朋友</code>和<code>了解更多相关信息</code>的好处。</li>
+<li>在坚持写作一段时间，你将收获<code>影响力</code>和<code>传递知识的乐趣</code>。</li>
+</ul>
+<p><a target="_blank" rel="noopener" href="https://blog.devtang.com/2014/01/08/why-we-need-write/">原文链接</a></p>
 
     </div>
 
@@ -274,11 +267,11 @@
 <div>
 <ul class="post-copyright">
   <li class="post-copyright-author">
-    <strong>本文作者： </strong>犀鸟教育-文帅
+    <strong>本文作者： </strong>犀鸟教育-覃涛
   </li>
   <li class="post-copyright-link">
     <strong>本文链接：</strong>
-    <a href="https://tech.xiniaogongkao.com/2020/09/07/%E5%89%8D%E7%AB%AF%E6%95%B0%E6%8D%AE%E5%BA%93%E4%B9%8B-WebSQL/" title="前端数据库之-WebSQL">https://tech.xiniaogongkao.com/2020/09/07/前端数据库之-WebSQL/</a>
+    <a href="https://tech.xiniaogongkao.com/2020/09/14/%E4%BD%9C%E4%B8%BA%E7%A0%81%E5%86%9C%E6%88%91%E4%BB%AC%E4%B8%BA%E4%BB%80%E4%B9%88%E8%A6%81%E5%86%99%E4%BD%9C/" title="作为码农我们为什么要写作(转载)">https://tech.xiniaogongkao.com/2020/09/14/作为码农我们为什么要写作/</a>
   </li>
   <li class="post-copyright-license">
     <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
@@ -289,7 +282,7 @@
 
       <footer class="post-footer">
           <div class="post-tags">
-              <a href="/tags/websql/" rel="tag"># websql</a>
+              <a href="/tags/%E5%86%99%E4%BD%9C/" rel="tag"># 写作</a>
           </div>
 
         
@@ -298,13 +291,10 @@
         
     <div class="post-nav">
       <div class="post-nav-item">
-    <a href="/2020/08/26/mysql%E4%BA%8B%E5%8A%A1%E7%89%B9%E6%80%A7%E5%8F%8A%E9%9A%94%E7%A6%BB%E7%BA%A7%E5%88%AB/" rel="prev" title="mysql事务特性及隔离级别">
-      <i class="fa fa-chevron-left"></i> mysql事务特性及隔离级别
+    <a href="/2020/09/10/%E7%AC%AC%E4%BA%8C%E7%AB%A0-%E8%A7%84%E8%8C%83/" rel="prev" title="第二章 规范">
+      <i class="fa fa-chevron-left"></i> 第二章 规范
     </a></div>
-      <div class="post-nav-item">
-    <a href="/2020/09/09/%E5%89%8D%E8%A8%80/" rel="next" title="前言">
-      前言 <i class="fa fa-chevron-right"></i>
-    </a></div>
+      <div class="post-nav-item"></div>
     </div>
       </footer>
     
@@ -363,7 +353,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%89%8D%E7%AB%AF%E6%95%B0%E6%8D%AE%E5%BA%93%E4%B9%8B-WebSQL"><span class="nav-number">1.</span> <span class="nav-text">前端数据库之-WebSQL</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%88%9B%E5%BB%BA%E6%95%B0%E6%8D%AE%E5%BA%93"><span class="nav-number">2.</span> <span class="nav-text">创建数据库</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%88%9B%E5%BB%BA%E8%A1%A8"><span class="nav-number">3.</span> <span class="nav-text">创建表</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%8F%92%E5%85%A5%E3%80%81%E4%BF%AE%E6%94%B9%E3%80%81%E5%88%A0%E9%99%A4%E6%95%B0%E6%8D%AE"><span class="nav-number">4.</span> <span class="nav-text">插入、修改、删除数据</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%9F%A5%E8%AF%A2%E6%95%B0%E6%8D%AE"><span class="nav-number">5.</span> <span class="nav-text">查询数据</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%80%BB%E7%BB%93"><span class="nav-number">6.</span> <span class="nav-text">总结</span></a></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%8F%90%E9%AB%98%E8%87%AA%E5%B7%B1%E5%AF%B9%E7%9F%A5%E8%AF%86%E7%9A%84%E6%8E%8C%E6%8F%A1%E5%B1%82%E6%AC%A1"><span class="nav-number">1.</span> <span class="nav-text">提高自己对知识的掌握层次</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%8F%90%E9%AB%98%E8%A1%A8%E8%BE%BE%E5%92%8C%E6%B2%9F%E9%80%9A%E7%9A%84%E8%83%BD%E5%8A%9B"><span class="nav-number">2.</span> <span class="nav-text">提高表达和沟通的能力</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%8E%A5%E5%8F%97%E8%AF%BB%E8%80%85%E7%9A%84%E6%B2%9F%E9%80%9A%E5%92%8C%E5%8F%8D%E9%A6%88"><span class="nav-number">3.</span> <span class="nav-text">接受读者的沟通和反馈</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%BD%B1%E5%93%8D%E5%8A%9B"><span class="nav-number">4.</span> <span class="nav-text">影响力</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BB%93%E6%9D%9F%E8%AF%AD"><span class="nav-number">5.</span> <span class="nav-text">结束语</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
