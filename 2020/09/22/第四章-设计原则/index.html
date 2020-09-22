@@ -1,0 +1,525 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.1.1">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon.ico">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon.ico">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"tech.xiniaogongkao.com","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="第四章-设计原则 每个人都有义务捍卫、遵守或完善原则。原则可以修正，但是不能肆意妄为。——瑞·达利欧《原则》">
+<meta property="og:type" content="article">
+<meta property="og:title" content="第四章 设计原则">
+<meta property="og:url" content="https://tech.xiniaogongkao.com/2020/09/22/%E7%AC%AC%E5%9B%9B%E7%AB%A0-%E8%AE%BE%E8%AE%A1%E5%8E%9F%E5%88%99/index.html">
+<meta property="og:site_name" content="犀鸟技术博客">
+<meta property="og:description" content="第四章-设计原则 每个人都有义务捍卫、遵守或完善原则。原则可以修正，但是不能肆意妄为。——瑞·达利欧《原则》">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2020-09-22T09:11:58.000Z">
+<meta property="article:modified_time" content="2020-09-22T09:12:41.126Z">
+<meta property="article:author" content="犀鸟技术中心">
+<meta property="article:tag" content="从码农到工匠">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="https://tech.xiniaogongkao.com/2020/09/22/%E7%AC%AC%E5%9B%9B%E7%AB%A0-%E8%AE%BE%E8%AE%A1%E5%8E%9F%E5%88%99/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>第四章 设计原则 | 犀鸟技术博客</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta custom-logo">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">犀鸟技术博客</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">与其感慨路难行，不如马上出发</p>
+      <a>
+        <img class="custom-logo-image" src="/images/xnlogo.png" alt="犀鸟技术博客">
+      </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://tech.xiniaogongkao.com/2020/09/22/%E7%AC%AC%E5%9B%9B%E7%AB%A0-%E8%AE%BE%E8%AE%A1%E5%8E%9F%E5%88%99/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="犀鸟技术中心">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="犀鸟技术博客">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          第四章 设计原则
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2020-09-22 17:11:58 / 修改时间：17:12:41" itemprop="dateCreated datePublished" datetime="2020-09-22T17:11:58+08:00">2020-09-22</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E3%80%8A%E4%BB%A3%E7%A0%81%E7%B2%BE%E8%BF%9B%E4%B9%8B%E8%B7%AF%EF%BC%9A%E4%BB%8E%E7%A0%81%E5%86%9C%E5%88%B0%E5%B7%A5%E5%8C%A0%E3%80%8B/" itemprop="url" rel="index"><span itemprop="name">《代码精进之路：从码农到工匠》</span></a>
+                </span>
+            </span>
+
+          <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>1.9k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>2 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="第四章-设计原则"><a href="#第四章-设计原则" class="headerlink" title="第四章-设计原则"></a>第四章-设计原则</h1><ul>
+<li>每个人都有义务捍卫、遵守或完善原则。原则可以修正，但是不能肆意妄为。——瑞·达利欧《原则》</li>
+</ul>
+<a id="more"></a>
+
+<h3 id="1-SOLID概览"><a href="#1-SOLID概览" class="headerlink" title="1 SOLID概览"></a>1 SOLID概览</h3><ul>
+<li>SOLID是5个设计原则开头字母的缩写，其本身就有“稳定的”的意思，寓意是“遵从SOLID原则可以建立稳定、灵活、健壮的系统”。</li>
+<li><code>Single Responsibility Principle（SRP）</code>：单一职责原则。</li>
+<li><code>Open Close Principle（OCP）</code>：开闭原则。</li>
+<li><code>Liskov Substitution Principle（LSP）</code>：里氏替换原则。</li>
+<li><code>Interface Segregation Principle（ISP）</code>：接口隔离原则。</li>
+<li><code>Dependency Inversion Principle（DIP）</code>：依赖倒置原则。</li>
+<li>其中，开闭原则和里氏代换原则是<strong>设计目标</strong>；单一职责原则、接口分隔原则和依赖倒置原则是<strong>设计方法</strong>。</li>
+</ul>
+<h3 id="2-SRP-单一职责原则"><a href="#2-SRP-单一职责原则" class="headerlink" title="2 SRP  单一职责原则"></a>2 SRP  单一职责原则</h3><ul>
+<li>SRP要求每个软件模块职责要单一，衡量标准是模块是否只有一个被修改的原因。</li>
+<li>职责越单一，被修改的原因就越少，模块的<code>内聚性</code>（Cohesion）就越高，被复用的可能性就越大，也更容易被理解。</li>
+</ul>
+<h3 id="3-OCP-开闭原则"><a href="#3-OCP-开闭原则" class="headerlink" title="3 OCP 开闭原则"></a>3 OCP 开闭原则</h3><ul>
+<li><strong>软件实体应该对扩展开放，对修改关闭。</strong></li>
+<li>对扩展开放，意味着有新的需求或变化时，可以对现有代码进行扩展，以适应新的情况。</li>
+<li>对修改关闭，意味着类一旦设计完成，就可以独立完成工作，而不要对其进行任何修改。</li>
+</ul>
+<h4 id="3-1-为什么-OCP-如此重要？"><a href="#3-1-为什么-OCP-如此重要？" class="headerlink" title="3.1 为什么 OCP 如此重要？"></a>3.1 为什么 OCP 如此重要？</h4><ul>
+<li>因为<strong>可扩展性</strong>是我们衡量软件质量的一个重要指标。</li>
+<li>在软件的生命周期内，更改是难免的，如果有一种方案既可以扩展软件功能，又可以不修改原代码，那是我们梦寐以求的。</li>
+<li>在面向对象设计中，我们通常通过<code>继承</code>和<code>多态</code>来实现OCP，即封装不变部分。对于需要变化的部分，通过接口继承实现的方式来实现“开放”。</li>
+</ul>
+<h3 id="4-LSP-里氏替换原则"><a href="#4-LSP-里氏替换原则" class="headerlink" title="4 LSP 里氏替换原则"></a>4 LSP 里氏替换原则</h3><ul>
+<li><strong>程序中的父类型都应该可以正确地被子类型替换。</strong></li>
+<li>根据LSP的定义，如果在程序中出现使用<code>instanceof</code>、<code>强制类型转换</code>或者<code>函数覆盖</code>，很可能意味着是对LSP的破坏。</li>
+</ul>
+<h3 id="5-ISP-接口隔离原则"><a href="#5-ISP-接口隔离原则" class="headerlink" title="5 ISP 接口隔离原则"></a>5 ISP 接口隔离原则</h3><ul>
+<li><strong>多个特定客户端接口要好于一个宽泛用途的接口。</strong></li>
+<li>接口隔离原则认为不能强迫用户去依赖那些他们不使用的接口。换句话说，<strong>使用多个专门的接口比使用单一的总接口要好</strong>。</li>
+</ul>
+<h3 id="6-DIP-依赖倒置原则"><a href="#6-DIP-依赖倒置原则" class="headerlink" title="6 DIP 依赖倒置原则"></a>6 DIP 依赖倒置原则</h3><ul>
+<li><strong>模块之间交互应该依赖抽象，而非实现。</strong></li>
+<li>类不是孤立的，一个类需要依赖于其他类来协作完成工作。但是这种依赖不应该是特定的具体实现，而应该依赖抽象。也就是我们通常所说的要“<code>面向接口编程</code>”。然而“面向接口编程”只是实现DIP的一个技法，DIP本身的意义要宽泛得多，<strong>它是一种思想，是一种软件设计的哲学</strong>。</li>
+<li>例如，一个生产计算机主板的公司，其显卡插槽肯定是按照业界标准接口（共同抽象）来设计的，而不会设计成只支持某个特定公司的显卡。这样，只要主板公司和显卡公司都依赖同一个抽象（显卡接口协议），就能实现互通了。</li>
+</ul>
+<h3 id="7-DRY-避免重复代码"><a href="#7-DRY-避免重复代码" class="headerlink" title="7 DRY 避免重复代码"></a>7 DRY 避免重复代码</h3><ul>
+<li>DRY是<code>Don’t Repeat Yourself</code>的缩写，DRY原则特指在<strong>程序设计和计算中避免重复代码</strong>，因为这样会降低代码的灵活性和简洁性，并且可能导致代码之间的矛盾。</li>
+</ul>
+<h3 id="8-YAGNI"><a href="#8-YAGNI" class="headerlink" title="8 YAGNI"></a>8 YAGNI</h3><ul>
+<li>YAGNI（<code>You Ain’t Gonna Need It</code>）的意思是“你不会需要它”，出自 Ron Jeffries 的 <em>Extreme Programming Installed</em> 一书。</li>
+<li>是指你自以为有用的功能，实际上都是用不到的。因此，除了核心的功能之外，其他的功能一概不要提前设计，这样可以大大加快开发进程。</li>
+<li>它背后的指导思想就是尽可能快、尽可能简单地让软件运行起来。</li>
+</ul>
+<h3 id="9-Rule-of-Three-三次原则"><a href="#9-Rule-of-Three-三次原则" class="headerlink" title="9 Rule of Three 三次原则"></a>9 Rule of Three 三次原则</h3><ul>
+<li>三次原则指导我们可以通过以下步骤来写代码。<ul>
+<li>第一次用到某个功能时，写一个特定的解决方法。</li>
+<li>第二次又用到的时候，复制上一次的代码。</li>
+<li>第三次出现的时候，才着手“抽象化”，写出通用的解决方法。</li>
+</ul>
+</li>
+<li>这3个步骤是对DRY原则和YAGNI原则的折中，是代码冗余和开发成本的平衡点。</li>
+</ul>
+<h3 id="10-KISS-原则"><a href="#10-KISS-原则" class="headerlink" title="10 KISS 原则"></a>10 KISS 原则</h3><ul>
+<li>KISS（Keep It Simple and Stupid）最早由Robert S. Kaplan在著名的平衡计分卡理论中提出。他认为把事情变复杂很简单，<strong>把事情变简单很复杂。</strong> 好的目标不是越复杂越好，反而是越简洁越好。</li>
+<li>真正的“简单”绝不是毫无设计感，上来就写代码，而是“宝剑锋从磨砺出”，亮剑的时候犹如一道华丽的闪电，背后却有着大量的艰辛和积累。</li>
+<li><strong>真正的简单，不是不思考，而是先发散、再收敛。</strong> 在纷繁复杂中，把握问题的核心。</li>
+</ul>
+<h3 id="11-本章小结"><a href="#11-本章小结" class="headerlink" title="11 本章小结"></a>11 本章小结</h3><ul>
+<li>本章介绍的设计原则能够指导我们编写出更好的代码。</li>
+<li>但还是那句话，不要教条，软件是一种平衡的艺术。要清楚一点，我们不是为了满足这些原则而工作的，<strong>原则只是背后的指导思想。</strong></li>
+<li>我们的目的是构建可用的软件系统，并尽量减少系统的复杂度。在不能满足所有原则时，要懂得适当取舍。</li>
+</ul>
+
+    </div>
+
+    
+    
+    
+        
+
+<div>
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>犀鸟教育-张凯
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="https://tech.xiniaogongkao.com/2020/09/22/%E7%AC%AC%E5%9B%9B%E7%AB%A0-%E8%AE%BE%E8%AE%A1%E5%8E%9F%E5%88%99/" title="第四章 设计原则">https://tech.xiniaogongkao.com/2020/09/22/第四章-设计原则/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E4%BB%8E%E7%A0%81%E5%86%9C%E5%88%B0%E5%B7%A5%E5%8C%A0/" rel="tag"># 从码农到工匠</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2020/09/22/%E7%AC%AC%E4%B8%89%E7%AB%A0-%E5%87%BD%E6%95%B0/" rel="prev" title="第三章 函数">
+      <i class="fa fa-chevron-left"></i> 第三章 函数
+    </a></div>
+      <div class="post-nav-item"></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%AC%AC%E5%9B%9B%E7%AB%A0-%E8%AE%BE%E8%AE%A1%E5%8E%9F%E5%88%99"><span class="nav-number">1.</span> <span class="nav-text">第四章-设计原则</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-SOLID%E6%A6%82%E8%A7%88"><span class="nav-number">1.0.1.</span> <span class="nav-text">1 SOLID概览</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-SRP-%E5%8D%95%E4%B8%80%E8%81%8C%E8%B4%A3%E5%8E%9F%E5%88%99"><span class="nav-number">1.0.2.</span> <span class="nav-text">2 SRP  单一职责原则</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-OCP-%E5%BC%80%E9%97%AD%E5%8E%9F%E5%88%99"><span class="nav-number">1.0.3.</span> <span class="nav-text">3 OCP 开闭原则</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#3-1-%E4%B8%BA%E4%BB%80%E4%B9%88-OCP-%E5%A6%82%E6%AD%A4%E9%87%8D%E8%A6%81%EF%BC%9F"><span class="nav-number">1.0.3.1.</span> <span class="nav-text">3.1 为什么 OCP 如此重要？</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-LSP-%E9%87%8C%E6%B0%8F%E6%9B%BF%E6%8D%A2%E5%8E%9F%E5%88%99"><span class="nav-number">1.0.4.</span> <span class="nav-text">4 LSP 里氏替换原则</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-ISP-%E6%8E%A5%E5%8F%A3%E9%9A%94%E7%A6%BB%E5%8E%9F%E5%88%99"><span class="nav-number">1.0.5.</span> <span class="nav-text">5 ISP 接口隔离原则</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#6-DIP-%E4%BE%9D%E8%B5%96%E5%80%92%E7%BD%AE%E5%8E%9F%E5%88%99"><span class="nav-number">1.0.6.</span> <span class="nav-text">6 DIP 依赖倒置原则</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#7-DRY-%E9%81%BF%E5%85%8D%E9%87%8D%E5%A4%8D%E4%BB%A3%E7%A0%81"><span class="nav-number">1.0.7.</span> <span class="nav-text">7 DRY 避免重复代码</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#8-YAGNI"><span class="nav-number">1.0.8.</span> <span class="nav-text">8 YAGNI</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#9-Rule-of-Three-%E4%B8%89%E6%AC%A1%E5%8E%9F%E5%88%99"><span class="nav-number">1.0.9.</span> <span class="nav-text">9 Rule of Three 三次原则</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#10-KISS-%E5%8E%9F%E5%88%99"><span class="nav-number">1.0.10.</span> <span class="nav-text">10 KISS 原则</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#11-%E6%9C%AC%E7%AB%A0%E5%B0%8F%E7%BB%93"><span class="nav-number">1.0.11.</span> <span class="nav-text">11 本章小结</span></a></li></ol></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">犀鸟技术中心</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">10</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">5</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">4</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="cc-license motion-element" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" class="cc-opacity" rel="noopener" target="_blank"><img src="/images/cc-by-nc-sa.svg" alt="Creative Commons"></a>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">犀鸟技术中心</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-area"></i>
+    </span>
+    <span title="站点总字数">17k</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="站点阅读时长">15 分钟</span>
+</div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

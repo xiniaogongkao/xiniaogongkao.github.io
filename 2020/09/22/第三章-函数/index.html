@@ -20,25 +20,20 @@
     var CONFIG = {"hostname":"tech.xiniaogongkao.com","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
   </script>
 
-  <meta name="description" content="前端数据库之-WebSQL在前端的数据存储中，通常会使用localStorage或者sessionStorage还有cookies，他们都是以键值对的形式存储，类似于非关系型的数据库，其实在浏览器中，还有一种关系型数据库，那就是这篇文章所提到的WebSQL，接下来介绍一下WebSQL的使用">
+  <meta name="description" content="第三章-函数 把简单的事情做到极致，功到自然成，最终“止于至善”。——秋山利辉《匠人精神》">
 <meta property="og:type" content="article">
-<meta property="og:title" content="前端数据库之-WebSQL">
-<meta property="og:url" content="https://tech.xiniaogongkao.com/2020/09/07/%E5%89%8D%E7%AB%AF%E6%95%B0%E6%8D%AE%E5%BA%93%E4%B9%8B-WebSQL/index.html">
+<meta property="og:title" content="第三章 函数">
+<meta property="og:url" content="https://tech.xiniaogongkao.com/2020/09/22/%E7%AC%AC%E4%B8%89%E7%AB%A0-%E5%87%BD%E6%95%B0/index.html">
 <meta property="og:site_name" content="犀鸟技术博客">
-<meta property="og:description" content="前端数据库之-WebSQL在前端的数据存储中，通常会使用localStorage或者sessionStorage还有cookies，他们都是以键值对的形式存储，类似于非关系型的数据库，其实在浏览器中，还有一种关系型数据库，那就是这篇文章所提到的WebSQL，接下来介绍一下WebSQL的使用">
+<meta property="og:description" content="第三章-函数 把简单的事情做到极致，功到自然成，最终“止于至善”。——秋山利辉《匠人精神》">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://tech.xiniaogongkao.com/2020/09/07/%E5%89%8D%E7%AB%AF%E6%95%B0%E6%8D%AE%E5%BA%93%E4%B9%8B-WebSQL/QQ%E6%88%AA%E5%9B%BE20200907101326.png">
-<meta property="og:image" content="https://tech.xiniaogongkao.com/2020/09/07/%E5%89%8D%E7%AB%AF%E6%95%B0%E6%8D%AE%E5%BA%93%E4%B9%8B-WebSQL/QQ%E6%88%AA%E5%9B%BE20200907102721.png">
-<meta property="og:image" content="https://tech.xiniaogongkao.com/2020/09/07/%E5%89%8D%E7%AB%AF%E6%95%B0%E6%8D%AE%E5%BA%93%E4%B9%8B-WebSQL/QQ%E6%88%AA%E5%9B%BE20200907103236.png">
-<meta property="og:image" content="https://tech.xiniaogongkao.com/2020/09/07/%E5%89%8D%E7%AB%AF%E6%95%B0%E6%8D%AE%E5%BA%93%E4%B9%8B-WebSQL/QQ%E6%88%AA%E5%9B%BE20200907104435.png">
-<meta property="article:published_time" content="2020-09-07T03:30:51.000Z">
-<meta property="article:modified_time" content="2020-09-22T09:18:54.747Z">
+<meta property="article:published_time" content="2020-09-22T09:08:41.000Z">
+<meta property="article:modified_time" content="2020-09-22T09:11:31.603Z">
 <meta property="article:author" content="犀鸟技术中心">
-<meta property="article:tag" content="websql">
+<meta property="article:tag" content="从码农到工匠">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://tech.xiniaogongkao.com/2020/09/07/%E5%89%8D%E7%AB%AF%E6%95%B0%E6%8D%AE%E5%BA%93%E4%B9%8B-WebSQL/QQ%E6%88%AA%E5%9B%BE20200907101326.png">
 
-<link rel="canonical" href="https://tech.xiniaogongkao.com/2020/09/07/%E5%89%8D%E7%AB%AF%E6%95%B0%E6%8D%AE%E5%BA%93%E4%B9%8B-WebSQL/">
+<link rel="canonical" href="https://tech.xiniaogongkao.com/2020/09/22/%E7%AC%AC%E4%B8%89%E7%AB%A0-%E5%87%BD%E6%95%B0/">
 
 
 <script id="page-configurations">
@@ -51,7 +46,7 @@
   };
 </script>
 
-  <title>前端数据库之-WebSQL | 犀鸟技术博客</title>
+  <title>第三章 函数 | 犀鸟技术博客</title>
   
 
 
@@ -175,7 +170,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://tech.xiniaogongkao.com/2020/09/07/%E5%89%8D%E7%AB%AF%E6%95%B0%E6%8D%AE%E5%BA%93%E4%B9%8B-WebSQL/">
+    <link itemprop="mainEntityOfPage" href="https://tech.xiniaogongkao.com/2020/09/22/%E7%AC%AC%E4%B8%89%E7%AB%A0-%E5%87%BD%E6%95%B0/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -188,7 +183,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          前端数据库之-WebSQL
+          第三章 函数
         </h1>
 
         <div class="post-meta">
@@ -197,23 +192,17 @@
                 <i class="far fa-calendar"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
+              
 
-              <time title="创建时间：2020-09-07 11:30:51" itemprop="dateCreated datePublished" datetime="2020-09-07T11:30:51+08:00">2020-09-07</time>
+              <time title="创建时间：2020-09-22 17:08:41 / 修改时间：17:11:31" itemprop="dateCreated datePublished" datetime="2020-09-22T17:08:41+08:00">2020-09-22</time>
             </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-09-22 17:18:54" itemprop="dateModified" datetime="2020-09-22T17:18:54+08:00">2020-09-22</time>
-              </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
                 <i class="far fa-folder"></i>
               </span>
               <span class="post-meta-item-text">分类于</span>
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/web%E7%AB%AF/" itemprop="url" rel="index"><span itemprop="name">web端</span></a>
+                  <a href="/categories/%E3%80%8A%E4%BB%A3%E7%A0%81%E7%B2%BE%E8%BF%9B%E4%B9%8B%E8%B7%AF%EF%BC%9A%E4%BB%8E%E7%A0%81%E5%86%9C%E5%88%B0%E5%B7%A5%E5%8C%A0%E3%80%8B/" itemprop="url" rel="index"><span itemprop="name">《代码精进之路：从码农到工匠》</span></a>
                 </span>
             </span>
 
@@ -223,7 +212,7 @@
                 <i class="far fa-file-word"></i>
               </span>
                 <span class="post-meta-item-text">本文字数：</span>
-              <span>1.4k</span>
+              <span>853</span>
             </span>
             <span class="post-meta-item" title="阅读时长">
               <span class="post-meta-item-icon">
@@ -242,27 +231,36 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <h1 id="前端数据库之-WebSQL"><a href="#前端数据库之-WebSQL" class="headerlink" title="前端数据库之-WebSQL"></a>前端数据库之-WebSQL</h1><p>在前端的数据存储中，通常会使用localStorage或者sessionStorage还有cookies，他们都是以键值对的形式存储，类似于非关系型的数据库，其实在浏览器中，还有一种关系型数据库，那就是这篇文章所提到的WebSQL，接下来介绍一下WebSQL的使用</p>
+        <h1 id="第三章-函数"><a href="#第三章-函数" class="headerlink" title="第三章-函数"></a>第三章-函数</h1><ul>
+<li>把简单的事情做到极致，功到自然成，最终“止于至善”。<br>——秋山利辉《匠人精神》</li>
+</ul>
 <a id="more"></a>
 
-<h1 id="创建数据库"><a href="#创建数据库" class="headerlink" title="创建数据库"></a>创建数据库</h1><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">const db = openDatabase(&#x27;person&#x27;,1,&#x27;person&#x27;,0)</span><br></pre></td></tr></table></figure>
-
-
-<p>使用openDatabase方法创建一个数据库，里面有五个参数，分别是数据库的名字，数据库的版本，数据库的备注，数据库的大小（在Chrome中，无论填多少大小都是5M，所以我们可以填0），创建的回调函数（可选输入），创建好之后我们打开Chrome的Application，再点击WebSQL，就看到已经创建了一个名为person的空数据库了</p>
-<p><img src="/2020/09/07/%E5%89%8D%E7%AB%AF%E6%95%B0%E6%8D%AE%E5%BA%93%E4%B9%8B-WebSQL/QQ%E6%88%AA%E5%9B%BE20200907101326.png" alt="QQ截图20200907101326.png"></p>
-<h1 id="创建表"><a href="#创建表" class="headerlink" title="创建表"></a>创建表</h1><p>接下来我们使用WebSQL的transaction方法来新起事务，我们通过他就可以用写SQL的方式来创建表了</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">db.transaction(tx =&gt;&#123;</span><br><span class="line">  tx.executeSql(&#x27;create table if not exists student (id unique,name)&#x27;)</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
-<p>该方法会被传入一个SQLTransaction对象，该对象可以执行executeSql方法。executeSql支持四个参数，sql语句，sql参数，成功回调函数，错误回调函数。现在我们通过此方法创建了一个student表，里面有id和name字段</p>
-<p><img src="/2020/09/07/%E5%89%8D%E7%AB%AF%E6%95%B0%E6%8D%AE%E5%BA%93%E4%B9%8B-WebSQL/QQ%E6%88%AA%E5%9B%BE20200907102721.png" alt="QQ截图20200907102721.png"></p>
-<h1 id="插入、修改、删除数据"><a href="#插入、修改、删除数据" class="headerlink" title="插入、修改、删除数据"></a>插入、修改、删除数据</h1><p>现在我们插入两条学生数据</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">db.transaction(tx =&gt;&#123;</span><br><span class="line">  tx.executeSql(&#x27;insert into student (id,name) values (?,?)&#x27;,[1,&#x27;天祥&#x27;]);</span><br><span class="line">  tx.executeSql(&#x27;insert into student (id,name) values (?,?)&#x27;,[2,&#x27;叶文&#x27;])</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
-
-<p><img src="/2020/09/07/%E5%89%8D%E7%AB%AF%E6%95%B0%E6%8D%AE%E5%BA%93%E4%B9%8B-WebSQL/QQ%E6%88%AA%E5%9B%BE20200907103236.png" alt="QQ截图20200907103236.png"></p>
-<p>我们在student表中创建了两条学生数据，如果要修改，可以执行update语句，删除可以执行delete语句，这里就不再演示，接下来我们查询并导出数据</p>
-<h1 id="查询数据"><a href="#查询数据" class="headerlink" title="查询数据"></a>查询数据</h1><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">db.transaction(tx =&gt;&#123;</span><br><span class="line">  tx.executeSql(&#x27;select * from student&#x27;,[],(tx,res)=&gt;&#123;</span><br><span class="line">    let rows = res.rows;	//查询的结果在res的rows对象属性里面</span><br><span class="line">    let len = rows.length;</span><br><span class="line">    for(let i=0;i&lt;len;i++)&#123;</span><br><span class="line">        console.log(rows[i])</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;);</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
-<p>执行之后成功查询到我们插入的两个学生的数据</p>
-<p><img src="/2020/09/07/%E5%89%8D%E7%AB%AF%E6%95%B0%E6%8D%AE%E5%BA%93%E4%B9%8B-WebSQL/QQ%E6%88%AA%E5%9B%BE20200907104435.png" alt="QQ截图20200907104435.png"></p>
-<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p>1、WebSQL的规范已经不受官方维护，目前火狐和IE等浏览器不能使用该功能，所以该功能仅作为一种知识拓展，不建议在开发中使用，如果遇到需要存储比较多内容的场景，可以使用IndexedDB<br>2、WebSQL是底层基于SQLite的关系型数据库<br>3、在Chrome中容量为5M，支持同域名下不同页面共享<br>4、版本的参数用于控制，如果打开的版本和现有版本不一致会报错</p>
+<h3 id="1-什么是函数"><a href="#1-什么是函数" class="headerlink" title="1 什么是函数"></a>1 什么是函数</h3><ul>
+<li>函数（function）作为数学概念，最早由我国清朝数学家李善兰翻译，出自其著作《代数学》。</li>
+<li>之所以这么翻译，他给出的理由是“<strong>凡此变数中函彼变数者，则此为彼之函数</strong>”，即函数指一个量随着另一个量的变化而变化，或者说一个量中包含另一个量。</li>
+</ul>
+<h3 id="2-软件中的函数"><a href="#2-软件中的函数" class="headerlink" title="2 软件中的函数"></a>2 软件中的函数</h3><h4 id="2-1-计算机中函数的定义"><a href="#2-1-计算机中函数的定义" class="headerlink" title="2.1 计算机中函数的定义"></a>2.1 计算机中函数的定义</h4><p>在计算机编程中，函数的作用和数学中的定义类似。函数是<strong>一组代码的集合</strong>，是程序中<strong>最小的功能模块</strong>，一次函数调用包括接收参数输入、数据处理、返回结果。</p>
+<h4 id="2-2-函数参数"><a href="#2-2-函数参数" class="headerlink" title="2.2 函数参数"></a>2.2 函数参数</h4><ul>
+<li>最理想的参数数量是零（零参数函数），其次是一（一元函数），再次是二（二元函数），应尽量避免三（三元函数）。有足够特殊的理由，才能用3个以上参数（多元函数）。当然凡事也不是绝对的，关键还是<code>看场景</code>，在程序设计中，一大忌讳就是教条</li>
+<li>总体上来说，参数越少，越容易理解，函数也越容易使用和测试，因为各种参数的不同组合的测试用例是一个笛卡儿积。</li>
+</ul>
+<h3 id="3-短小的函数"><a href="#3-短小的函数" class="headerlink" title="3 短小的函数"></a>3 短小的函数</h3><ul>
+<li>Robert C. Martin有一个信条：<strong>函数的第一规则是要短小，第二规则是要更短小</strong>。</li>
+<li>有时保持代码的逻辑不变，只是把长方法改成<code>多个短方法</code>，代码的可读性就能提高很多。</li>
+</ul>
+<h3 id="4-职责单一"><a href="#4-职责单一" class="headerlink" title="4 职责单一"></a>4 职责单一</h3><ul>
+<li>一个方法只做一件事情，也就是函数级别的<code>单一职责原则</code>（Single Responsibility Principle，SRP）。</li>
+<li>遵循SRP不仅可以提升代码的<code>可读性</code>，还能提升代码的<code>可复用性</code>。因为职责越单一，功能越内聚，就越有可能被复用</li>
+</ul>
+<h3 id="5-精简辅助代码"><a href="#5-精简辅助代码" class="headerlink" title="5 精简辅助代码"></a>5 精简辅助代码</h3><ul>
+<li>所谓的辅助代码（Assistant Code），是程序运行中必不可少的代码，但又不是处理业务逻辑的核心代码，比如判空、打印日志、鉴权、降级和缓存检查等。</li>
+<li>让函数中的代码能直观地体现业务逻辑，而不是让业务代码淹没在辅助代码中。</li>
+</ul>
+<h3 id="6-本章小结"><a href="#6-本章小结" class="headerlink" title="6 本章小结"></a>6 本章小结</h3><ul>
+<li>函数是软件系统中的核心要素，无论采用哪种编程范式和编程语言，程序逻辑都是写在函数中的，因此编写好函数是编写好代码的基础。</li>
+<li>一个系统容易腐化的部分正是函数，不解决函数的复杂性，就很难解决系统的复杂性。</li>
+</ul>
 
     </div>
 
@@ -274,11 +272,11 @@
 <div>
 <ul class="post-copyright">
   <li class="post-copyright-author">
-    <strong>本文作者： </strong>犀鸟教育-文帅
+    <strong>本文作者： </strong>犀鸟教育-张凯
   </li>
   <li class="post-copyright-link">
     <strong>本文链接：</strong>
-    <a href="https://tech.xiniaogongkao.com/2020/09/07/%E5%89%8D%E7%AB%AF%E6%95%B0%E6%8D%AE%E5%BA%93%E4%B9%8B-WebSQL/" title="前端数据库之-WebSQL">https://tech.xiniaogongkao.com/2020/09/07/前端数据库之-WebSQL/</a>
+    <a href="https://tech.xiniaogongkao.com/2020/09/22/%E7%AC%AC%E4%B8%89%E7%AB%A0-%E5%87%BD%E6%95%B0/" title="第三章 函数">https://tech.xiniaogongkao.com/2020/09/22/第三章-函数/</a>
   </li>
   <li class="post-copyright-license">
     <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
@@ -289,7 +287,7 @@
 
       <footer class="post-footer">
           <div class="post-tags">
-              <a href="/tags/websql/" rel="tag"># websql</a>
+              <a href="/tags/%E4%BB%8E%E7%A0%81%E5%86%9C%E5%88%B0%E5%B7%A5%E5%8C%A0/" rel="tag"># 从码农到工匠</a>
           </div>
 
         
@@ -298,12 +296,12 @@
         
     <div class="post-nav">
       <div class="post-nav-item">
-    <a href="/2020/08/26/mysql%E4%BA%8B%E5%8A%A1%E7%89%B9%E6%80%A7%E5%8F%8A%E9%9A%94%E7%A6%BB%E7%BA%A7%E5%88%AB/" rel="prev" title="mysql事务特性及隔离级别">
-      <i class="fa fa-chevron-left"></i> mysql事务特性及隔离级别
+    <a href="/2020/09/14/%E4%BD%9C%E4%B8%BA%E7%A0%81%E5%86%9C%E6%88%91%E4%BB%AC%E4%B8%BA%E4%BB%80%E4%B9%88%E8%A6%81%E5%86%99%E4%BD%9C/" rel="prev" title="作为码农我们为什么要写作(转载)">
+      <i class="fa fa-chevron-left"></i> 作为码农我们为什么要写作(转载)
     </a></div>
       <div class="post-nav-item">
-    <a href="/2020/09/09/%E5%89%8D%E8%A8%80/" rel="next" title="前言">
-      前言 <i class="fa fa-chevron-right"></i>
+    <a href="/2020/09/22/%E7%AC%AC%E5%9B%9B%E7%AB%A0-%E8%AE%BE%E8%AE%A1%E5%8E%9F%E5%88%99/" rel="next" title="第四章 设计原则">
+      第四章 设计原则 <i class="fa fa-chevron-right"></i>
     </a></div>
     </div>
       </footer>
@@ -363,7 +361,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%89%8D%E7%AB%AF%E6%95%B0%E6%8D%AE%E5%BA%93%E4%B9%8B-WebSQL"><span class="nav-number">1.</span> <span class="nav-text">前端数据库之-WebSQL</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%88%9B%E5%BB%BA%E6%95%B0%E6%8D%AE%E5%BA%93"><span class="nav-number">2.</span> <span class="nav-text">创建数据库</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%88%9B%E5%BB%BA%E8%A1%A8"><span class="nav-number">3.</span> <span class="nav-text">创建表</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%8F%92%E5%85%A5%E3%80%81%E4%BF%AE%E6%94%B9%E3%80%81%E5%88%A0%E9%99%A4%E6%95%B0%E6%8D%AE"><span class="nav-number">4.</span> <span class="nav-text">插入、修改、删除数据</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%9F%A5%E8%AF%A2%E6%95%B0%E6%8D%AE"><span class="nav-number">5.</span> <span class="nav-text">查询数据</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%80%BB%E7%BB%93"><span class="nav-number">6.</span> <span class="nav-text">总结</span></a></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%AC%AC%E4%B8%89%E7%AB%A0-%E5%87%BD%E6%95%B0"><span class="nav-number">1.</span> <span class="nav-text">第三章-函数</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-%E4%BB%80%E4%B9%88%E6%98%AF%E5%87%BD%E6%95%B0"><span class="nav-number">1.0.1.</span> <span class="nav-text">1 什么是函数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-%E8%BD%AF%E4%BB%B6%E4%B8%AD%E7%9A%84%E5%87%BD%E6%95%B0"><span class="nav-number">1.0.2.</span> <span class="nav-text">2 软件中的函数</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#2-1-%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%B8%AD%E5%87%BD%E6%95%B0%E7%9A%84%E5%AE%9A%E4%B9%89"><span class="nav-number">1.0.2.1.</span> <span class="nav-text">2.1 计算机中函数的定义</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-2-%E5%87%BD%E6%95%B0%E5%8F%82%E6%95%B0"><span class="nav-number">1.0.2.2.</span> <span class="nav-text">2.2 函数参数</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-%E7%9F%AD%E5%B0%8F%E7%9A%84%E5%87%BD%E6%95%B0"><span class="nav-number">1.0.3.</span> <span class="nav-text">3 短小的函数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-%E8%81%8C%E8%B4%A3%E5%8D%95%E4%B8%80"><span class="nav-number">1.0.4.</span> <span class="nav-text">4 职责单一</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-%E7%B2%BE%E7%AE%80%E8%BE%85%E5%8A%A9%E4%BB%A3%E7%A0%81"><span class="nav-number">1.0.5.</span> <span class="nav-text">5 精简辅助代码</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#6-%E6%9C%AC%E7%AB%A0%E5%B0%8F%E7%BB%93"><span class="nav-number">1.0.6.</span> <span class="nav-text">6 本章小结</span></a></li></ol></li></ol></li></ol></div>
       </div>
       <!--/noindex-->
 
