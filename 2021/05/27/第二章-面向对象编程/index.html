@@ -1,0 +1,573 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.1.1">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon.ico">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon.ico">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"tech.xiniaogongkao.com","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="1 面向过程与面向对象之前所写的 3 个对输入框中输入的数据校验功能方法，用了 3 个函数，这是一种面向过程的实现方式。然而在这种方式中，你会无端地在页面中添加很多全局变量，而且不利于别人重复使用。一旦别人使用以前提供的方法，你就不能轻易地去修改这些方法，这不利于团队代码维护。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="第二章 面向对象编程">
+<meta property="og:url" content="https://tech.xiniaogongkao.com/2021/05/27/%E7%AC%AC%E4%BA%8C%E7%AB%A0-%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1%E7%BC%96%E7%A8%8B/index.html">
+<meta property="og:site_name" content="犀鸟技术博客">
+<meta property="og:description" content="1 面向过程与面向对象之前所写的 3 个对输入框中输入的数据校验功能方法，用了 3 个函数，这是一种面向过程的实现方式。然而在这种方式中，你会无端地在页面中添加很多全局变量，而且不利于别人重复使用。一旦别人使用以前提供的方法，你就不能轻易地去修改这些方法，这不利于团队代码维护。">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2021-05-27T03:00:15.000Z">
+<meta property="article:modified_time" content="2021-05-27T03:05:00.901Z">
+<meta property="article:author" content="犀鸟技术中心">
+<meta property="article:tag" content="设计模式">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="https://tech.xiniaogongkao.com/2021/05/27/%E7%AC%AC%E4%BA%8C%E7%AB%A0-%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1%E7%BC%96%E7%A8%8B/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>第二章 面向对象编程 | 犀鸟技术博客</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta custom-logo">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">犀鸟技术博客</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">与其感慨路难行，不如马上出发</p>
+      <a>
+        <img class="custom-logo-image" src="/images/xnlogo.png" alt="犀鸟技术博客">
+      </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://tech.xiniaogongkao.com/2021/05/27/%E7%AC%AC%E4%BA%8C%E7%AB%A0-%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1%E7%BC%96%E7%A8%8B/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="犀鸟技术中心">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="犀鸟技术博客">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          第二章 面向对象编程
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2021-05-27 11:00:15 / 修改时间：11:05:00" itemprop="dateCreated datePublished" datetime="2021-05-27T11:00:15+08:00">2021-05-27</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E3%80%8AJavaScript-%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E3%80%8B/" itemprop="url" rel="index"><span itemprop="name">《JavaScript 设计模式》</span></a>
+                </span>
+            </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine：</span>
+    
+    <a title="valine" href="/2021/05/27/%E7%AC%AC%E4%BA%8C%E7%AB%A0-%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1%E7%BC%96%E7%A8%8B/#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/2021/05/27/%E7%AC%AC%E4%BA%8C%E7%AB%A0-%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1%E7%BC%96%E7%A8%8B/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>10k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>9 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h2 id="1-面向过程与面向对象"><a href="#1-面向过程与面向对象" class="headerlink" title="1 面向过程与面向对象"></a>1 面向过程与面向对象</h2><p>之前所写的 3 个对输入框中输入的数据校验功能方法，用了 3 个函数，这是一种面向过程的实现方式。<br>然而在这种方式中，你会无端地在页面中<strong>添加很多全局变量</strong>，而且<strong>不利于别人重复使用</strong>。<br>一旦别人使用以前提供的方法，你就不能轻易地去修改这些方法，这不利于团队代码维护。<br></p>
+<a id="more"></a>​
+
+<p><strong>面向对象编程</strong>就是将你的需求抽象成一个对象，然后针对这个对象分析其特性（属性）和动作（方法）。这个对象我们称之为类。<br>​<br>​<br></p>
+<h2 id="2-封装"><a href="#2-封装" class="headerlink" title="2 封装"></a>2 封装</h2><h3 id="2-1-创建一个类"><a href="#2-1-创建一个类" class="headerlink" title="2.1 创建一个类"></a>2.1 创建一个类</h3><p>在 JavaScript 中创建一个类很容易，首先声明一个函数保存在一个变量里。<br>按照编程习惯一般将这个类的变量名<strong>首字母大写</strong>。<br>然后在这个函数（类）的内部通过对 this 变量添加属性或者方法来实现对类添加属性或方法。例如：<br>​<br></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> Book = <span class="function"><span class="keyword">function</span>(<span class="params">id, bookname, price</span>) </span>&#123;</span><br><span class="line">	<span class="built_in">this</span>.id = id;</span><br><span class="line">  <span class="built_in">this</span>.bookname = bookname;</span><br><span class="line">  <span class="built_in">this</span>.price = price;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">Book.prototype.display = <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">	<span class="comment">// 展示这本书</span></span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p>我们不能直接使用这个 Book 类，需要用 new 关键字来<strong>实例化（创建）</strong>新的对象。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> book = <span class="keyword">new</span> Book(<span class="number">10</span>, <span class="string">&#x27;JavaScript设计模式&#x27;</span>, <span class="number">50</span>);</span><br><span class="line"><span class="built_in">console</span>.log(book.bookname); <span class="comment">// JavaScript设计模式</span></span><br></pre></td></tr></table></figure>
+
+<p><br>JavaScript 是一种基于原型 prototype 的语言，所以每创建一个对象时，它都有一个原型 prototype 用于指向其继承的属性、方法。<br>​<br></p>
+<h3 id="2-2-属性和方法封装"><a href="#2-2-属性和方法封装" class="headerlink" title="2.2 属性和方法封装"></a>2.2 属性和方法封装</h3><p>由于 JavaScript 的<strong>函数级作用域</strong>，声明在函数内部的变量以及方法在外界是访问不到的，通过此特性即可创建类的私有变量以及私有方法。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 私有属性与私有方法，特权方法，对象公有属性和对象共有方法，构造器</span></span><br><span class="line"><span class="keyword">var</span> Book = <span class="function"><span class="keyword">function</span>(<span class="params">id, name, price</span>) </span>&#123;</span><br><span class="line">	<span class="comment">// 私有属性</span></span><br><span class="line">  <span class="keyword">var</span> num = <span class="number">1</span>;</span><br><span class="line">  <span class="comment">// 私有方法</span></span><br><span class="line">  <span class="function"><span class="keyword">function</span> <span class="title">checkId</span>(<span class="params"></span>) </span>&#123;&#125;;</span><br><span class="line">  </span><br><span class="line">  <span class="comment">// 特权方法</span></span><br><span class="line">  <span class="built_in">this</span>.getName = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;&#125;;</span><br><span class="line">  <span class="built_in">this</span>.getPrice = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;&#125;;</span><br><span class="line">  <span class="built_in">this</span>.setName = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;&#125;;</span><br><span class="line">  <span class="built_in">this</span>.setPrice = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;&#125;;</span><br><span class="line">  </span><br><span class="line">  <span class="comment">// 对象公有属性</span></span><br><span class="line">  <span class="built_in">this</span>.id = id</span><br><span class="line">  <span class="comment">//对象公有方法</span></span><br><span class="line">  <span class="built_in">this</span>.copy = <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;&#125;;</span><br><span class="line">  <span class="comment">// 构造器</span></span><br><span class="line">  <span class="built_in">this</span>.setName(name);</span><br><span class="line">  <span class="built_in">this</span>.setPrice(price)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 静态公有属性（对象不能访问）</span></span><br><span class="line">Book.isChinese = <span class="literal">true</span>;</span><br><span class="line"><span class="comment">// 静态公有方法（对象不能访问）</span></span><br><span class="line">Book.resetTime = <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">	<span class="built_in">console</span>.log(<span class="string">&#x27;new Time&#x27;</span>)</span><br><span class="line">&#125;</span><br><span class="line">Book.prototype = &#123;</span><br><span class="line">	<span class="comment">// 公有属性</span></span><br><span class="line">  isJSBook: <span class="literal">false</span>,</span><br><span class="line">  <span class="comment">// 公有方法</span></span><br><span class="line">  display: <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>注：通过 this 创建的方法，不但可以访问这些对象的共有属性与共有方法，而且还能访问到类或对象自身的私有属性和私有方法。由于这些方法权利较大，所以称为<strong>特权方法</strong>。<br>​<br></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> b = <span class="keyword">new</span> Book(<span class="number">11</span>, <span class="string">&#x27;JavaScript设计模式&#x27;</span>, <span class="number">50</span>);</span><br><span class="line">conosle.log(b.num); <span class="comment">// undefined</span></span><br><span class="line">conosle.log(b.isJSBook); <span class="comment">// false</span></span><br><span class="line">conosle.log(b.id); <span class="comment">// 11</span></span><br><span class="line">conosle.log(b.isChinese); <span class="comment">// undefined</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="built_in">console</span>.log(Book.isChinese); <span class="comment">// true</span></span><br><span class="line">Book.resetTime(); <span class="comment">// new Time</span></span><br></pre></td></tr></table></figure>
+<p>通过 new 关键字创建的对象实质是对新对象 this 的不断赋值，并将 prototype 指向类的 prototype 所指的对象。<strong>新对象的 prototype 和类的 prototype 指向的是同一个对象</strong>。<br>​<br></p>
+<h3 id="2-3-闭包实现"><a href="#2-3-闭包实现" class="headerlink" title="2.3 闭包实现"></a>2.3 闭包实现</h3><p>闭包是有权访问另一个函数作用域中变量的函数，即在一个函数内部创建另一个函数。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 利用闭包实现静态变量</span></span><br><span class="line"><span class="keyword">var</span> Book = (<span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">	<span class="comment">// 静态私有变量</span></span><br><span class="line">	<span class="keyword">var</span> bookNum = <span class="number">0</span>;</span><br><span class="line">  <span class="comment">// 静态私有方法</span></span><br><span class="line">  <span class="function"><span class="keyword">function</span> <span class="title">checkBook</span>(<span class="params">name</span>) </span>&#123;&#125;;</span><br><span class="line">  </span><br><span class="line">  <span class="comment">// 创建类</span></span><br><span class="line">  <span class="function"><span class="keyword">function</span> <span class="title">_book</span>(<span class="params">newId, newName, newPrice</span>) </span>&#123;</span><br><span class="line">  	<span class="keyword">var</span> name, price;</span><br><span class="line">    <span class="comment">// 私有方法</span></span><br><span class="line">    <span class="function"><span class="keyword">function</span> <span class="title">checkID</span>(<span class="params">id</span>) </span>&#123;&#125;;</span><br><span class="line">    <span class="comment">// 特权方法</span></span><br><span class="line">    <span class="built_in">this</span>.getName = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;&#125;;</span><br><span class="line">    <span class="built_in">this</span>.getPrice = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;&#125;;</span><br><span class="line">    <span class="built_in">this</span>.setName = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;&#125;;</span><br><span class="line">    <span class="built_in">this</span>.setPrice = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;&#125;;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 对象公有属性</span></span><br><span class="line">    <span class="built_in">this</span>.id = newId</span><br><span class="line">    <span class="comment">//对象公有方法</span></span><br><span class="line">    <span class="built_in">this</span>.copy = <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;&#125;;</span><br><span class="line">    bookNum++;</span><br><span class="line">    <span class="keyword">if</span> (bookNum &gt; <span class="number">100</span>) &#123;</span><br><span class="line">    	<span class="keyword">throw</span> <span class="keyword">new</span> <span class="built_in">Error</span>(<span class="string">&#x27;我们仅出版 100 本书&#x27;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// 构造器</span></span><br><span class="line">    <span class="built_in">this</span>.setName(name);</span><br><span class="line">    <span class="built_in">this</span>.setPrice(price);</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="comment">// 构建原型</span></span><br><span class="line">  _book.prototype = &#123;</span><br><span class="line">  	<span class="comment">// 静态公有属性</span></span><br><span class="line">    isJSBook: <span class="literal">false</span>,</span><br><span class="line">    <span class="comment">// 静态公有方法</span></span><br><span class="line">    display: <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;&#125;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="comment">// 返回类</span></span><br><span class="line">  <span class="keyword">return</span> _book;</span><br><span class="line">&#125;)();</span><br></pre></td></tr></table></figure>
+<h3 id="2-4-创建对象的安全模式"><a href="#2-4-创建对象的安全模式" class="headerlink" title="2.4 创建对象的安全模式"></a>2.4 创建对象的安全模式<br><br></h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> Book = <span class="function"><span class="keyword">function</span>(<span class="params">title, time, type</span>) </span>&#123;</span><br><span class="line">	<span class="built_in">this</span>.title = title;</span><br><span class="line">  <span class="built_in">this</span>.time = time;</span><br><span class="line">  <span class="built_in">this</span>.type = type;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> book = Book(<span class="string">&#x27;JavaScript&#x27;</span>, <span class="number">2014</span>, <span class="string">&#x27;js&#x27;</span>); <span class="comment">// 未使用 new 关键字</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">console</span>.log(book); <span class="comment">// undefined</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">console</span>.log(<span class="built_in">window</span>.title); <span class="comment">// JavaScript</span></span><br><span class="line"><span class="built_in">console</span>.log(<span class="built_in">window</span>.time); <span class="comment">// 2014</span></span><br><span class="line"><span class="built_in">console</span>.log(<span class="built_in">window</span>.type); <span class="comment">// js</span></span><br></pre></td></tr></table></figure>
+<p> new 关键字的作业可以看作是对当前对象的 this 不停地赋值，然而例子中没有用 new，所以会<strong>直接执行</strong>这个函数。<br>而这个函数在全局作用域执行了，this 指向 window，所以属性会被添加到 window 上面。<br>​</p>
+<p>添加检查如下：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> Book = <span class="function"><span class="keyword">function</span>(<span class="params">title, time, type</span>) </span>&#123;</span><br><span class="line">  <span class="comment">// 判断执行过程中 this 是否是当前这个对象</span></span><br><span class="line">  <span class="keyword">if</span> (<span class="built_in">this</span> <span class="keyword">instanceof</span> Book) &#123;</span><br><span class="line">  	<span class="built_in">this</span>.title = title;</span><br><span class="line">    <span class="built_in">this</span>.time = time;</span><br><span class="line">    <span class="built_in">this</span>.type = type;</span><br><span class="line">  &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">  	<span class="keyword">return</span> <span class="keyword">new</span> Book(title, time, type)</span><br><span class="line">  &#125;</span><br><span class="line">	</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>测试如下：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">console</span>.log(book); <span class="comment">// Book</span></span><br><span class="line"><span class="built_in">console</span>.log(book.title); <span class="comment">// JavaScript</span></span><br><span class="line"><span class="built_in">console</span>.log(book.time); <span class="comment">// 2014</span></span><br><span class="line"><span class="built_in">console</span>.log(book.type); <span class="comment">// js</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">console</span>.log(<span class="built_in">window</span>.title); <span class="comment">// undefined</span></span><br><span class="line"><span class="built_in">console</span>.log(<span class="built_in">window</span>.time); <span class="comment">// undefined</span></span><br><span class="line"><span class="built_in">console</span>.log(<span class="built_in">window</span>.type); <span class="comment">// undefined</span></span><br></pre></td></tr></table></figure>
+
+<br>
+
+<h2 id="3-继承"><a href="#3-继承" class="headerlink" title="3 继承"></a>3 继承</h2><h3 id="3-1-子类的原型对象——类型继承"><a href="#3-1-子类的原型对象——类型继承" class="headerlink" title="3.1 子类的原型对象——类型继承"></a>3.1 子类的原型对象——类型继承</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 声明父类</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">SuperClass</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">	<span class="built_in">this</span>.superValue = <span class="literal">true</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// 为父类添加共有方法</span></span><br><span class="line">SuperClass.prototype.getSuperValue = <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">	<span class="keyword">return</span> <span class="built_in">this</span>.superValue;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// 声明子类</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">SubClass</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">	<span class="built_in">this</span>.subValue = <span class="literal">false</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 继承父类</span></span><br><span class="line">SubClass.prototype = <span class="keyword">new</span> SuperClass();</span><br><span class="line"><span class="comment">// 为子类添加共有方法</span></span><br><span class="line">SubClass.prototype.getSubValue = <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">	<span class="keyword">return</span> <span class="built_in">this</span>.subValue;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>类的原型对象的作用就是<strong>为类的原型添加共有方法</strong>，但类不能直接访问这些属性和方法，必须通过原型 prototype 来访问。<br>使用如下：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> instance = <span class="keyword">new</span> SubClass();</span><br><span class="line"><span class="built_in">console</span>.log(instance.getSuperValue()); <span class="comment">// true</span></span><br><span class="line"><span class="built_in">console</span>.log(instance.getSubValue()); <span class="comment">// false</span></span><br></pre></td></tr></table></figure>
+<p>我们还可以通过 instanceof 来<strong>检测某个对象是否为某个类的实例</strong>。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">console</span>.log(instance <span class="keyword">instanceof</span> SuperClass); <span class="comment">// true</span></span><br><span class="line"><span class="built_in">console</span>.log(instance <span class="keyword">instanceof</span> SubClass); <span class="comment">// true</span></span><br><span class="line"><span class="built_in">console</span>.log(SubClass <span class="keyword">instanceof</span> SuperClass); <span class="comment">// false</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">console</span>.log(SubClass.prototype <span class="keyword">instanceof</span> SuperClass); <span class="comment">// true</span></span><br></pre></td></tr></table></figure>
+<p>​</p>
+<p>类似继承的缺点：</p>
+<ul>
+<li><p>其一，由于子类通过其原型 prototype 对父类实例化，继承了父类。因此一个子类的实例更改子类原型从父类构造函数中继承来的共有属性就会直接影响到其他子类。如下：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">SuperClass</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">	<span class="built_in">this</span>.books = [a, b , c];</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">SubClass</span>(<span class="params"></span>) </span>&#123;&#125;;</span><br><span class="line">SubClass.prototype = <span class="keyword">new</span> SuperClass();</span><br><span class="line"><span class="keyword">var</span> instance1 = <span class="keyword">new</span> SubClass();</span><br><span class="line"><span class="keyword">var</span> instance2 = <span class="keyword">new</span> SubClass();</span><br><span class="line"></span><br><span class="line"><span class="built_in">console</span>.log(instance2.books); <span class="comment">// [a, b , c]</span></span><br><span class="line">instance1.books.push(<span class="string">&#x27;d&#x27;</span>);</span><br><span class="line"><span class="built_in">console</span>.log(instance2.books); <span class="comment">// [a, b , c, d]</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>其二，由于子类实现的继承是靠其原型 prototype 对父类的实例化实现的，因此在创建父类的时候，是无法向父类传递参数的，因而在实例化父类的时候也无法对父类构造函数的属性进行初始化。</p>
+</li>
+</ul>
+<p>​</p>
+<p>​<br></p>
+<h3 id="3-2-创建即继承——构造函数继承"><a href="#3-2-创建即继承——构造函数继承" class="headerlink" title="3.2 创建即继承——构造函数继承"></a>3.2 创建即继承——构造函数继承</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">SuperClass</span>(<span class="params">id</span>) </span>&#123;</span><br><span class="line">  <span class="comment">// 引用类型共有属性</span></span><br><span class="line">  <span class="built_in">this</span>.books = [<span class="string">&#x27;JavaScript&#x27;</span>, <span class="string">&#x27;html&#x27;</span>, <span class="string">&#x27;css&#x27;</span>]</span><br><span class="line">  <span class="comment">// 值类型共有属性</span></span><br><span class="line">  <span class="built_in">this</span>.id = id;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// 父类声明原型方法</span></span><br><span class="line">SuperClass.prototype.showBooks = <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">	<span class="built_in">console</span>.log(<span class="built_in">this</span>.books);</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// 声明子类</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">SubClass</span>(<span class="params">id</span>) </span>&#123;</span><br><span class="line">	<span class="comment">// 继承父类</span></span><br><span class="line">  SuperClass.call(<span class="built_in">this</span>, id);</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// 创建第一个子类的实例</span></span><br><span class="line"><span class="keyword">var</span> instance1 = <span class="keyword">new</span> SubClass(<span class="number">10</span>);</span><br><span class="line"><span class="comment">// 创建第二个子类的实例</span></span><br><span class="line"><span class="keyword">var</span> instance2 = <span class="keyword">new</span> SubClass(<span class="number">11</span>);</span><br><span class="line"></span><br><span class="line">instance1.books.push(<span class="string">&#x27;设计模式&#x27;</span>);</span><br><span class="line"><span class="built_in">console</span>.log(instance1.books); <span class="comment">// [&#x27;JavaScript&#x27;, &#x27;html&#x27;, &#x27;css&#x27;, &#x27;设计模式&#x27;]</span></span><br><span class="line"><span class="built_in">console</span>.log(instance1.id); <span class="comment">// 10</span></span><br><span class="line"><span class="built_in">console</span>.log(instance2.books); <span class="comment">// [&#x27;JavaScript&#x27;, &#x27;html&#x27;, &#x27;css&#x27;]</span></span><br><span class="line"><span class="built_in">console</span>.log(instance2.id); <span class="comment">// 11</span></span><br><span class="line"></span><br><span class="line">instance1.showBookss(); <span class="comment">// TypeError</span></span><br></pre></td></tr></table></figure>
+<p>注意这里，<code>SuperClass.call(this, id);</code> 这条语句<strong>是构造函数式的精华</strong>。<br>在子类中，对 SuperClass 调用这个方法就是将子类中的变量在父类中执行一遍，由于父类中是给 this 绑定属性的，因此子类自然也就继承了父类的共有属性。<br>​</p>
+<p>​<br></p>
+<h3 id="3-3-将优点为我所用——组合式继承"><a href="#3-3-将优点为我所用——组合式继承" class="headerlink" title="3.3 将优点为我所用——组合式继承"></a>3.3 将优点为我所用——组合式继承</h3><p><br>类式继承是通过子类的原型prototype对父类实例化来实现的，构造函数式继承是通过在子类的构造函数作用环境中执行一次父类的构造函数来实现的，所以只要在继承中同时做到这两点即可，看下面的代码。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 声明父类</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">SuperClass</span>(<span class="params">name</span>)</span>&#123;</span><br><span class="line">　　<span class="comment">// 值类型共有属性</span></span><br><span class="line">　　<span class="built_in">this</span>.name = name;</span><br><span class="line">　　<span class="comment">// 引用类型共有属性</span></span><br><span class="line">　　<span class="built_in">this</span>.books = [<span class="string">&quot;html&quot;</span>, <span class="string">&quot;css&quot;</span>, <span class="string">&quot;JavaScript&quot;</span>];</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// 父类原型共有方法</span></span><br><span class="line">SuperClass.prototype.getName = <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">　　<span class="built_in">console</span>.log(<span class="built_in">this</span>.name);</span><br><span class="line">&#125;;</span><br><span class="line"><span class="comment">// 声明子类</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">SubClass</span>(<span class="params">name, time</span>)</span>&#123;　</span><br><span class="line">　　<span class="comment">// 构造函数式继承父类name属性</span></span><br><span class="line">　　SuperClass.call(<span class="built_in">this</span>, name);</span><br><span class="line">　　<span class="comment">// 子类中新增共有属性</span></span><br><span class="line">　　<span class="built_in">this</span>.time = time;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// 类式继承 子类原型继承父类</span></span><br><span class="line">SubClass.prototype = <span class="keyword">new</span> SuperClass();</span><br><span class="line"><span class="comment">// 子类原型方法</span></span><br><span class="line">SubClass.prototype.getTIme = <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">　　<span class="built_in">console</span>.log(<span class="built_in">this</span>.time);</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p>测试用例如下：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> instance1 = <span class="keyword">new</span> SubClass(<span class="string">&quot;js book&quot;</span>, <span class="number">2014</span>);</span><br><span class="line">instance1.books.push(<span class="string">&quot;设计模式&quot;</span>);　　</span><br><span class="line"><span class="built_in">console</span>.log(instance1.books);　　　<span class="comment">// [&quot;html&quot;, &quot;css&quot;, &quot;JavaScript&quot;, &quot;设计模式&quot;] </span></span><br><span class="line">instance1.getName();　　 　　　　<span class="comment">// js book</span></span><br><span class="line">instance1.getTime();　　 　　　　<span class="comment">// 2014　</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> instance2 = <span class="keyword">new</span> SubClass(<span class="string">&quot;css book&quot;</span>, <span class="number">2013</span>);</span><br><span class="line"><span class="built_in">console</span>.log(instance2.books);　　　<span class="comment">// [&quot;html&quot;, &quot;css&quot;, &quot;JavaScript&quot;] </span></span><br><span class="line">instance2.getName();　　　　　　　<span class="comment">// css book </span></span><br><span class="line">instance2.getTime();　　 　　　　<span class="comment">// 2013</span></span><br></pre></td></tr></table></figure>
+<p>因为我们在使用构造函数继承时执行了一遍父类的构造函数，而在实现子类原型的类式继承时又调用了一遍父类构造函数。因此<strong>父类构造函数调用了两遍</strong>，所以这还不是最完美的方式。</p>
+<h3 id><a href="#" class="headerlink" title></a></h3><h3 id="3-4-洁净的继承者——原型式继承"><a href="#3-4-洁净的继承者——原型式继承" class="headerlink" title="3.4 洁净的继承者——原型式继承"></a>3.4 洁净的继承者——原型式继承</h3><p><br>2006 年道格拉斯·克罗克福德（<a target="_blank" rel="noopener" href="https://github.com/douglascrockford">Douglas Crockford</a>）发表了一篇《JavaScript 中原型式继承》的文章。</p>
+<blockquote>
+<p>Douglas Crockford是Web开发领域最知名的技术权威之一，曾任Yahoo!资深JavaScript架构师，现任PayPal高级JavaScript架构师。</p>
+</blockquote>
+<p>他的观点是，借助原型 prototype 可以根据<strong>已有的对象创建一个新的对象</strong>，同时不必创建新的自定义对象类型。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 原型是继承</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">inheritObject</span>(<span class="params">o</span>)</span>&#123;</span><br><span class="line">　　<span class="comment">// 声明一个过渡函数对象</span></span><br><span class="line">　　<span class="function"><span class="keyword">function</span> <span class="title">F</span>(<span class="params"></span>)</span>&#123;&#125;</span><br><span class="line">　　<span class="comment">// 过渡对象的原型继承父对象</span></span><br><span class="line">　　F.prototype = o;</span><br><span class="line">　　<span class="comment">// 返回过渡对象的一个实例，该实例的原型继承了父对象</span></span><br><span class="line">　　<span class="keyword">return</span> <span class="keyword">new</span> F();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>它是对类式继承的一个封装，其实<strong>其中的过渡对象就相当于类式继承中的子类</strong>，只不过在原型式中作为一个过渡对象出现的，目的是为了创建要返回的新的实例化对象。<br>​</p>
+<p>测试代码如下：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> book = &#123;</span><br><span class="line">　　name: <span class="string">&quot;js book&quot;</span>,</span><br><span class="line">　　alikeBook: [<span class="string">&quot;css book&quot;</span>, <span class="string">&quot;html book&quot;</span>]</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> newBook = inheritObject(book);</span><br><span class="line">newBook.name = <span class="string">&quot;ajax book&quot;</span>;</span><br><span class="line">newBook.alikeBook.push(<span class="string">&quot;xml book&quot;</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> otherBook = inheritObject(book);</span><br><span class="line">otherBook.name = <span class="string">&quot;flash book&quot;</span>;</span><br><span class="line">otherBook.alikeBook.push(<span class="string">&quot;as book&quot;</span>);</span><br><span class="line"></span><br><span class="line"><span class="built_in">console</span>.log(newBook.name);　　　　　　<span class="comment">//ajax book </span></span><br><span class="line"><span class="built_in">console</span>.log(newBook.alikeBook);　　　　<span class="comment">//[&quot;css book&quot;, &quot;html book&quot;, &quot;xml book&quot;, &quot;as book&quot;] </span></span><br><span class="line"><span class="built_in">console</span>.log(otherBook.name);　　　　<span class="comment">//flash book </span></span><br><span class="line"><span class="built_in">console</span>.log(otherBook.alikeBook);　　<span class="comment">//[&quot;css book&quot;, &quot;html book&quot;, &quot;xml book&quot;, &quot;as book&quot;] </span></span><br><span class="line"><span class="built_in">console</span>.log(book.name); 　　　　　　<span class="comment">//js book</span></span><br><span class="line"><span class="built_in">console</span>.log(book.alikeBook); 　　　　<span class="comment">//[&quot;css book&quot;, &quot;html book&quot;, &quot;xml book&quot;, &quot;as book&quot;]</span></span><br></pre></td></tr></table></figure>
+<p>跟类式继承一样，父类对象book中的值类型的属性被复制，引用类型的属性被共用。<br>​<br></p>
+<h3 id="3-5-如虎添翼——寄生式继承"><a href="#3-5-如虎添翼——寄生式继承" class="headerlink" title="3.5 如虎添翼——寄生式继承"></a>3.5 如虎添翼——寄生式继承</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 寄生式继承</span></span><br><span class="line"><span class="comment">// 声明基对象</span></span><br><span class="line"><span class="keyword">var</span> book = &#123;</span><br><span class="line">　　name: <span class="string">&quot;js book&quot;</span>,</span><br><span class="line">　　alikeBook: [<span class="string">&quot;css book&quot;</span>, <span class="string">&quot;html book&quot;</span>]</span><br><span class="line">&#125;;</span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">createBook</span>(<span class="params">obj</span>)</span>&#123;</span><br><span class="line">　　<span class="comment">// 通过原型继承方式创建新对象</span></span><br><span class="line">　　<span class="keyword">var</span> o = <span class="keyword">new</span> inheritObject(obj);　　　　</span><br><span class="line">　　<span class="comment">// 拓展新对象</span></span><br><span class="line">　　o.getName = <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;　　　　　　　　</span><br><span class="line">　　　　<span class="built_in">console</span>.log(name);</span><br><span class="line">　　&#125;;　　</span><br><span class="line">　　<span class="comment">// 返回拓展后的新对象</span></span><br><span class="line">　　<span class="keyword">return</span> o;　　　　　　　　　　　　　　</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>其实寄生式继承就是对原型继承的第二次封装，并且在这<strong>第二次封装过程中对继承的对象进行了拓展</strong>，这样新创建的对象不仅仅有父类中的属性和方法而且还添加新的属性和方法。<br>​<br></p>
+<h3 id="3-6-终极继承者——寄生组合式继承"><a href="#3-6-终极继承者——寄生组合式继承" class="headerlink" title="3.6 终极继承者——寄生组合式继承"></a>3.6 终极继承者——寄生组合式继承</h3><p><br>“嗯，之前我们学习了组合式继承，那时候我们将<strong>类式继承同构造函数继承组合使用</strong>，但是这种方式有一个问题，就是子类不是父类的实例，而子类的原型是父类的实例，所以才有了寄生组合式继承。但是你知道是哪两种模式的组合么？”<br>“寄生当然是寄生式继承，<strong>寄生式继承依托于原型继承，原型继承又与类式继承相像</strong>，另外一种就不应该是这些模式了，所以另外一种继承模式应该是构造函数继承了吧。当然，子类不是父类实例的问题是由于类式继承引起的。”</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 寄生式继承 继承原型</span></span><br><span class="line"><span class="comment"> * 传递参数 subClass　 子类</span></span><br><span class="line"><span class="comment"> * 传递参数 superClass 父类</span></span><br><span class="line"><span class="comment"> **/</span> </span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">inheritPrototype</span>(<span class="params">subClass, superClass</span>)</span>&#123;</span><br><span class="line">　　<span class="comment">// 复制一份父类的原型副本保存在变量中</span></span><br><span class="line">　　<span class="keyword">var</span> p = inheritObject(superClass.prototype);　 </span><br><span class="line">　　<span class="comment">// 修正因为重写子类原型导致子类的constructor属性被修改</span></span><br><span class="line">　　p.constructor = subClass;　　</span><br><span class="line">　　<span class="comment">// 设置子类的原型　　　　　 </span></span><br><span class="line">　　subClass.prototype = p;　　　　　　　　</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p> 测试用例如下：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 定义父类　　　　　　　　　　 </span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">SuperClass</span>(<span class="params">name</span>)</span>&#123;</span><br><span class="line">　　<span class="built_in">this</span>.name = name;</span><br><span class="line">　　<span class="built_in">this</span>.colors = [<span class="string">&quot;red&quot;</span>, <span class="string">&quot;blue&quot;</span>, <span class="string">&quot;green&quot;</span>];</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// 定义父类原型方法</span></span><br><span class="line">SuperClass.prototype.getName = <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">　　<span class="built_in">console</span>.log(<span class="built_in">this</span>.name);</span><br><span class="line">&#125;;</span><br><span class="line"><span class="comment">// 定义子类</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">SubClass</span>(<span class="params">name, time</span>)</span>&#123;　</span><br><span class="line">　　<span class="comment">// 构造函数式继承</span></span><br><span class="line">　　SuperClass.call(<span class="built_in">this</span>, name);</span><br><span class="line">　　<span class="comment">// 子类新增属性</span></span><br><span class="line">　　<span class="built_in">this</span>.time = time;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// 寄生式继承父类原型</span></span><br><span class="line">inheritPrototype(SubClass, SuperClass);</span><br><span class="line"><span class="comment">// 子类新增原型方法</span></span><br><span class="line">SubClass.prototype.getTime = <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">　　<span class="built_in">console</span>.log(<span class="built_in">this</span>.time);</span><br><span class="line">&#125;;</span><br><span class="line"><span class="comment">// 创建两个测试方法</span></span><br><span class="line"><span class="keyword">var</span> instance1 = <span class="keyword">new</span> SubClass(<span class="string">&quot;js book&quot;</span>, <span class="number">2014</span>);</span><br><span class="line"><span class="keyword">var</span> instance2 = <span class="keyword">new</span> SubClass(<span class="string">&quot;css book&quot;</span>, <span class="number">2013</span>);</span><br><span class="line"></span><br><span class="line">instance1.colors.push(<span class="string">&quot;black&quot;</span>);</span><br><span class="line"><span class="built_in">console</span>.log(instance1.colors); 　　<span class="comment">//[&quot;red&quot;, &quot;blue&quot;, &quot;green&quot;, &quot;black&quot;]</span></span><br><span class="line"><span class="built_in">console</span>.log(instance2.colors); 　　<span class="comment">//[&quot;red&quot;, &quot;blue&quot;, &quot;green&quot;]</span></span><br><span class="line">instance2.getName();　　　　  　　　<span class="comment">//css book</span></span><br><span class="line">instance2.getTime();　　　　    　　<span class="comment">//2013</span></span><br></pre></td></tr></table></figure>
+<p>“现在你明白了吧，其实这种方式继承如图2-2所示，其中最大的改变就是对<strong>子类原型的处理</strong>，被赋予父类原型的一个引用，这是一个对象，因此这里有一点你要注意，就是子类再想添加原型方法必须通过 prototype 对象，通过点语法的形式一个一个添加方法了，否则直接赋予对象就会覆盖掉从父类原型继承的对象了。”</p>
+
+    </div>
+
+    
+    
+    
+        
+
+<div>
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>犀鸟教育-张凯
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="https://tech.xiniaogongkao.com/2021/05/27/%E7%AC%AC%E4%BA%8C%E7%AB%A0-%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1%E7%BC%96%E7%A8%8B/" title="第二章 面向对象编程">https://tech.xiniaogongkao.com/2021/05/27/第二章-面向对象编程/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" rel="tag"># 设计模式</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2021/05/27/%E7%AC%AC%E4%B8%80%E7%AB%A0-%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1%E5%89%8D%E8%A8%80/" rel="prev" title="第一章 面向对象前言">
+      <i class="fa fa-chevron-left"></i> 第一章 面向对象前言
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2021/05/27/1-1-%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%A1%AC%E4%BB%B6%E7%9A%84%E5%8F%91%E5%B1%95/" rel="next" title="1.1 计算机硬件的发展">
+      1.1 计算机硬件的发展 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+    <div class="comments" id="valine-comments"></div>
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E9%9D%A2%E5%90%91%E8%BF%87%E7%A8%8B%E4%B8%8E%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1"><span class="nav-number">1.</span> <span class="nav-text">1 面向过程与面向对象</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-%E5%B0%81%E8%A3%85"><span class="nav-number">2.</span> <span class="nav-text">2 封装</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#2-1-%E5%88%9B%E5%BB%BA%E4%B8%80%E4%B8%AA%E7%B1%BB"><span class="nav-number">2.1.</span> <span class="nav-text">2.1 创建一个类</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-2-%E5%B1%9E%E6%80%A7%E5%92%8C%E6%96%B9%E6%B3%95%E5%B0%81%E8%A3%85"><span class="nav-number">2.2.</span> <span class="nav-text">2.2 属性和方法封装</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-3-%E9%97%AD%E5%8C%85%E5%AE%9E%E7%8E%B0"><span class="nav-number">2.3.</span> <span class="nav-text">2.3 闭包实现</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-4-%E5%88%9B%E5%BB%BA%E5%AF%B9%E8%B1%A1%E7%9A%84%E5%AE%89%E5%85%A8%E6%A8%A1%E5%BC%8F"><span class="nav-number">2.4.</span> <span class="nav-text">2.4 创建对象的安全模式
+
+</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-%E7%BB%A7%E6%89%BF"><span class="nav-number">3.</span> <span class="nav-text">3 继承</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#3-1-%E5%AD%90%E7%B1%BB%E7%9A%84%E5%8E%9F%E5%9E%8B%E5%AF%B9%E8%B1%A1%E2%80%94%E2%80%94%E7%B1%BB%E5%9E%8B%E7%BB%A7%E6%89%BF"><span class="nav-number">3.1.</span> <span class="nav-text">3.1 子类的原型对象——类型继承</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-2-%E5%88%9B%E5%BB%BA%E5%8D%B3%E7%BB%A7%E6%89%BF%E2%80%94%E2%80%94%E6%9E%84%E9%80%A0%E5%87%BD%E6%95%B0%E7%BB%A7%E6%89%BF"><span class="nav-number">3.2.</span> <span class="nav-text">3.2 创建即继承——构造函数继承</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-3-%E5%B0%86%E4%BC%98%E7%82%B9%E4%B8%BA%E6%88%91%E6%89%80%E7%94%A8%E2%80%94%E2%80%94%E7%BB%84%E5%90%88%E5%BC%8F%E7%BB%A7%E6%89%BF"><span class="nav-number">3.3.</span> <span class="nav-text">3.3 将优点为我所用——组合式继承</span></a></li><li class="nav-item nav-level-3"><a class="nav-link"><span class="nav-number">3.4.</span> <span class="nav-text"></span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-4-%E6%B4%81%E5%87%80%E7%9A%84%E7%BB%A7%E6%89%BF%E8%80%85%E2%80%94%E2%80%94%E5%8E%9F%E5%9E%8B%E5%BC%8F%E7%BB%A7%E6%89%BF"><span class="nav-number">3.5.</span> <span class="nav-text">3.4 洁净的继承者——原型式继承</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-5-%E5%A6%82%E8%99%8E%E6%B7%BB%E7%BF%BC%E2%80%94%E2%80%94%E5%AF%84%E7%94%9F%E5%BC%8F%E7%BB%A7%E6%89%BF"><span class="nav-number">3.6.</span> <span class="nav-text">3.5 如虎添翼——寄生式继承</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-6-%E7%BB%88%E6%9E%81%E7%BB%A7%E6%89%BF%E8%80%85%E2%80%94%E2%80%94%E5%AF%84%E7%94%9F%E7%BB%84%E5%90%88%E5%BC%8F%E7%BB%A7%E6%89%BF"><span class="nav-number">3.7.</span> <span class="nav-text">3.6 终极继承者——寄生组合式继承</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">犀鸟技术中心</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">15</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">7</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">7</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="cc-license motion-element" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" class="cc-opacity" rel="noopener" target="_blank"><img src="/images/cc-by-nc-sa.svg" alt="Creative Commons"></a>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">犀鸟技术中心</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-area"></i>
+    </span>
+    <span title="站点总字数">31k</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="站点阅读时长">28 分钟</span>
+</div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+
+<script>
+NexT.utils.loadComments(document.querySelector('#valine-comments'), () => {
+  NexT.utils.getScript('//unpkg.com/valine/dist/Valine.min.js', () => {
+    var GUEST = ['nick', 'mail', 'link'];
+    var guest = 'nick,mail,link';
+    guest = guest.split(',').filter(item => {
+      return GUEST.includes(item);
+    });
+    new Valine({
+      el         : '#valine-comments',
+      verify     : false,
+      notify     : false,
+      appId      : 'RSGSDX6mpy0tovY7FcfRbPB5-gzGzoHsz',
+      appKey     : 'cB66y8LSjGdHvLNmRBxmaiC4',
+      placeholder: "Just go go",
+      avatar     : 'mm',
+      meta       : guest,
+      pageSize   : '10' || 10,
+      visitor    : false,
+      lang       : 'zh-cn' || 'zh-cn',
+      path       : location.pathname,
+      recordIP   : false,
+      serverURLs : ''
+    });
+  }, window.Valine);
+});
+</script>
+
+</body>
+</html>
