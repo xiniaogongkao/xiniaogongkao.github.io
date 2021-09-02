@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.1.1">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.4/css/all.min.css" integrity="sha256-mUZM63G8m73Mcidfrv5E+Y61y7a12O5mW4ezU3bxqW4=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"tech.xiniaogongkao.com","root":"/","images":"/images","scheme":"Muse","version":"8.7.1","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":false,"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="/js/config.js"></script>
+<meta name="description" content="HTTPS（全称：Hypertext Transfer Protocol Secure，超文本传输安全协议），是以安全为目标的 HTTP 通道，简单讲是 HTTP 的安全版。本文，就来介绍下其原理。​">
+<meta property="og:type" content="article">
+<meta property="og:title" content="HTTPS的加密原理">
+<meta property="og:url" content="https://tech.xiniaogongkao.com/2021/08/20/HTTPS%E7%9A%84%E5%8A%A0%E5%AF%86%E5%8E%9F%E7%90%86/index.html">
+<meta property="og:site_name" content="犀鸟技术博客">
+<meta property="og:description" content="HTTPS（全称：Hypertext Transfer Protocol Secure，超文本传输安全协议），是以安全为目标的 HTTP 通道，简单讲是 HTTP 的安全版。本文，就来介绍下其原理。​">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://i.loli.net/2021/09/02/TdVFe82SHXJtyKM.png">
+<meta property="og:image" content="https://i.loli.net/2021/09/02/zSZBlrCUvgPtiua.png">
+<meta property="og:image" content="https://i.loli.net/2021/09/02/Ojb57JsPX61yiUg.png">
+<meta property="og:image" content="https://i.loli.net/2021/09/02/AqY2aNcEiFjBKXM.png">
+<meta property="og:image" content="https://i.loli.net/2021/09/02/w52uyBsR6NHP39V.png">
+<meta property="og:image" content="https://i.loli.net/2021/09/02/8voB4UDhqwFkKZt.jpg">
+<meta property="og:image" content="https://i.loli.net/2021/09/02/J8Wl1CKNI9nrHUu.jpg">
+<meta property="og:image" content="https://i.loli.net/2021/09/02/zHR1ydOIigWlv9V.jpg">
+<meta property="og:image" content="https://i.loli.net/2021/09/02/OtMuYdGrcaCjHpB.jpg">
+<meta property="og:image" content="https://i.loli.net/2021/09/02/Bs6D4Oi1JhIw5Tv.jpg">
+<meta property="og:image" content="https://i.loli.net/2021/09/02/5sDVQTikW84jBoa.jpg">
+<meta property="og:image" content="https://i.loli.net/2021/09/02/wXj7sbeUkp1Q9Gy.jpg">
+<meta property="article:published_time" content="2021-08-20T02:06:19.000Z">
+<meta property="article:modified_time" content="2021-09-02T03:08:26.526Z">
+<meta property="article:author" content="犀鸟技术中心">
+<meta property="article:tag" content="HTTP系列">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://i.loli.net/2021/09/02/TdVFe82SHXJtyKM.png">
+
+
+<link rel="canonical" href="https://tech.xiniaogongkao.com/2021/08/20/HTTPS%E7%9A%84%E5%8A%A0%E5%AF%86%E5%8E%9F%E7%90%86/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://tech.xiniaogongkao.com/2021/08/20/HTTPS%E7%9A%84%E5%8A%A0%E5%AF%86%E5%8E%9F%E7%90%86/","path":"2021/08/20/HTTPS的加密原理/","title":"HTTPS的加密原理"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>HTTPS的加密原理 | 犀鸟技术博客</title>
+  
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <h1 class="site-title">犀鸟技术博客</h1>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">与其感慨路难行，不如马上出发</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E9%9C%80%E8%A6%81-HTTPS"><span class="nav-number">1.</span> <span class="nav-text">为什么需要 HTTPS</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5"><span class="nav-number">2.</span> <span class="nav-text">基本概念</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AF%B9%E7%A7%B0%E5%8A%A0%E5%AF%86"><span class="nav-number">2.1.</span> <span class="nav-text">对称加密</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%9D%9E%E5%AF%B9%E7%A7%B0%E5%8A%A0%E5%AF%86"><span class="nav-number">2.2.</span> <span class="nav-text">非对称加密</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%95%B0%E5%AD%97%E8%AF%81%E4%B9%A6%E4%B8%8E%E6%95%B0%E5%AD%97%E7%AD%BE%E5%90%8D"><span class="nav-number">2.3.</span> <span class="nav-text">数字证书与数字签名</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%95%B0%E5%AD%97%E8%AF%81%E4%B9%A6%E7%9A%84%E7%94%B3%E8%AF%B7"><span class="nav-number">2.3.1.</span> <span class="nav-text">数字证书的申请</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%95%B0%E5%AD%97%E8%AF%81%E4%B9%A6%E6%80%8E%E4%B9%88%E8%B5%B7%E4%BD%9C%E7%94%A8%EF%BC%9F"><span class="nav-number">2.3.2.</span> <span class="nav-text">数字证书怎么起作用？</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#HTTPS-%E7%9A%84%E5%8E%9F%E7%90%86"><span class="nav-number">3.</span> <span class="nav-text">HTTPS 的原理</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%AE%80%E5%8C%96%E7%9A%84%E6%B5%81%E7%A8%8B%E5%9B%BE"><span class="nav-number">3.1.</span> <span class="nav-text">简化的流程图</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%A4%8D%E5%88%B6%E7%9A%84%E6%B5%81%E7%A8%8B%E5%9B%BE"><span class="nav-number">3.2.</span> <span class="nav-text">复制的流程图</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#HTTPS-%E7%9A%84%E4%BD%BF%E7%94%A8"><span class="nav-number">4.</span> <span class="nav-text">HTTPS 的使用</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%96%87%E7%AB%A0%E5%8F%82%E8%80%83"><span class="nav-number">4.1.</span> <span class="nav-text">文章参考</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-overview">
+            <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">犀鸟技术中心</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">24</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">6</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">7</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://tech.xiniaogongkao.com/2021/08/20/HTTPS%E7%9A%84%E5%8A%A0%E5%AF%86%E5%8E%9F%E7%90%86/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="犀鸟技术中心">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="犀鸟技术博客">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          HTTPS的加密原理
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2021-08-20 10:06:19" itemprop="dateCreated datePublished" datetime="2021-08-20T10:06:19+08:00">2021-08-20</time>
+    </span>
+      <span class="post-meta-item">
+        <span class="post-meta-item-icon">
+          <i class="far fa-calendar-check"></i>
+        </span>
+        <span class="post-meta-item-text">更新于</span>
+        <time title="修改时间：2021-09-02 11:08:26" itemprop="dateModified" datetime="2021-09-02T11:08:26+08:00">2021-09-02</time>
+      </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/web%E7%AB%AF/" itemprop="url" rel="index"><span itemprop="name">web端</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>3.6k</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>3 分钟</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <p>HTTPS（全称：Hypertext Transfer Protocol Secure，超文本传输安全协议），是以安全为目标的 HTTP 通道，简单讲是 HTTP 的安全版。<br>本文，就来介绍下其原理。<br>​</p>
+<a id="more"></a>
+
+<h2 id="为什么需要-HTTPS"><a href="#为什么需要-HTTPS" class="headerlink" title="为什么需要 HTTPS"></a>为什么需要 HTTPS</h2><p>使用 https 的原因很简单，就是因为 http 的<strong>不安全</strong><br><img src="https://i.loli.net/2021/09/02/TdVFe82SHXJtyKM.png" alt="image.png"><br>当我们往服务器发送比较隐私的数据（如银行卡、身份证）时，如果使用 http 进行通信，那么安全性将得不到保障。<br>​</p>
+<ol>
+<li>首先数据在传输的过程中，数据可能被中间人抓包拿到，那么数据就会被中间人<strong>窃取</strong>。</li>
+<li>其次数据被中间人拿到后，中间人可能会对数据进行<strong>修改或者替换，</strong>然后发往服务器。</li>
+<li>最后服务器收到数据后，也无法确定数据有没有修改或替换。当然，服务器也无法判断数据就真的是来源于客户端。</li>
+</ol>
+<p>​</p>
+<p>总结下来，http 存在三个弊端：</p>
+<ul>
+<li>无法保证消息的<strong>保密性</strong></li>
+<li>无法保证消息的<strong>完整性和准确性</strong></li>
+<li>无法保证消息来源的<strong>可靠性</strong></li>
+</ul>
+<p><strong>​</strong></p>
+<p>https 就是为了解决上诉问题应运而生的。<br>​</p>
+<h2 id="基本概念"><a href="#基本概念" class="headerlink" title="基本概念"></a>基本概念</h2><p>为了解决 http 中存在的问题，https 采用了一些加解密、数字证书、数字签名的技术来实现。<br>下面介绍一下这些基本概念<br>​</p>
+<p>为了保证消息的保密性，就需要用到加密和解密。加解密算法目前主流的分为对称加密和非对称加密。</p>
+<h3 id="对称加密"><a href="#对称加密" class="headerlink" title="对称加密"></a>对称加密</h3><p>对称加密（共享密匙加密）：客户端和服务器<strong>共用一个密匙</strong>来对消息进行加解密，这种方式称为对称加密。<br>​</p>
+<p>客户端和服务端约定好一个加密的密匙。客户端在发消息前用该密匙对消息加密，发送给服务器后，服务器再用该密匙进行解密拿到消息。<br>密匙就如同电影《悬崖之上》中的密码母本《梅兰芳游美记》，对消息的加密和解密都得通过它。<br>​</p>
+<p><img src="https://i.loli.net/2021/09/02/zSZBlrCUvgPtiua.png" alt="image.png"><br>​</p>
+<p><strong>对称加密的优点</strong></p>
+<ul>
+<li>解决了 http 消息保密性的问题</li>
+</ul>
+<p>​</p>
+<p><strong>对称加密的缺点</strong></p>
+<ul>
+<li>对称加密虽然保证了消息保密性，但是因为客户端和服务器共享一个密匙，这样就使得密匙特别容易泄露。</li>
+<li>因为密匙泄露风险较高，所以很难保证消息来源的可靠性、消息的完整性和准确性。</li>
+</ul>
+<p>​</p>
+<h3 id="非对称加密"><a href="#非对称加密" class="headerlink" title="非对称加密"></a>非对称加密</h3><p>非对称加密（公有密匙加密）：既然对称加密中，密匙那么容易泄露，那么我们可以采用一种非对称加密的方式来解决。<br>​</p>
+<p>采用非对称加密时，客户端和服务端均拥有一个<strong>公有密匙（Public Key）</strong>和一个<strong>私有密匙（Private Key）。</strong><br>公有密匙可以对外暴露，而私有密匙只有自己可见。<br>​</p>
+<p>使用公有密匙加密的消息，只有对应的私有密匙才能解开。反过来，使用私有密匙加密的消息，只有公有密匙才能解开。<br>这样客户端在发送消息前，先用服务器的公匙对消息进行加密，服务器收到后再用自己的私匙进行解密。<br><img src="https://i.loli.net/2021/09/02/Ojb57JsPX61yiUg.png" alt="image.png"></p>
+<p><strong>非对称加密的优点</strong></p>
+<ul>
+<li>非对称加密采用公有密匙和私有密匙的方式，解决了 http 中消息保密性问题，而且使得私有密匙泄露的风险降低。</li>
+<li>因为公匙加密的消息只有对应的私匙才能解开，所以较大程度上保证了消息的来源性以及消息的准确性和完整性。</li>
+</ul>
+<p>​</p>
+<p><strong>非对称加密的缺点：</strong></p>
+<ul>
+<li>非对称加密时需要使用到接收方的公匙对消息进行加密，但是公匙不是保密的，任何人都可以拿到，中间人也可以。那么中间人可以做两件事，<ul>
+<li>第一件是中间人可以在客户端与服务器交换公匙的时候，将<strong>客户端的公匙替换成自己的</strong>。这样服务器拿到的公匙将不是客户端的，而是服务器的。服务器也无法判断公匙来源的正确性。</li>
+<li>第二件是中间人可以不替换公匙，但是他可以截获客户端发来的消息，然后<strong>篡改</strong>，然后用服务器的公匙加密再发往服务器，服务器将收到错误的消息。</li>
+</ul>
+</li>
+<li>非对称加密的性能相对对称加密来说会<strong>慢上几倍甚至几百倍</strong>，比较消耗系统资源。正是因为如此，https 将两种加密结合了起来。</li>
+</ul>
+<p><img src="https://i.loli.net/2021/09/02/AqY2aNcEiFjBKXM.png" alt="image.png"><br><img src="https://i.loli.net/2021/09/02/w52uyBsR6NHP39V.png" alt="image.png"><br>​</p>
+<h3 id="数字证书与数字签名"><a href="#数字证书与数字签名" class="headerlink" title="数字证书与数字签名"></a>数字证书与数字签名</h3><p>为了解决非对称加密中公匙来源的<strong>不安全性</strong>，我们可以使用数字证书和数字签名来解决。</p>
+<h4 id="数字证书的申请"><a href="#数字证书的申请" class="headerlink" title="数字证书的申请"></a>数字证书的申请</h4><p>在现实中，有一些专门的权威机构用来颁发数字证书，我们称这些机构认证为<strong>认证中心（</strong>CA，Certificate Authority<strong>）。</strong>我们（服务器）可以向这些 CA 来申请数字证书。</p>
+<p><strong>申请过程如下：</strong></p>
+<ol>
+<li>自己本地生成一对密匙，然后拿着自己的公匙以及其他信息去 CA 申请数字证书。</li>
+</ol>
+<ol start="2">
+<li>CA 在拿到这些信息后，会选择一种<strong>单向 Hash 算法</strong>（如 MD5）对这些信息进行加密，加密后的东西称为摘要。</li>
+</ol>
+<p><img src="https://i.loli.net/2021/09/02/8voB4UDhqwFkKZt.jpg" alt="image.png"></p>
+<ul>
+<li>单向Hash算法有一种特点就是<strong>单向不可逆的</strong>，只要原始内容有一点变化，加密后的数据都将会是千差万别（当然也有很小的可能性会重复，有兴趣的小伙伴鸽巢原理了解一下），这样就防止了信息被篡改。</li>
+</ul>
+<ol start="3">
+<li>生成摘要后还不算完，CA 还会用自己的私匙对摘要进行加密，摘要加密后的数据我们称为<strong>数字签名</strong>。</li>
+</ol>
+<p><img src="https://i.loli.net/2021/09/02/J8Wl1CKNI9nrHUu.jpg" alt="image.png"></p>
+<ol start="4">
+<li>最后，CA将会把我们的申请信息（包含服务器的公匙）和数字签名整合在一起，由此而生成<strong>数字证书</strong>。然后CA将数字证书传递给我们。</li>
+</ol>
+<p><img src="https://i.loli.net/2021/09/02/zHR1ydOIigWlv9V.jpg" alt="image.png"></p>
+<h4 id="数字证书怎么起作用？"><a href="#数字证书怎么起作用？" class="headerlink" title="数字证书怎么起作用？"></a>数字证书怎么起作用？</h4><p>服务器在获取到数字证书后，服务器会将数字证书发送给客户端，客户端就需要用CA的公匙解密数字证书并<strong>验证数字证书的合法性</strong>。那我们如何能拿到CA的公匙呢？我们的电脑和浏览器中已经内置了一部分权威机构的根证书，这些根证书中包含了CA的公匙。<br>​</p>
+<p>之所以是根证书，是因为现实生活中，认证中心是分层级的，也就是说有顶级认证中心，也有下面的各个子级的认证中心，是一个树状结构，计算机中内置的是最顶级机构的根证书，不过不用担心，根证书的公匙在子级也是适用的。<br>​</p>
+<p>客户端用CA的公匙解密数字证书，如果解密成功则说明证书来源于合法的认证机构。解密成功后，客户端就拿到了摘要。<br>​</p>
+<p>此时，客户端会按照和 CA 一样的 Hash 算法将申请信息生成一份摘要，并和解密出来的那份做对比，如果相同则说明内容完整，没有被篡改。最后，客户端安全的从证书中拿到服务器的公匙就可以和服务器进行安全的非对称加密通信了。服务器想获得客户端的公匙也可以通过相同方式。<br><img src="https://i.loli.net/2021/09/02/OtMuYdGrcaCjHpB.jpg" alt="image.png"><br>​</p>
+<h2 id="HTTPS-的原理"><a href="#HTTPS-的原理" class="headerlink" title="HTTPS 的原理"></a>HTTPS 的原理</h2><p>通过上面的学习，我们了解对称加密与非对称加密的特点和优缺点，以及数字证书的作用。https 没有采用单一的技术去实现，而是根据他们的特点，充分的将这些技术整合进去，以达到性能与安全最大化。这套整合的技术我们称之为 <strong>SSL</strong>（Secure Scoket Layer 安全套接层）。所以 https 并非是一项新的协议，它只是在http上披了一层加密的外壳。</p>
+<h3 id="简化的流程图"><a href="#简化的流程图" class="headerlink" title="简化的流程图"></a>简化的流程图</h3><p>下图不包含 <strong>Pre-Master Secret</strong><br><img src="https://i.loli.net/2021/09/02/Bs6D4Oi1JhIw5Tv.jpg" alt="image.png"></p>
+<h3 id="复制的流程图"><a href="#复制的流程图" class="headerlink" title="复制的流程图"></a>复制的流程图</h3><p><img src="https://i.loli.net/2021/09/02/5sDVQTikW84jBoa.jpg" alt="image.png"><br>这里把 https 建立到断开分为 6 个阶段，12 个过程。下面对这 12 个过程一一解释</p>
+<ol>
+<li>客户端通过发送 <code>Client Hello</code> 报文开始 <code>SSL</code> 通信。<ol>
+<li>报文中包含客户端支持的<code>SSL</code> 的指定版本、加密组件（Cipher Suite）列表（所使用的加密算法及密匙长度等）</li>
+</ol>
+</li>
+</ol>
+<ol start="2">
+<li>服务器可进行<code>SSL</code> 通信时，会以<code>Server Hello</code> 报文作为应答。<ol>
+<li>和客户端一样，在报文中包含<code>SSL</code> 版本以及加密组件。</li>
+<li>服务器的加密组件内容是从接收到的客户端加密组件内筛选出来的。</li>
+</ol>
+</li>
+</ol>
+<ol start="3">
+<li><p>服务器发送证书报文。报文中包含公开密匙证书。</p>
+</li>
+<li><p>最后服务器发送<code>Server Hello Done</code> 报文通知客户端，最初阶段的<code>SSL</code> 握手协商部分结束。</p>
+</li>
+<li><p><code>SSL</code> 第一次握手结束后，客户端以 <code>Client Key Exchange</code> 报文作为回应。</p>
+<ol>
+<li>报文包含通信加密中使用的一种被称为<code>Pre-master secret</code> 的随机密码串。</li>
+<li>该报文已用步骤 3 的公开密匙进行加密。</li>
+</ol>
+</li>
+</ol>
+<ol start="6">
+<li>接着客户端继续发送<code>Change Cipher Spec</code> 报文。<ol>
+<li>该报文会提示服务器，在此报文之后的通信会采用 <code>Pre-master secret</code> 密匙加密</li>
+</ol>
+</li>
+</ol>
+<ol start="7">
+<li>客户端发送<code>Finished</code> 报文。<ol>
+<li>该报文包含连接至今全部报文的整体校验值。</li>
+<li>这次握手协商是否能够成功，要以服务器是否能够正确解密该报文文件作为判定标准。</li>
+</ol>
+</li>
+</ol>
+<ol start="8">
+<li><p>服务器同样发送<code>Change Cipher Spec</code> 报文。</p>
+</li>
+<li><p>服务器同样发送<code>Finished</code> 报文。</p>
+</li>
+<li><p>服务器和客户端<code>Finished</code> 报文交换完毕之后，<code>SSL</code> 连接就算建立完成。</p>
+<ol>
+<li>当然，通信会收到<code>SSL</code> 的保护。从此处开始进行应用层协议的通信，即发送 HTTP 请求。</li>
+</ol>
+</li>
+</ol>
+<ol start="11">
+<li><p>应用层协议通信，即发送 HTTP 响应。</p>
+</li>
+<li><p>最后由客户端断开连接。</p>
+<ol>
+<li>断开连接时，发送<code>close_notify</code> 报文。</li>
+<li>上图做了一些省略，这步之后发送<code>TCP FIN</code>报文来关闭与 TCP 的通信</li>
+</ol>
+</li>
+</ol>
+<p>另外，在以上流程图中，应用层发送数据时会附加一种叫做 MAC（Message Authentication Code）的报文摘要。</p>
+<p>MAC 能够查知报文是否遭到篡改，从而保证报文的完整性。</p>
+<p><img src="https://i.loli.net/2021/09/02/wXj7sbeUkp1Q9Gy.jpg" alt="image.png"></p>
+<p>经过上面的介绍，我们可以看出 https 先是利用数字证书保证服务器端的公匙可以安全无误的到达客户端。然后再用非对称加密安全的传递共享密匙，最后用共享密匙安全的交换数据。</p>
+<h2 id="HTTPS-的使用"><a href="#HTTPS-的使用" class="headerlink" title="HTTPS 的使用"></a>HTTPS 的使用</h2><p>https 那么的安全，是不是我们在什么场景下都要去使用 https 进行通信呢？答案是否定的。</p>
+<ol>
+<li>https 虽然提供了消息安全传输的通道，但是每次消息的<strong>加解密十分耗时</strong>，消息系统资源。所以，除非在一些对安全性比较高的场景下，比如银行系统，购物系统中我们必须要使用 https 进行通信，其他一些对安全性要求不高的场景，我们其实没必要使用 https。</li>
+<li>使用 https 需要使用到<strong>数字证书</strong>，但是一般权威机构颁发的数字证书都是收费的，而且价格也是不菲的，所以对于一些个人网站特别是学生来讲，如果对安全性要求不高，也没必要使用https。</li>
+</ol>
+<h3 id="文章参考"><a href="#文章参考" class="headerlink" title="文章参考"></a>文章参考</h3><p><a target="_blank" rel="noopener" href="https://juejin.cn/post/6844903814378553358">一篇文章读懂HTTPS及其背后的加密原理</a></p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/HTTP%E7%B3%BB%E5%88%97/" rel="tag"># HTTP系列</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2021/08/07/HTTP%E6%8A%A5%E6%96%87/" rel="prev" title="HTTP报文">
+                  <i class="fa fa-chevron-left"></i> HTTP报文
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2021/09/02/TLS%E5%92%8CSSL%E7%9A%84%E4%BB%8B%E7%BB%8D%E4%BB%A5%E5%8F%8A%E5%8C%BA%E5%88%AB/" rel="next" title="TLS和SSL的介绍以及区别">
+                  TLS和SSL的介绍以及区别 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">犀鸟技术中心</span>
+</div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+    <span title="站点总字数">55k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="站点阅读时长">50 分钟</span>
+  </span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/muse/" rel="noopener" target="_blank">NexT.Muse</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <script src="https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+  
+
+
+
+
+
+</body>
+</html>

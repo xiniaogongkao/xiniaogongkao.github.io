@@ -2,25 +2,25 @@
 <html lang="zh-CN">
 <head>
   <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="viewport" content="width=device-width">
 <meta name="theme-color" content="#222">
 <meta name="generator" content="Hexo 5.1.1">
+
+
   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
-  <link rel="icon" type="image/png" sizes="32x32" href="/favicon.ico">
-  <link rel="icon" type="image/png" sizes="16x16" href="/favicon.ico">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
   <link rel="mask-icon" href="/images/logo.svg" color="#222">
 
 <link rel="stylesheet" href="/css/main.css">
 
 
-<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
 
-<script id="hexo-configurations">
-    var NexT = window.NexT || {};
-    var CONFIG = {"hostname":"tech.xiniaogongkao.com","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
-  </script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.4/css/all.min.css" integrity="sha256-mUZM63G8m73Mcidfrv5E+Y61y7a12O5mW4ezU3bxqW4=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
 
-  <meta name="description" content="1 面向过程与面向对象之前所写的 3 个对输入框中输入的数据校验功能方法，用了 3 个函数，这是一种面向过程的实现方式。然而在这种方式中，你会无端地在页面中添加很多全局变量，而且不利于别人重复使用。一旦别人使用以前提供的方法，你就不能轻易地去修改这些方法，这不利于团队代码维护。">
+<script class="next-config" data-name="main" type="application/json">{"hostname":"tech.xiniaogongkao.com","root":"/","images":"/images","scheme":"Muse","version":"8.7.1","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":false,"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="/js/config.js"></script>
+<meta name="description" content="1 面向过程与面向对象之前所写的 3 个对输入框中输入的数据校验功能方法，用了 3 个函数，这是一种面向过程的实现方式。然而在这种方式中，你会无端地在页面中添加很多全局变量，而且不利于别人重复使用。一旦别人使用以前提供的方法，你就不能轻易地去修改这些方法，这不利于团队代码维护。">
 <meta property="og:type" content="article">
 <meta property="og:title" content="第二章 面向对象编程">
 <meta property="og:url" content="https://tech.xiniaogongkao.com/2021/05/27/%E7%AC%AC%E4%BA%8C%E7%AB%A0-%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1%E7%BC%96%E7%A8%8B/index.html">
@@ -28,82 +28,49 @@
 <meta property="og:description" content="1 面向过程与面向对象之前所写的 3 个对输入框中输入的数据校验功能方法，用了 3 个函数，这是一种面向过程的实现方式。然而在这种方式中，你会无端地在页面中添加很多全局变量，而且不利于别人重复使用。一旦别人使用以前提供的方法，你就不能轻易地去修改这些方法，这不利于团队代码维护。">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2021-05-27T03:00:15.000Z">
-<meta property="article:modified_time" content="2021-05-27T03:05:00.901Z">
+<meta property="article:modified_time" content="2021-09-02T02:02:04.718Z">
 <meta property="article:author" content="犀鸟技术中心">
 <meta property="article:tag" content="设计模式">
 <meta name="twitter:card" content="summary">
 
+
 <link rel="canonical" href="https://tech.xiniaogongkao.com/2021/05/27/%E7%AC%AC%E4%BA%8C%E7%AB%A0-%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1%E7%BC%96%E7%A8%8B/">
 
 
-<script id="page-configurations">
-  // https://hexo.io/docs/variables.html
-  CONFIG.page = {
-    sidebar: "",
-    isHome : false,
-    isPost : true,
-    lang   : 'zh-CN'
-  };
-</script>
 
-  <title>第二章 面向对象编程 | 犀鸟技术博客</title>
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://tech.xiniaogongkao.com/2021/05/27/%E7%AC%AC%E4%BA%8C%E7%AB%A0-%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1%E7%BC%96%E7%A8%8B/","path":"2021/05/27/第二章-面向对象编程/","title":"第二章 面向对象编程"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>第二章 面向对象编程 | 犀鸟技术博客</title>
   
 
 
 
 
-
-
   <noscript>
-  <style>
-  .use-motion .brand,
-  .use-motion .menu-item,
-  .sidebar-inner,
-  .use-motion .post-block,
-  .use-motion .pagination,
-  .use-motion .comments,
-  .use-motion .post-header,
-  .use-motion .post-body,
-  .use-motion .collection-header { opacity: initial; }
-
-  .use-motion .site-title,
-  .use-motion .site-subtitle {
-    opacity: initial;
-    top: initial;
-  }
-
-  .use-motion .logo-line-before i { left: initial; }
-  .use-motion .logo-line-after i { right: initial; }
-  </style>
-</noscript>
-
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
 </head>
 
-<body itemscope itemtype="http://schema.org/WebPage">
-  <div class="container use-motion">
-    <div class="headband"></div>
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
 
+  <main class="main">
     <header class="header" itemscope itemtype="http://schema.org/WPHeader">
       <div class="header-inner"><div class="site-brand-container">
   <div class="site-nav-toggle">
-    <div class="toggle" aria-label="切换导航栏">
-      <span class="toggle-line toggle-line-first"></span>
-      <span class="toggle-line toggle-line-middle"></span>
-      <span class="toggle-line toggle-line-last"></span>
+    <div class="toggle" aria-label="切换导航栏" role="button">
     </div>
   </div>
 
-  <div class="site-meta custom-logo">
+  <div class="site-meta">
 
     <a href="/" class="brand" rel="start">
-      <span class="logo-line-before"><i></i></span>
+      <i class="logo-line"></i>
       <h1 class="site-title">犀鸟技术博客</h1>
-      <span class="logo-line-after"><i></i></span>
+      <i class="logo-line"></i>
     </a>
       <p class="site-subtitle" itemprop="description">与其感慨路难行，不如马上出发</p>
-      <a>
-        <img class="custom-logo-image" src="/images/xnlogo.png" alt="犀鸟技术博客">
-      </a>
   </div>
 
   <div class="site-nav-right">
@@ -115,61 +82,100 @@
 
 
 
-<nav class="site-nav">
-  <ul id="menu" class="main-menu menu">
-        <li class="menu-item menu-item-home">
-
-    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
-
-  </li>
-        <li class="menu-item menu-item-about">
-
-    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
-
-  </li>
-        <li class="menu-item menu-item-tags">
-
-    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
-
-  </li>
-        <li class="menu-item menu-item-categories">
-
-    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
-
-  </li>
-        <li class="menu-item menu-item-archives">
-
-    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
-
-  </li>
-  </ul>
-</nav>
-
 
 
 
 </div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E9%9D%A2%E5%90%91%E8%BF%87%E7%A8%8B%E4%B8%8E%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1"><span class="nav-number">1.</span> <span class="nav-text">1 面向过程与面向对象</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-%E5%B0%81%E8%A3%85"><span class="nav-number">2.</span> <span class="nav-text">2 封装</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#2-1-%E5%88%9B%E5%BB%BA%E4%B8%80%E4%B8%AA%E7%B1%BB"><span class="nav-number">2.1.</span> <span class="nav-text">2.1 创建一个类</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-2-%E5%B1%9E%E6%80%A7%E5%92%8C%E6%96%B9%E6%B3%95%E5%B0%81%E8%A3%85"><span class="nav-number">2.2.</span> <span class="nav-text">2.2 属性和方法封装</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-3-%E9%97%AD%E5%8C%85%E5%AE%9E%E7%8E%B0"><span class="nav-number">2.3.</span> <span class="nav-text">2.3 闭包实现</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-4-%E5%88%9B%E5%BB%BA%E5%AF%B9%E8%B1%A1%E7%9A%84%E5%AE%89%E5%85%A8%E6%A8%A1%E5%BC%8F"><span class="nav-number">2.4.</span> <span class="nav-text">2.4 创建对象的安全模式
+
+</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-%E7%BB%A7%E6%89%BF"><span class="nav-number">3.</span> <span class="nav-text">3 继承</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#3-1-%E5%AD%90%E7%B1%BB%E7%9A%84%E5%8E%9F%E5%9E%8B%E5%AF%B9%E8%B1%A1%E2%80%94%E2%80%94%E7%B1%BB%E5%9E%8B%E7%BB%A7%E6%89%BF"><span class="nav-number">3.1.</span> <span class="nav-text">3.1 子类的原型对象——类型继承</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-2-%E5%88%9B%E5%BB%BA%E5%8D%B3%E7%BB%A7%E6%89%BF%E2%80%94%E2%80%94%E6%9E%84%E9%80%A0%E5%87%BD%E6%95%B0%E7%BB%A7%E6%89%BF"><span class="nav-number">3.2.</span> <span class="nav-text">3.2 创建即继承——构造函数继承</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-3-%E5%B0%86%E4%BC%98%E7%82%B9%E4%B8%BA%E6%88%91%E6%89%80%E7%94%A8%E2%80%94%E2%80%94%E7%BB%84%E5%90%88%E5%BC%8F%E7%BB%A7%E6%89%BF"><span class="nav-number">3.3.</span> <span class="nav-text">3.3 将优点为我所用——组合式继承</span></a></li><li class="nav-item nav-level-3"><a class="nav-link"><span class="nav-number">3.4.</span> <span class="nav-text"></span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-4-%E6%B4%81%E5%87%80%E7%9A%84%E7%BB%A7%E6%89%BF%E8%80%85%E2%80%94%E2%80%94%E5%8E%9F%E5%9E%8B%E5%BC%8F%E7%BB%A7%E6%89%BF"><span class="nav-number">3.5.</span> <span class="nav-text">3.4 洁净的继承者——原型式继承</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-5-%E5%A6%82%E8%99%8E%E6%B7%BB%E7%BF%BC%E2%80%94%E2%80%94%E5%AF%84%E7%94%9F%E5%BC%8F%E7%BB%A7%E6%89%BF"><span class="nav-number">3.6.</span> <span class="nav-text">3.5 如虎添翼——寄生式继承</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-6-%E7%BB%88%E6%9E%81%E7%BB%A7%E6%89%BF%E8%80%85%E2%80%94%E2%80%94%E5%AF%84%E7%94%9F%E7%BB%84%E5%90%88%E5%BC%8F%E7%BB%A7%E6%89%BF"><span class="nav-number">3.7.</span> <span class="nav-text">3.6 终极继承者——寄生组合式继承</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-overview">
+            <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">犀鸟技术中心</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">24</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">6</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">7</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
     </header>
 
     
-  <div class="back-to-top">
+  <div class="back-to-top" role="button" aria-label="返回顶部">
     <i class="fa fa-arrow-up"></i>
     <span>0%</span>
   </div>
 
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
 
-    <main class="main">
-      <div class="main-inner">
-        <div class="content-wrap">
-          
 
-          <div class="content post posts-expand">
-            
+    <div class="main-inner post posts-expand">
 
-    
+
+  
+
+
+<div class="post-block">
   
   
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="https://tech.xiniaogongkao.com/2021/05/27/%E7%AC%AC%E4%BA%8C%E7%AB%A0-%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1%E7%BC%96%E7%A8%8B/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -186,55 +192,54 @@
           第二章 面向对象编程
         </h1>
 
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              
-
-              <time title="创建时间：2021-05-27 11:00:15 / 修改时间：11:05:00" itemprop="dateCreated datePublished" datetime="2021-05-27T11:00:15+08:00">2021-05-27</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E3%80%8AJavaScript-%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E3%80%8B/" itemprop="url" rel="index"><span itemprop="name">《JavaScript 设计模式》</span></a>
-                </span>
-            </span>
-
-          
-  
-  <span class="post-meta-item">
-    
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
       <span class="post-meta-item-icon">
-        <i class="far fa-comment"></i>
+        <i class="far fa-calendar"></i>
       </span>
-      <span class="post-meta-item-text">Valine：</span>
-    
-    <a title="valine" href="/2021/05/27/%E7%AC%AC%E4%BA%8C%E7%AB%A0-%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1%E7%BC%96%E7%A8%8B/#valine-comments" itemprop="discussionUrl">
-      <span class="post-comments-count valine-comment-count" data-xid="/2021/05/27/%E7%AC%AC%E4%BA%8C%E7%AB%A0-%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1%E7%BC%96%E7%A8%8B/" itemprop="commentCount"></span>
-    </a>
-  </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2021-05-27 11:00:15" itemprop="dateCreated datePublished" datetime="2021-05-27T11:00:15+08:00">2021-05-27</time>
+    </span>
+      <span class="post-meta-item">
+        <span class="post-meta-item-icon">
+          <i class="far fa-calendar-check"></i>
+        </span>
+        <span class="post-meta-item-text">更新于</span>
+        <time title="修改时间：2021-09-02 10:02:04" itemprop="dateModified" datetime="2021-09-02T10:02:04+08:00">2021-09-02</time>
+      </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/web%E7%AB%AF/" itemprop="url" rel="index"><span itemprop="name">web端</span></a>
+        </span>
+          ，
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/web%E7%AB%AF/%E3%80%8AJavaScript-%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E3%80%8B/" itemprop="url" rel="index"><span itemprop="name">《JavaScript 设计模式》</span></a>
+        </span>
+    </span>
+
   
-  <br>
-            <span class="post-meta-item" title="本文字数">
-              <span class="post-meta-item-icon">
-                <i class="far fa-file-word"></i>
-              </span>
-                <span class="post-meta-item-text">本文字数：</span>
-              <span>10k</span>
-            </span>
-            <span class="post-meta-item" title="阅读时长">
-              <span class="post-meta-item-icon">
-                <i class="far fa-clock"></i>
-              </span>
-                <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>9 分钟</span>
-            </span>
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>10k</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>9 分钟</span>
+    </span>
+</div>
 
         </div>
       </header>
@@ -243,8 +248,6 @@
     
     
     <div class="post-body" itemprop="articleBody">
-
-      
         <h2 id="1-面向过程与面向对象"><a href="#1-面向过程与面向对象" class="headerlink" title="1 面向过程与面向对象"></a>1 面向过程与面向对象</h2><p>之前所写的 3 个对输入框中输入的数据校验功能方法，用了 3 个函数，这是一种面向过程的实现方式。<br>然而在这种方式中，你会无端地在页面中<strong>添加很多全局变量</strong>，而且<strong>不利于别人重复使用</strong>。<br>一旦别人使用以前提供的方法，你就不能轻易地去修改这些方法，这不利于团队代码维护。<br></p>
 <a id="more"></a>​
 
@@ -318,204 +321,75 @@
     
     
     
-        
 
-<div>
-<ul class="post-copyright">
-  <li class="post-copyright-author">
-    <strong>本文作者： </strong>犀鸟教育-张凯
-  </li>
-  <li class="post-copyright-link">
-    <strong>本文链接：</strong>
-    <a href="https://tech.xiniaogongkao.com/2021/05/27/%E7%AC%AC%E4%BA%8C%E7%AB%A0-%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1%E7%BC%96%E7%A8%8B/" title="第二章 面向对象编程">https://tech.xiniaogongkao.com/2021/05/27/第二章-面向对象编程/</a>
-  </li>
-  <li class="post-copyright-license">
-    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
-  </li>
-</ul>
-</div>
-
-
-      <footer class="post-footer">
+    <footer class="post-footer">
           <div class="post-tags">
               <a href="/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" rel="tag"># 设计模式</a>
           </div>
 
         
 
-
-        
-    <div class="post-nav">
-      <div class="post-nav-item">
-    <a href="/2021/05/27/%E7%AC%AC%E4%B8%80%E7%AB%A0-%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1%E5%89%8D%E8%A8%80/" rel="prev" title="第一章 面向对象前言">
-      <i class="fa fa-chevron-left"></i> 第一章 面向对象前言
-    </a></div>
-      <div class="post-nav-item">
-    <a href="/2021/05/27/1-1-%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%A1%AC%E4%BB%B6%E7%9A%84%E5%8F%91%E5%B1%95/" rel="next" title="1.1 计算机硬件的发展">
-      1.1 计算机硬件的发展 <i class="fa fa-chevron-right"></i>
-    </a></div>
-    </div>
-      </footer>
-    
-  </article>
-  
-  
-  
-
-
-
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2021/05/27/%E7%AC%AC%E4%B8%80%E7%AB%A0-%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1%E5%89%8D%E8%A8%80/" rel="prev" title="第一章 面向对象前言">
+                  <i class="fa fa-chevron-left"></i> 第一章 面向对象前言
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2021/05/29/%E7%AC%AC%E4%B8%89%E7%AB%A0-%E7%AE%80%E5%8D%95%E5%B7%A5%E5%8E%82%E6%A8%A1%E5%BC%8F/" rel="next" title="第三章 简单工厂模式">
+                  第三章 简单工厂模式 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
           </div>
-          
-    <div class="comments" id="valine-comments"></div>
-
-<script>
-  window.addEventListener('tabs:register', () => {
-    let { activeClass } = CONFIG.comments;
-    if (CONFIG.comments.storage) {
-      activeClass = localStorage.getItem('comments_active') || activeClass;
-    }
-    if (activeClass) {
-      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
-      if (activeTab) {
-        activeTab.click();
-      }
-    }
-  });
-  if (CONFIG.comments.storage) {
-    window.addEventListener('tabs:click', event => {
-      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
-      let commentClass = event.target.classList[1];
-      localStorage.setItem('comments_active', commentClass);
-    });
-  }
-</script>
-
-        </div>
-          
-  
-  <div class="toggle sidebar-toggle">
-    <span class="toggle-line toggle-line-first"></span>
-    <span class="toggle-line toggle-line-middle"></span>
-    <span class="toggle-line toggle-line-last"></span>
-  </div>
-
-  <aside class="sidebar">
-    <div class="sidebar-inner">
-
-      <ul class="sidebar-nav motion-element">
-        <li class="sidebar-nav-toc">
-          文章目录
-        </li>
-        <li class="sidebar-nav-overview">
-          站点概览
-        </li>
-      </ul>
-
-      <!--noindex-->
-      <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E9%9D%A2%E5%90%91%E8%BF%87%E7%A8%8B%E4%B8%8E%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1"><span class="nav-number">1.</span> <span class="nav-text">1 面向过程与面向对象</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-%E5%B0%81%E8%A3%85"><span class="nav-number">2.</span> <span class="nav-text">2 封装</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#2-1-%E5%88%9B%E5%BB%BA%E4%B8%80%E4%B8%AA%E7%B1%BB"><span class="nav-number">2.1.</span> <span class="nav-text">2.1 创建一个类</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-2-%E5%B1%9E%E6%80%A7%E5%92%8C%E6%96%B9%E6%B3%95%E5%B0%81%E8%A3%85"><span class="nav-number">2.2.</span> <span class="nav-text">2.2 属性和方法封装</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-3-%E9%97%AD%E5%8C%85%E5%AE%9E%E7%8E%B0"><span class="nav-number">2.3.</span> <span class="nav-text">2.3 闭包实现</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-4-%E5%88%9B%E5%BB%BA%E5%AF%B9%E8%B1%A1%E7%9A%84%E5%AE%89%E5%85%A8%E6%A8%A1%E5%BC%8F"><span class="nav-number">2.4.</span> <span class="nav-text">2.4 创建对象的安全模式
-
-</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-%E7%BB%A7%E6%89%BF"><span class="nav-number">3.</span> <span class="nav-text">3 继承</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#3-1-%E5%AD%90%E7%B1%BB%E7%9A%84%E5%8E%9F%E5%9E%8B%E5%AF%B9%E8%B1%A1%E2%80%94%E2%80%94%E7%B1%BB%E5%9E%8B%E7%BB%A7%E6%89%BF"><span class="nav-number">3.1.</span> <span class="nav-text">3.1 子类的原型对象——类型继承</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-2-%E5%88%9B%E5%BB%BA%E5%8D%B3%E7%BB%A7%E6%89%BF%E2%80%94%E2%80%94%E6%9E%84%E9%80%A0%E5%87%BD%E6%95%B0%E7%BB%A7%E6%89%BF"><span class="nav-number">3.2.</span> <span class="nav-text">3.2 创建即继承——构造函数继承</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-3-%E5%B0%86%E4%BC%98%E7%82%B9%E4%B8%BA%E6%88%91%E6%89%80%E7%94%A8%E2%80%94%E2%80%94%E7%BB%84%E5%90%88%E5%BC%8F%E7%BB%A7%E6%89%BF"><span class="nav-number">3.3.</span> <span class="nav-text">3.3 将优点为我所用——组合式继承</span></a></li><li class="nav-item nav-level-3"><a class="nav-link"><span class="nav-number">3.4.</span> <span class="nav-text"></span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-4-%E6%B4%81%E5%87%80%E7%9A%84%E7%BB%A7%E6%89%BF%E8%80%85%E2%80%94%E2%80%94%E5%8E%9F%E5%9E%8B%E5%BC%8F%E7%BB%A7%E6%89%BF"><span class="nav-number">3.5.</span> <span class="nav-text">3.4 洁净的继承者——原型式继承</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-5-%E5%A6%82%E8%99%8E%E6%B7%BB%E7%BF%BC%E2%80%94%E2%80%94%E5%AF%84%E7%94%9F%E5%BC%8F%E7%BB%A7%E6%89%BF"><span class="nav-number">3.6.</span> <span class="nav-text">3.5 如虎添翼——寄生式继承</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-6-%E7%BB%88%E6%9E%81%E7%BB%A7%E6%89%BF%E8%80%85%E2%80%94%E2%80%94%E5%AF%84%E7%94%9F%E7%BB%84%E5%90%88%E5%BC%8F%E7%BB%A7%E6%89%BF"><span class="nav-number">3.7.</span> <span class="nav-text">3.6 终极继承者——寄生组合式继承</span></a></li></ol></li></ol></div>
-      </div>
-      <!--/noindex-->
-
-      <div class="site-overview-wrap sidebar-panel">
-        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
-  <p class="site-author-name" itemprop="name">犀鸟技术中心</p>
-  <div class="site-description" itemprop="description"></div>
+    </footer>
+  </article>
 </div>
-<div class="site-state-wrap motion-element">
-  <nav class="site-state">
-      <div class="site-state-item site-state-posts">
-          <a href="/archives/">
-        
-          <span class="site-state-item-count">19</span>
-          <span class="site-state-item-name">日志</span>
-        </a>
-      </div>
-      <div class="site-state-item site-state-categories">
-            <a href="/categories/">
-          
-        <span class="site-state-item-count">7</span>
-        <span class="site-state-item-name">分类</span></a>
-      </div>
-      <div class="site-state-item site-state-tags">
-            <a href="/tags/">
-          
-        <span class="site-state-item-count">7</span>
-        <span class="site-state-item-name">标签</span></a>
-      </div>
-  </nav>
+
+
+
+
+
+
 </div>
-  <div class="cc-license motion-element" itemprop="license">
-    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" class="cc-opacity" rel="noopener" target="_blank"><img src="/images/cc-by-nc-sa.svg" alt="Creative Commons"></a>
-  </div>
+  </main>
 
+  <footer class="footer">
+    <div class="footer-inner">
 
-
-      </div>
-
-    </div>
-  </aside>
-  <div id="sidebar-dimmer"></div>
-
-
-      </div>
-    </main>
-
-    <footer class="footer">
-      <div class="footer-inner">
-        
-
-        
 
 <div class="copyright">
-  
   &copy; 
   <span itemprop="copyrightYear">2021</span>
   <span class="with-love">
     <i class="fa fa-heart"></i>
   </span>
   <span class="author" itemprop="copyrightHolder">犀鸟技术中心</span>
-    <span class="post-meta-divider">|</span>
+</div>
+<div class="wordcount">
+  <span class="post-meta-item">
     <span class="post-meta-item-icon">
-      <i class="fa fa-chart-area"></i>
+      <i class="fa fa-chart-line"></i>
     </span>
-    <span title="站点总字数">40k</span>
-    <span class="post-meta-divider">|</span>
+    <span title="站点总字数">55k</span>
+  </span>
+  <span class="post-meta-item">
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="站点阅读时长">36 分钟</span>
+    <span title="站点阅读时长">50 分钟</span>
+  </span>
 </div>
-
-        
-
-
-
-
-
-
-
-
-      </div>
-    </footer>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/muse/" rel="noopener" target="_blank">NexT.Muse</a> 强力驱动
   </div>
 
+    </div>
+  </footer>
+
   
-  <script src="/lib/anime.min.js"></script>
-  <script src="/lib/velocity/velocity.min.js"></script>
-  <script src="/lib/velocity/velocity.ui.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
 
-<script src="/js/utils.js"></script>
-
-<script src="/js/motion.js"></script>
-
-
-<script src="/js/schemes/pisces.js"></script>
-
-
-<script src="/js/next-boot.js"></script>
+  
 
 
 
@@ -525,49 +399,6 @@
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-  
-
-  
-
-
-<script>
-NexT.utils.loadComments(document.querySelector('#valine-comments'), () => {
-  NexT.utils.getScript('//unpkg.com/valine/dist/Valine.min.js', () => {
-    var GUEST = ['nick', 'mail', 'link'];
-    var guest = 'nick,mail,link';
-    guest = guest.split(',').filter(item => {
-      return GUEST.includes(item);
-    });
-    new Valine({
-      el         : '#valine-comments',
-      verify     : false,
-      notify     : false,
-      appId      : 'RSGSDX6mpy0tovY7FcfRbPB5-gzGzoHsz',
-      appKey     : 'cB66y8LSjGdHvLNmRBxmaiC4',
-      placeholder: "Just go go",
-      avatar     : 'mm',
-      meta       : guest,
-      pageSize   : '10' || 10,
-      visitor    : false,
-      lang       : 'zh-cn' || 'zh-cn',
-      path       : location.pathname,
-      recordIP   : false,
-      serverURLs : ''
-    });
-  }, window.Valine);
-});
-</script>
 
 </body>
 </html>

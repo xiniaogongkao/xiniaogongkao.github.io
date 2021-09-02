@@ -1,0 +1,577 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.1.1">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.4/css/all.min.css" integrity="sha256-mUZM63G8m73Mcidfrv5E+Y61y7a12O5mW4ezU3bxqW4=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"tech.xiniaogongkao.com","root":"/","images":"/images","scheme":"Muse","version":"8.7.1","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":false,"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="/js/config.js"></script>
+<meta name="description" content="用于 HTTP 协议交互的信息被称为 HTTP 报文。客户端的 HTTP 报文叫请求报文，服务端的 HTTP 报文叫响应报文。​">
+<meta property="og:type" content="article">
+<meta property="og:title" content="HTTP报文">
+<meta property="og:url" content="https://tech.xiniaogongkao.com/2021/08/07/HTTP%E6%8A%A5%E6%96%87/index.html">
+<meta property="og:site_name" content="犀鸟技术博客">
+<meta property="og:description" content="用于 HTTP 协议交互的信息被称为 HTTP 报文。客户端的 HTTP 报文叫请求报文，服务端的 HTTP 报文叫响应报文。​">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://i.loli.net/2021/09/02/br3X5HVfpU8kjQ2.png">
+<meta property="og:image" content="https://i.loli.net/2021/09/02/ELMcoGOlbP2FpJ7.png">
+<meta property="og:image" content="https://i.loli.net/2021/09/02/kOjmcvdMyCqhXPi.png">
+<meta property="og:image" content="https://i.loli.net/2021/09/02/Z59ul37wajU6tNg.png">
+<meta property="article:published_time" content="2021-08-07T02:05:56.000Z">
+<meta property="article:modified_time" content="2021-09-02T02:31:39.072Z">
+<meta property="article:author" content="犀鸟技术中心">
+<meta property="article:tag" content="HTTP系列">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://i.loli.net/2021/09/02/br3X5HVfpU8kjQ2.png">
+
+
+<link rel="canonical" href="https://tech.xiniaogongkao.com/2021/08/07/HTTP%E6%8A%A5%E6%96%87/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://tech.xiniaogongkao.com/2021/08/07/HTTP%E6%8A%A5%E6%96%87/","path":"2021/08/07/HTTP报文/","title":"HTTP报文"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>HTTP报文 | 犀鸟技术博客</title>
+  
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <h1 class="site-title">犀鸟技术博客</h1>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">与其感慨路难行，不如马上出发</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%AF%B7%E6%B1%82%E6%96%B9%E6%B3%95"><span class="nav-number">1.</span> <span class="nav-text">请求方法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%8A%B6%E6%80%81%E7%A0%81"><span class="nav-number">2.</span> <span class="nav-text">状态码</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#2xx-%E7%B3%BB%E5%88%97"><span class="nav-number">2.1.</span> <span class="nav-text">2xx 系列</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3xx-%E7%B3%BB%E5%88%97"><span class="nav-number">2.2.</span> <span class="nav-text">3xx 系列</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#4xx-%E7%B3%BB%E5%88%97"><span class="nav-number">2.3.</span> <span class="nav-text">4xx 系列</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#5xx-%E7%B3%BB%E5%88%97"><span class="nav-number">2.4.</span> <span class="nav-text">5xx 系列</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%A6%96%E9%83%A8%E5%AD%97%E6%AE%B5"><span class="nav-number">3.</span> <span class="nav-text">首部字段</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%80%9A%E7%94%A8%E9%A6%96%E9%83%A8"><span class="nav-number">3.1.</span> <span class="nav-text">通用首部</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%AF%B7%E6%B1%82%E9%A6%96%E9%83%A8"><span class="nav-number">3.2.</span> <span class="nav-text">请求首部</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%93%8D%E5%BA%94%E9%A6%96%E9%83%A8"><span class="nav-number">3.3.</span> <span class="nav-text">响应首部</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%AE%9E%E4%BD%93%E9%A6%96%E9%83%A8"><span class="nav-number">3.4.</span> <span class="nav-text">实体首部</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-overview">
+            <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">犀鸟技术中心</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">24</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">6</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">7</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://tech.xiniaogongkao.com/2021/08/07/HTTP%E6%8A%A5%E6%96%87/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="犀鸟技术中心">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="犀鸟技术博客">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          HTTP报文
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2021-08-07 10:05:56" itemprop="dateCreated datePublished" datetime="2021-08-07T10:05:56+08:00">2021-08-07</time>
+    </span>
+      <span class="post-meta-item">
+        <span class="post-meta-item-icon">
+          <i class="far fa-calendar-check"></i>
+        </span>
+        <span class="post-meta-item-text">更新于</span>
+        <time title="修改时间：2021-09-02 10:31:39" itemprop="dateModified" datetime="2021-09-02T10:31:39+08:00">2021-09-02</time>
+      </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/web%E7%AB%AF/" itemprop="url" rel="index"><span itemprop="name">web端</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>1.9k</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>2 分钟</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <p>用于 HTTP 协议交互的信息被称为 HTTP 报文。<br>客户端的 HTTP 报文叫<strong>请求报文</strong>，服务端的 HTTP 报文叫<strong>响应报文。</strong><br><strong>​</strong></p>
+<a id="more"></a>
+
+<p><strong>请求报文</strong> 是由请求行（请求方法、协议版本）、请求首部（请求URI、客户端信息等）和内容实体（用户信息和资源信息等，可为空）构成。<br><img src="https://i.loli.net/2021/09/02/br3X5HVfpU8kjQ2.png" alt="image.png"><br><img src="https://i.loli.net/2021/09/02/ELMcoGOlbP2FpJ7.png" alt="image.png"></p>
+<p><strong>响应报文</strong> 是由状态行（协议版本、状态码）、响应首部（服务器名称、资源标识等）和内容实体（服务端返回的资源信息）构成。<br><img src="https://i.loli.net/2021/09/02/kOjmcvdMyCqhXPi.png" alt="image.png"><br><img src="https://i.loli.net/2021/09/02/Z59ul37wajU6tNg.png" alt="image.png"></p>
+<h3 id="请求方法"><a href="#请求方法" class="headerlink" title="请求方法"></a>请求方法</h3><ul>
+<li>GET：一般用于获取服务器资源</li>
+<li>POST：一般用于传输实体主体</li>
+<li>PUT：一般用于传输文件</li>
+<li>DELETE：一般用于删除文件</li>
+<li>HEAD：用于获取报文首部，不返回报文主体</li>
+<li>OPTIONS：用于询问请求 URI 资源支持的方法</li>
+</ul>
+<h3 id="状态码"><a href="#状态码" class="headerlink" title="状态码"></a>状态码</h3><p>HTTP状态码表示客户端HTTP请求的返回结果、标识服务器处理是否正常、表明请求出现的错误等。<br>​</p>
+<h4 id="2xx-系列"><a href="#2xx-系列" class="headerlink" title="2xx 系列"></a>2xx 系列</h4><p>成功（表明请求被正常处理了）</p>
+<table>
+<thead>
+<tr>
+<th>200</th>
+<th>OK，表示从客户端发来的请求在服务器端被正确处理</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>204</td>
+<td>No Content，表示请求成功，但响应报文不含实体的主体部分</td>
+</tr>
+<tr>
+<td>206</td>
+<td>Partial Content，进行范围请求成功</td>
+</tr>
+</tbody></table>
+<h4 id="3xx-系列"><a href="#3xx-系列" class="headerlink" title="3xx 系列"></a>3xx 系列</h4><p>重定向（表明浏览器需执行特殊处理）</p>
+<table>
+<thead>
+<tr>
+<th>301</th>
+<th>Moved Permanently，永久重定向，表示自愿已被分配了新的 URL</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>302</td>
+<td>Found，临时性重定向，表示资源临时被分配了新的 URL</td>
+</tr>
+<tr>
+<td>303</td>
+<td>See Other，表示资源存在着另一个 URL，应使用 GET 方法获取资源</td>
+</tr>
+<tr>
+<td>（对于 301/302/303 响应，几乎所有浏览器都会删除报文并自动用 GET 重新请求）</td>
+<td></td>
+</tr>
+<tr>
+<td>304</td>
+<td>Not Modified，表示服务器允许访问的自愿，但请求未满足条件的情况（与重定向无关）</td>
+</tr>
+<tr>
+<td>307</td>
+<td>Temporary Redirect，临时重定向，和 302 含义类似。但是期望客户端保持请求方法不变向新的地址发出请求</td>
+</tr>
+</tbody></table>
+<h4 id="4xx-系列"><a href="#4xx-系列" class="headerlink" title="4xx 系列"></a>4xx 系列</h4><p>客户端错误</p>
+<table>
+<thead>
+<tr>
+<th>400</th>
+<th>Bad Request，请求报文存在语法错误</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>401</td>
+<td>Unauthorized，表示发送的请求需要有通过 HTTP 认证的认证信息</td>
+</tr>
+<tr>
+<td>403</td>
+<td>Forbidden，表示对请求资源的访问被服务器拒绝，可在实体主体部分返回原因描述</td>
+</tr>
+<tr>
+<td>404</td>
+<td>Not Found，表示在服务器上没有找到请求的资源</td>
+</tr>
+</tbody></table>
+<h4 id="5xx-系列"><a href="#5xx-系列" class="headerlink" title="5xx 系列"></a>5xx 系列</h4><p>服务器错误</p>
+<table>
+<thead>
+<tr>
+<th>500</th>
+<th>Internal Server Error，表示服务器在执行请求时发生了错误</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>501</td>
+<td>Not Implemented，表示服务器不支持当前请求所需要的某个功能</td>
+</tr>
+<tr>
+<td>503</td>
+<td>Service Unavailable，表明服务器暂时处于超负载或正在停机维护，无法处理请求</td>
+</tr>
+</tbody></table>
+<h3 id="首部字段"><a href="#首部字段" class="headerlink" title="首部字段"></a>首部字段</h3><p>下面是请求首部和响应首部中的字段名称和作用</p>
+<h4 id="通用首部"><a href="#通用首部" class="headerlink" title="通用首部"></a>通用首部</h4><ul>
+<li>Cache-Control<ul>
+<li>控制缓存的行为</li>
+<li><code>no-cache</code>：强制向服务器再次验证</li>
+<li><code>no-store</code><strong>：</strong>不做任何缓存</li>
+<li><code>max-age=111111</code>：资源可缓存最大时间（秒）</li>
+<li><code>public</code>：客户端、代理服务器都可利用缓存</li>
+<li><code>private</code>：代理服务器不可以缓存</li>
+</ul>
+</li>
+<li>Connection<ul>
+<li>浏览器想要优先使用的连接类型</li>
+<li><code>keep-alive</code>：开启持久连接</li>
+<li><code> close</code>：关闭持久连接</li>
+</ul>
+</li>
+<li>Date<ul>
+<li>创建报文时间</li>
+</ul>
+</li>
+<li>Pragma<ul>
+<li>只用于请求报文，客户端要求中间服务器不返回缓存的资源</li>
+</ul>
+</li>
+<li>Via<ul>
+<li>代理服务器相关信息，每经过一个代理服务器就会添加相关信息，用逗号分割</li>
+</ul>
+</li>
+<li>Transfer-Encoding<ul>
+<li>传输编码方式</li>
+<li><code>chunked</code>：分块传输</li>
+</ul>
+</li>
+<li>Upgrade<ul>
+<li>要求客户端使用的升级协议</li>
+<li>需配合 <code>Connection: Upgrade</code> 一起使用：<code>websocket</code></li>
+</ul>
+</li>
+<li>Warning<ul>
+<li>缓存相关问题的警告</li>
+</ul>
+</li>
+</ul>
+<p>​</p>
+<h4 id="请求首部"><a href="#请求首部" class="headerlink" title="请求首部"></a>请求首部</h4><ul>
+<li>Accept<ul>
+<li>能正确接收的媒体类型</li>
+<li><code>application/json</code></li>
+<li><code>text/plain</code></li>
+</ul>
+</li>
+<li>Accept-Charset<ul>
+<li>能正确接收的字符集</li>
+<li><code>unicode-1-1</code></li>
+</ul>
+</li>
+<li>Accept-Encoding<ul>
+<li>能正确接收的编码格式列表</li>
+<li><code>gzip</code></li>
+<li><code>deflate</code></li>
+</ul>
+</li>
+<li>Accept-Language<ul>
+<li>能正确接收的语言列表</li>
+<li><code>zh-cn,zh;q=0.9,en,q=0.8</code></li>
+<li><code>q=0.9</code> 代表当前语言的权重</li>
+</ul>
+</li>
+<li>Authorization<ul>
+<li>客户端认证信息</li>
+<li>一般存 token 用于鉴权</li>
+</ul>
+</li>
+<li>Cookie<ul>
+<li>发送给服务器的 Cookie 信息</li>
+</ul>
+</li>
+<li>Expect<ul>
+<li>期待服务端的指定行为</li>
+</ul>
+</li>
+<li>From<ul>
+<li>请求方邮箱地址</li>
+</ul>
+</li>
+<li>Host<ul>
+<li>服务器的域名，用于区分单台服务器多个域名的虚拟主机</li>
+<li>是 **HTTP/1.1 **唯一必须包含的字段</li>
+</ul>
+</li>
+<li>User-Agent<ul>
+<li>客户端信息</li>
+</ul>
+</li>
+<li>Referer<ul>
+<li>请求发起页面的原始 URI</li>
+</ul>
+</li>
+</ul>
+<p>​</p>
+<h4 id="响应首部"><a href="#响应首部" class="headerlink" title="响应首部"></a>响应首部</h4><ul>
+<li>Accept-Ranges<ul>
+<li>告知客户端服务器是否可接受范围请求</li>
+</ul>
+</li>
+<li>Age<ul>
+<li>资源在代理缓存中存在的时间</li>
+</ul>
+</li>
+<li>Location<ul>
+<li>客户端重定向到某个 URL</li>
+</ul>
+</li>
+<li>Server<ul>
+<li>服务器名字</li>
+<li><code>Apache</code></li>
+<li><code>Nginx</code></li>
+</ul>
+</li>
+</ul>
+<p>​</p>
+<p>​</p>
+<h4 id="实体首部"><a href="#实体首部" class="headerlink" title="实体首部"></a>实体首部</h4><ul>
+<li>Allow<ul>
+<li>资源的正确请求方式</li>
+<li><code>GET POST PUT</code></li>
+</ul>
+</li>
+<li>Content-Language<ul>
+<li>内容使用的语言</li>
+<li><code>zh-CN</code></li>
+</ul>
+</li>
+<li>Expires<ul>
+<li>内容的过期时间</li>
+</ul>
+</li>
+<li>Last-modified<ul>
+<li>内容的最后修改时间</li>
+</ul>
+</li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/HTTP%E7%B3%BB%E5%88%97/" rel="tag"># HTTP系列</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2021/08/06/HTTP%E7%89%88%E6%9C%AC/" rel="prev" title="HTTP版本">
+                  <i class="fa fa-chevron-left"></i> HTTP版本
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2021/08/20/HTTPS%E7%9A%84%E5%8A%A0%E5%AF%86%E5%8E%9F%E7%90%86/" rel="next" title="HTTPS的加密原理">
+                  HTTPS的加密原理 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">犀鸟技术中心</span>
+</div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+    <span title="站点总字数">55k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="站点阅读时长">50 分钟</span>
+  </span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/muse/" rel="noopener" target="_blank">NexT.Muse</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <script src="https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+  
+
+
+
+
+
+</body>
+</html>
